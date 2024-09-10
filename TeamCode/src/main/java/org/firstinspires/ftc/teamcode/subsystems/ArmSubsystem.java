@@ -24,11 +24,10 @@ public class ArmSubsystem extends SubsystemBase {
     private Servo arm_left;
     private Servo arm_right;
     //intake is big
-    public static double INTAKE_POSITION = 0.64;
     //0.11
     //0.2
-    public static double OUTTAKE_POSITION = 0.19;
-    public static double PIXEL_FIX_POSITION = -1;
+    public static double WALL_POSITION = 0.28;
+    public static double SAMPLE_POSITION = -1;
     //14 one = 0.21
     //flush = 0.18
     //angled = 0.22
@@ -43,32 +42,25 @@ public class ArmSubsystem extends SubsystemBase {
      * Moves arm to depositing position.
      */
 
-    public Command armOut() {
+
+    public Command armGround() {
         return new InstantCommand(()-> {
-            arm_left.setPosition(OUTTAKE_POSITION);
-            arm_right.setPosition(OUTTAKE_POSITION);
-        }, this).andThen(
-                new WaitCommand(500)
-        );
-    }
-    public Command armPixel() {
-        return new InstantCommand(()-> {
-            arm_left.setPosition(PIXEL_FIX_POSITION);
-            arm_right.setPosition(PIXEL_FIX_POSITION);
+            arm_left.setPosition(SAMPLE_POSITION);
+            arm_right.setPosition(SAMPLE_POSITION);
         }, this).andThen(
                 new WaitCommand(500)
         );
     }
 
-    public Command armIn() {
+    public Command armWall() {
         return new InstantCommand(()-> {
-            arm_left.setPosition(INTAKE_POSITION);
-            arm_right.setPosition(INTAKE_POSITION);
+            arm_left.setPosition(WALL_POSITION);
+            arm_right.setPosition(WALL_POSITION);
         }, this).andThen(
                 new WaitCommand(500)
         );
     }
-
+/*
     public Action autoArm(boolean in) {
         return new Action() {
             ElapsedTime timer = new ElapsedTime();
@@ -87,6 +79,8 @@ public class ArmSubsystem extends SubsystemBase {
             }
         };
     }
+
+ */
     @Override
     public void periodic(){
 

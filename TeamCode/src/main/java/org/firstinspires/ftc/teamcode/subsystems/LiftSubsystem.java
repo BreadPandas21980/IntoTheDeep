@@ -29,6 +29,7 @@ public class LiftSubsystem extends SubsystemBase {
     boolean climb = false;
     public boolean heighting = false;
     public static double slackTime = 1.5;
+    public static double slackTimeG = .1;
 
     public static double kP = 0.01;
     public static double kI = 0;
@@ -41,10 +42,7 @@ public class LiftSubsystem extends SubsystemBase {
     ElapsedTime lifttimer1 = new ElapsedTime();
     public static class Presets {
         public static int CLIMB_HEIGHT = 1520;
-        public static final int HIGH_DROP = 1700;
-        public static final int MID_DROP = 1400;
-        public static final int LOW_DROP = 750;
-        public static final int RESET_HEIGHT = 0;
+        public static int SAMPLE_HEIGHT = 250;
 
     }
     public LiftSubsystem(DcMotorEx slide_left, DcMotorEx slide_right, DcMotorEx intakeMotor2) {
@@ -158,8 +156,18 @@ public class LiftSubsystem extends SubsystemBase {
     public void resetLiftTimer(){
         lifttimer1.reset();
     }
+    public void resetLiftTimerG(){
+        lifttimer1.reset();
+    }
     public boolean liftTimer() {
         if(lifttimer1.seconds() > slackTime) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public boolean liftTimerG() {
+        if(lifttimer1.seconds() > slackTimeG) {
             return true;
         } else {
             return false;
@@ -172,17 +180,13 @@ public class LiftSubsystem extends SubsystemBase {
                 .andThen(new WaitUntilCommand(this::liftTimer))
                 .andThen(unheighting());
     }
-    /*
-//1:30
-    1:00
-    (a bit before endgame) :40 - ten seconds to endgame
-    endgame
-    :20
-    :15
-    :10
-    count
-
-     */
+    public Command goToActualGround(int tick) {
+        return new InstantCommand(() -> setTargetPos(tick), this)
+                .andThen(new WaitUntilCommand(this::atTarget))
+                .andThen(new InstantCommand(()-> resetLiftTimerG(), this))
+                .andThen(new WaitUntilCommand(this::liftTimerG))
+                .andThen(unheighting());
+    }
     @Override
     public void periodic() {
         if(heighting) {

@@ -14,6 +14,7 @@ import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.LEFT_TRIGGER;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.RIGHT_TRIGGER;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -47,10 +48,6 @@ public class ActualTeleOp extends BaseOpMode {
 
  */
 
-        gb2(B).toggleWhenPressed(
-                dropbox.fullyOpen(),
-                dropbox.notOpenSwitch()
-        );
 /*
         gb1(LEFT_TRIGGER).whenActive(
                 dropbox.fullyOpen()
@@ -79,25 +76,23 @@ public class ActualTeleOp extends BaseOpMode {
 
  */
 
-        gb2(Y).whenActive(arm.armOut());
-        gb2(A).whenActive(arm.armIn());
-        gb2(X).whenActive(
-                dropbox.halfOpen()
-        );
-        gb2(RIGHT_TRIGGER).whenActive(arm.armPixel());
 
-        gb2(DPAD_LEFT).whenActive(
-                fold.foldH1()
+        gb2(A).whenActive(arm.armWall());
+        gb2(B).toggleWhenPressed(
+                claw.notOpen(),
+                claw.fullyOpen()
         );
-        gb2(DPAD_UP).whenActive(
-                fold.foldH0()
+        gb2(Y).whenActive(
+                new SequentialCommandGroup(
+                        ///arm.armWall(),
+                                lift.heighting(),
+                                lift.goToActualGround(LiftSubsystem.Presets.SAMPLE_HEIGHT),
+
+                        arm.armGround()
+                    )
+
         );
-        gb2(DPAD_RIGHT).whenActive(
-                fold.foldH2()
-        );
-        gb2(DPAD_DOWN).whenActive(
-                fold.foldGround()
-        );
+
 
 
         //gb1(DPAD_UP).whenActive(shooter.shoot());
@@ -106,11 +101,10 @@ public class ActualTeleOp extends BaseOpMode {
 
         //gb2(START).and(gb2(BACK)).whenActive(drive.drivetrainBrake().alongWith(lift.idle()).alongWith(intake.idle()));
 
-        register(drive, lift, arm, intake, dropbox,  fold);
+        register(drive, lift, arm, intake, claw);
         drive.setDefaultCommand(drive.drobotCentric(driverGamepad::getRightX, driverGamepad::getLeftY, driverGamepad::getLeftX));
         lift.setDefaultCommand(lift.setPower(operatorGamepad::getLeftY));
         intake.setDefaultCommand(intake.idle());
-        fold.setDefaultCommand(fold.foldGround());
         //led.setDefaultCommand(led.checkDist());
         //dropbox.setDefaultCommand(dropbox.setPower(operatorGamepad::getRightY));
     }
