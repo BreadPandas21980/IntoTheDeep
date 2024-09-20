@@ -11,6 +11,7 @@ import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -22,8 +23,7 @@ import java.util.function.DoubleSupplier;
 public class LiftSubsystem extends SubsystemBase {
 
     public static double output = 0;
-    private double leftMotorPower, rightMotorPower;
-    private final DcMotorEx slide_left, slide_right, intakeMotor2;
+    private final MotorEx slide_left, slide_right, intakeMotor2;
     private PIDController controller;
 
     boolean climb = false;
@@ -35,21 +35,19 @@ public class LiftSubsystem extends SubsystemBase {
     public static double kI = 0;
     public static double kD = 0;
     public static double tolerance = 10;
-    public static int currentPos = 0;
     public static int targetPos = 0;
     public static int threshold = 30;
-    public boolean lifttime = false;
     ElapsedTime lifttimer1 = new ElapsedTime();
     public static class Presets {
         public static int CLIMB_HEIGHT = 1520;
         public static int SAMPLE_HEIGHT = 250;
 
     }
-    public LiftSubsystem(DcMotorEx slide_left, DcMotorEx slide_right, DcMotorEx intakeMotor2) {
+    public LiftSubsystem(MotorEx slide_left, MotorEx slide_right, MotorEx intakeMotor2) {
         this.slide_left = slide_left;
         this.slide_right = slide_right;
         this.intakeMotor2 = intakeMotor2;
-        slide_left.setDirection(DcMotorSimple.Direction.REVERSE);
+        slide_left.setInverted(true);
 
         controller = new PIDController(kP, kI, kD);
         controller.setTolerance(tolerance);
@@ -62,17 +60,13 @@ public class LiftSubsystem extends SubsystemBase {
     public Command unheighting() {
         return new InstantCommand(() -> heighting = false, this);
     }
-    private void setPos(int pos) {
-        targetPos = pos;
-    }
 
     public int getLeftEncoderVal() {
         return intakeMotor2.getCurrentPosition();
     }
 
     public void resetEnc() {
-        intakeMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeMotor2.resetEncoder();
     }
     public boolean atTarget() {
         return intakeMotor2.getCurrentPosition() < targetPos + threshold  &&
@@ -83,12 +77,7 @@ public class LiftSubsystem extends SubsystemBase {
         return targetPos;
     }
 
-    public double getLeftMotorPower() {
-        return slide_left.getPower();
-    }
-    public double getRightMotorPower() {
-        return slide_right.getPower();
-    }
+    //was used to bring slides down and fully suspend after robot was on truss
     public Command climb() {
         return new InstantCommand(() -> climb = true, this);
     }
@@ -98,20 +87,23 @@ public class LiftSubsystem extends SubsystemBase {
     public Command setPower(DoubleSupplier power) {
         return new RunCommand(() -> {
 
+            if(power.getAsDouble() > 0.1) {
+                heighting = false;
+            }
             if(climb == false) {
                 if(power.getAsDouble() > 0.2) {
-                    slide_left.setPower(1);
-                    slide_right.setPower(1);
+                    slide_left.set(1);
+                    slide_right.set(1);
                 } else if (power.getAsDouble() < -0.2) {
-                    slide_left.setPower(-0.9);
-                    slide_right.setPower(-0.9);
+                    slide_left.set(-0.9);
+                    slide_right.set(-0.9);
                 } else {
-                    slide_left.setPower(0);
-                    slide_right.setPower(0);
+                    slide_left.set(0);
+                    slide_right.set(0);
                 }
             } else {
-                slide_left.setPower(-0.8);
-                slide_right.setPower(-0.8);
+                slide_left.set(-0.8);
+                slide_right.set(-0.8);
             }
         }, this);
 
@@ -130,23 +122,23 @@ public class LiftSubsystem extends SubsystemBase {
             public boolean run(@NonNull TelemetryPacket packet) {
                 a.reset();
                 if (!initialized) {
-                    setPos(t);
+                    setTargetPos(t);
                     initialized = true;
                 }
                 controller.setPID(kP, kI, kD);
                 double output1 = controller.calculate(getLeftEncoderVal(), getCurrentGoal());
-                slide_left.setPower(output1);
-                slide_right.setPower(output1);
+                slide_left.set(output1);
+                slide_right.set(output1);
                 if(a.seconds() > 1 ) {
-                    slide_right.setPower(0.08);
-                    slide_left.setPower(0.08);
+                    slide_right.set(0.08);
+                    slide_left.set(0.08);
                     return false;
                 }
                 if (Math.abs(intakeMotor2.getCurrentPosition() - t) > 7.5){
                     return true;
                 } else {
-                    slide_right.setPower(0.08);
-                    slide_left.setPower(0.08);
+                    slide_right.set(0.08);
+                    slide_left.set(0.08);
                     return false;
                 }
             }
@@ -187,35 +179,27 @@ public class LiftSubsystem extends SubsystemBase {
                 .andThen(new WaitUntilCommand(this::liftTimerG))
                 .andThen(unheighting());
     }
+
+    public Command goToActualTest(int tick) {
+        return new InstantCommand(() -> setTargetPos(tick), this);
+    }
+
     @Override
     public void periodic() {
+        if(atTarget()){
+            heighting = false;
+        }
+
         if(heighting) {
             ElapsedTime timer = new ElapsedTime();
             timer.reset();
             controller.setPID(kP, kI, kD);
             output = controller.calculate(getLeftEncoderVal(), getCurrentGoal());
-            slide_left.setPower(output);
-            slide_right.setPower(output);
-/*
-            if(timer.seconds() > 2.5) {
-                //timer.reset();
-                heighting = false;
-                //p.reset();
-                //p1 = true;
-            }
-
- */
-
-
+            slide_left.set(output);
+            slide_right.set(output);
 
             super.periodic();
         } else {
-            /*
-            if(p < 5 && p1 == true) {
-
-            }
-
-             */
             controller.setPID(0, 0, 0);
         }
 

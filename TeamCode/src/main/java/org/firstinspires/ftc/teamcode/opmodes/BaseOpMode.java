@@ -32,19 +32,14 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 public class BaseOpMode extends CommandOpMode {
 
     protected MotorEx fL, fR, bL, bR, slide_left, slide_right, intakeMotor1, intakeMotor2;
-    protected DcMotorEx slide_leftDC, slide_rightDC, intakeMotor2DC;
     protected Servo arm_left, arm_right, shootServo, left_fold, right_fold;
     protected Servo clawServo;
-    protected OpenCvCamera camera;
     protected DriveSubsystem drive;
     protected LiftSubsystem lift;
     protected ArmSubsystem arm;
     protected ClawSubsystem claw;
     protected IntakeSubsystem intake;
     protected MecanumDrive rrDrive;
-    public DistanceSensor distance1;
-    public DistanceSensor distance2;
-    public RevBlinkinLedDriver lights;
 
     protected GamepadEx driverGamepad;
     protected GamepadEx operatorGamepad;
@@ -75,18 +70,13 @@ public class BaseOpMode extends CommandOpMode {
         imu = new RevIMU(hardwareMap);
         imu.init();
 
-
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        FtcDashboard.getInstance().startCameraStream(camera, 0);
-
         drive = new DriveSubsystem(fL, fR, bL, bR, imu);
         rrDrive = new MecanumDrive(hardwareMap, startPose);
 
         arm = new ArmSubsystem(arm_left, arm_right);
         //liftT = new LiftSubsystemTele(slide_leftDC, slide_rightDC, intake,  intakeMotor2DC);
-        lift = new LiftSubsystem(slide_leftDC, slide_rightDC,  intakeMotor2DC);
-        intake = new IntakeSubsystem(intakeMotor1, intakeMotor2 );
+        lift = new LiftSubsystem(slide_left, slide_right, intakeMotor2);
+        intake = new IntakeSubsystem(intakeMotor1, intakeMotor2);
         claw = new ClawSubsystem(clawServo );
 
 
@@ -95,31 +85,9 @@ public class BaseOpMode extends CommandOpMode {
 
         telemetry.update();
     }
-/*
-    protected void getLocation() {
-        switch (detector.getLocation()) {
-            case LEFT:
-                propPosition = leftSpike;
-                telemetry.addData("Left", "Left");
-                break;
-            case MID:
-                propPosition = midSpike;
-                telemetry.addData("Mid", "yayyyy");
-                break;
-            case RIGHT:
-                propPosition = rightSpike;
-                telemetry.addData("Right", "ok");
-                break;
-        }
-
-        sleep(20);
-        telemetry.update();
-    }
-
- */
 
     protected void initHardware() {
-        try {
+   //     try {
             fL = new MotorEx(hardwareMap, "front_left");
             fR = new MotorEx(hardwareMap, "front_right");
             bL = new MotorEx(hardwareMap, "back_left");
@@ -128,31 +96,22 @@ public class BaseOpMode extends CommandOpMode {
             intakeMotor2 = new MotorEx(hardwareMap, "intakeMotor2");
             slide_left = new MotorEx(hardwareMap, "slide_left");
             slide_right = new MotorEx(hardwareMap, "slide_right");
-            slide_leftDC = hardwareMap.get(DcMotorEx.class, "slide_left");
-            slide_rightDC = hardwareMap.get(DcMotorEx.class, "slide_right");
             arm_left = hardwareMap.get(Servo.class, "arm_left");
             arm_right = hardwareMap.get(Servo.class, "arm_right");
             shootServo = hardwareMap.get(Servo.class, "shooter");
             left_fold = hardwareMap.get(Servo.class, "left_fold");
             right_fold = hardwareMap.get(Servo.class, "right_fold");
             clawServo = hardwareMap.get(Servo.class, "claw");
-            intakeMotor2DC = hardwareMap.get(DcMotorEx.class, "intakeMotor2");
-            distance1 = hardwareMap.get(DistanceSensor.class, "DistanceSensor1");
-            distance2 = hardwareMap.get(DistanceSensor.class, "DistanceSensor2");
           //  lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
 
-        }
-        catch(Exception e) {
-            telemetry.addData("ERROR", "Motor init failed");
-        }
+    //    }
+     //   catch(Exception e) {
+       //     telemetry.addData("ERROR", "Motor init failed");
+      //  }
     }
 
     protected void setupHardware() {
 
-        slide_leftDC.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide_rightDC.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide_leftDC.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        slide_rightDC.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         clawServo.setDirection(Servo.Direction.REVERSE);
 
         intakeMotor1.setInverted(true);

@@ -162,13 +162,6 @@ public class DriveSubsystem extends SubsystemBase {
         );
     }
 
-    public Command drivetrainBrake() {
-        return new InstantCommand(()-> {
-            drive.driveWithMotorPowers(0, 0, 0, 0);
-        }, this).andThen(
-                new WaitCommand(500)
-        );
-    }
 
     public double getRawExternalHeading() {
         return imu.getRevIMU().getAngularOrientation().firstAngle;
