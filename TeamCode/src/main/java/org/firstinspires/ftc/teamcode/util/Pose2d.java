@@ -25,11 +25,11 @@ public class Pose2d implements Cloneable {
         this.y += p1.y;
         this.heading += p1.heading;
     }
-    //adds pose to this pose
-    public void add(Pose2d p1){
-        this.x += p1.x;
-        this.y += p1.y;
-        this.heading += p1.heading;
+    //subtracts pose to this pose
+    public void subtract(Pose2d p1){
+        this.x -= p1.x;
+        this.y -= p1.y;
+        this.heading -= p1.heading;
     }
 
     //checks if pose NaN

@@ -81,6 +81,25 @@ public class Vector2 {
         return new Vector2(x, y);
     }
 
+    public static double[][] oneDtoTwoD(Vector2[] path) {
+        double[][] pathCopy = new double[path.length][2];
+        for (int i = 0; i < path.length; i++) {
+            for(int j = 0; j < 2; j++) {
+                pathCopy[i][0] = path[i].x;
+                pathCopy[i][1] = path[i].y;
+            }
+        }
+        return pathCopy;
+    }
+
+    public static Vector2[] twoDtoOneD(double[][] path) {
+        Vector2[] pathCopy = new Vector2[path.length];
+        for (int i = 0; i < path.length; i++) {
+            pathCopy[i] = new Vector2(path[i][0], path[i][1]);
+        }
+        return pathCopy;
+    }
+
     //rotate this vector around a point
     //https://stackoverflow.com/questions/620745/c-rotating-a-vector-around-a-certain-point
     public void rotateAround(double angle, double x, double y) {
