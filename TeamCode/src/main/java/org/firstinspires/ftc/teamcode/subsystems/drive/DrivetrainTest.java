@@ -8,32 +8,17 @@ import java.util.List;
 
 public class DrivetrainTest {
 
+    public Vector2 lastClosestPoint;
+    public double trackWidth = 12; //in inches, should be a little larger than real one (turning scrub)
+
+    public double leftWheelVel;
+    public double rightWheelVel;
+    public static double kV = 0;
+    public static double kA = 0;
+    public static double kP = 0;
 
 
 
-
-    /**
-     * Constructor, takes a Path of Way Points defined as a double array of column vectors representing the global
-     * cartesian points of the path in {x,y} coordinates. The waypoint are traveled from one point to the next in sequence.
-     *
-     * For example: here is a properly formated waypoint array
-     *
-     * double[][] waypointPath = new double[][]{
-     {1, 1},
-     {5, 1},
-     {9, 12},
-     {12, 9},
-     {15,6},
-     {15, 4}
-     };
-     //https://www.desmos.com/calculator/4pv9d7giqe
-     //smoothing
-
-     This path goes from {1,1} -> {5,1} -> {9,12} -> {12, 9} -> {15,6} -> {15,4}
-
-     The units of these coordinates are position units assumed by the user (i.e inch, foot, meters)
-     * @param path
-     */
     public Vector2[] injection(double spacing, Vector2[] path) {
         List<Vector2> newPoints = new ArrayList<>(path.length);
         Vector2 startPoint = new Vector2(path[0].x, path[0].y);
@@ -49,6 +34,11 @@ public class DrivetrainTest {
         }
         return newPoints.toArray(new Vector2[0]);
     }
+
+
+    //https://www.desmos.com/calculator/4pv9d7giqe
+    //smoothing
+    //This path goes from {1,1} -> {5,1} -> {9,12} -> {12, 9} -> {15,6} -> {15,4}
     public Vector2[] smoother(Vector2[] path, double a, double b, double tolerance){
         //copy path into 2d array
         double[][] pathCopy = Vector2.oneDtoTwoD(path);
@@ -71,7 +61,35 @@ public class DrivetrainTest {
 
         return Vector2.twoDtoOneD(newPath);
     }
-    public Vector2 lineCircleIntersection(Pose2d robotPose, Pose2d lineStart, Pose2d lineEnd, double lookAheadRadius) {
+
+    public Vector2 findClosestPoint(Vector2[] path) {
+        double closestDist = Integer.MAX_VALUE;
+        int closestIndex = -1;
+        int indexLastClosestPoint = -1;
+        int startIndex = 0;
+
+        //start from the next point so robot never goes backwards
+        for(int i = 0; i < path.length; i++) {
+            if( (lastClosestPoint.equals(path[i])) ){
+                indexLastClosestPoint = i;
+                break;
+            }
+        }
+        if(indexLastClosestPoint != -1) {
+            startIndex = indexLastClosestPoint + 1;
+        }
+        for(int j = startIndex; j < path.length; j++) {
+            if(Vector2.distanceAlongPath(path, path[j]) < closestDist) {
+                closestDist = Vector2.distanceAlongPath(path, path[j]);
+                closestIndex = j;
+            }
+        }
+        return path[closestIndex];
+    }
+
+    //lookahead radius 12-25, smaller if curvy
+    //if null use last loookahead point
+    public Vector2 lookAheadPoint(Pose2d robotPose, Vector2 lineStart, Vector2 lineEnd, double lookAheadRadius) {
 
         //changes line to a direction vector (moves it to origin)
         Vector2 direction = new Vector2(lineEnd.x - lineStart.x, lineEnd.y - lineStart.y);
@@ -112,15 +130,55 @@ public class DrivetrainTest {
             //
             if (t1 >= 0 && t1 <= 1) {
                 direction.mult(t1);
-                return Vector2.add(direction, new Vector2(lineStart.x, lineStart.y));
+                Vector2 lookPoint = Vector2.add(direction, new Vector2(lineStart.x, lineStart.y));
+                lookPoint.lookAheadRadius = lookAheadRadius;
+                return lookPoint;
             }
             if (t2 >= 0 && t2 <= 1) {
                 direction.mult(t2);
-                return Vector2.add(direction, new Vector2(lineStart.x, lineStart.y));
+                Vector2 lookPoint = Vector2.add(direction, new Vector2(lineStart.x, lineStart.y));
+                lookPoint.lookAheadRadius = lookAheadRadius;
+                return lookPoint;
             } else {
                 return null;
             }
         }
+    }
+
+    public double findArcCurvature(Vector2 lookAheadPoint, Pose2d robotPose) {
+        double a = -Math.tan(robotPose.getHeading());
+        double b = 1;
+        double c = Math.tan(robotPose.getHeading()) * robotPose.getX() - robotPose.getY();
+        double x = Math.abs(a * lookAheadPoint.x + b * lookAheadPoint.y + c) / Math.sqrt(a*a + b*b);
+        double curvature = 2 * x / Math.pow(lookAheadPoint.lookAheadRadius, 2);
+        //if point on right, sign positive
+        //if point on left of robot, sign negative
+        //cross product of RB RL vectors
+        double side = Math.signum(
+                Math.sin(robotPose.getHeading()) * (lookAheadPoint.x - robotPose.getX())
+                - Math.cos(robotPose.getHeading()) * (lookAheadPoint.y - robotPose.getY())
+        );
+        double signedCurvature = side * curvature;
+
+        return  signedCurvature;
+    }
+
+    public void findWheelVelocities(Vector2[] path, int index, Pose2d robotPose, double lookAheadRadius) {
+        Vector2.findTargetVelocityAtPoint(path);
+        double targVelocity = path[index].targetVelocity;
+        Vector2 lineStart = new Vector2(path[index].x, path[index].y);
+        Vector2 lineEnd = new Vector2(path[index + 1].x, path[index + 1].y);
+        Vector2 lookAheadPoint = lookAheadPoint(robotPose, lineStart, lineEnd, lookAheadRadius);
+
+        double arcCurvature = findArcCurvature(lookAheadPoint, robotPose);
+
+        //use mecanum kinematics
+        //https://gm0.org/en/latest/docs/software/concepts/kinematics.html
+
+        //skidsteer kinematics = tank drive
+        leftWheelVel = targVelocity * (2 + arcCurvature * trackWidth) / 2;
+        rightWheelVel = targVelocity * (2 - arcCurvature * trackWidth) / 2;
+
     }
 
 
