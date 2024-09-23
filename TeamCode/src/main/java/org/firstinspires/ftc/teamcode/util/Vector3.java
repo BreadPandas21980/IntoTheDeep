@@ -16,8 +16,8 @@ public class Vector3 implements Cloneable {
     }
 
     //transform vector to Pose2d
-    public Pose2d toPose() {
-        return new Pose2d(x, y, z);
+    public Pose2dtest toPose() {
+        return new Pose2dtest(x, y, z);
     }
 
     //add this and another vector together

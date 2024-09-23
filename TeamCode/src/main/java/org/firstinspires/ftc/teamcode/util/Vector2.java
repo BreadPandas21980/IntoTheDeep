@@ -3,10 +3,9 @@ package org.firstinspires.ftc.teamcode.util;
 public class Vector2 {
     public double x;
     public double y;
-    public double velocity = 0;
-    public double curvature = 0;
-    public double targetVelocity = 0;
-    public double lookAheadRadius;
+    private double velocity;
+    private double curvature;
+    private double distance;
     private double magnitudecache;
 
     public Vector2(double x, double y) {
@@ -14,13 +13,25 @@ public class Vector2 {
         this.y = y;
     }
 
+    public Vector2(Vector2 vector) {
+        this.x = vector.x;
+        this.y = vector.y;
+    }
+
     public Vector2(){
         x = y = 0;
     }
 
+    public void set(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
     //adds two vectors together
     public static Vector2 add(Vector2 a, Vector2 b) {
         return new Vector2(a.x + b.x, a.y + b.y);
+    }
+    public static Vector2 subtract(Vector2 a, Vector2 b) {
+        return new Vector2(a.x - b.x, a.y - b.y);
     }
 
     //returns the magnitude of the vector
@@ -39,6 +50,18 @@ public class Vector2 {
         magnitudecache *= a;
     }
 
+    public static Vector2 mult(Vector2 a, double n, Vector2 target) {
+        if (target == null) {
+            target = new Vector2(a.x * n, a.y * n );
+        } else {
+            target.set(a.x * n, a.y * n );
+        }
+        return target;
+    }
+
+    public static Vector2 mult(Vector2 a, double n ) {
+        return mult(a, n, null);
+    }
     //returns the dot product of 2 vectors
     // ???
     public static double dotProduct(Vector2 a, Vector2 b) {
@@ -57,7 +80,38 @@ public class Vector2 {
         y /= mag;
         magnitudecache = 1;
     }
+    public Vector2 normalize(Vector2 target) {
+        if (target == null) {
+            target = new Vector2();
+        }
+        double m = mag();
+        if (m > 0) {
+            target.set(x / m, y / m);
+        } else {
+            target.set(x, y);
+        }
+        return target;
+    }
 
+    public double getDistance() {
+        return distance;
+    }
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public double getCurvature() {
+        return curvature;
+    }
+    public void setCurvature(double curvature) {
+        this.curvature = curvature;
+    }
+    public double getVelocity() {
+        return velocity;
+    }
+    public void setVelocity(double velocity) {
+        this.velocity = velocity;
+    }
     //adds a vector to this vector
     public void add(Vector2 a) {
         x += a.x;
@@ -106,6 +160,9 @@ public class Vector2 {
         return Math.sqrt(Math.pow((x - newPoint.x),2) + Math.pow((y - newPoint.y),2));
     }
 
+    public static double distanceFromPoint(Vector2 a, Vector2 b) { // distance equation
+        return Math.sqrt(Math.pow((a.x - b.x),2) + Math.pow((a.y - b.y),2));
+    }
     public static double[][] oneDtoTwoD(Vector2[] path) {
         double[][] pathCopy = new double[path.length][2];
         for (int i = 0; i < path.length; i++) {
@@ -141,16 +198,16 @@ public class Vector2 {
         }
     }
 
-
+/*
     //https://www.desmos.com/calculator/obvgxhsz40
     //find curvature by getting radius of cicle that intersects point and 2 points around it
     public static void curvatureOfPath(Vector2[] path) {
-        /*
-        double[] curvature = new double[path.length];
-        curvature[0] = 0;
-        curvature[path.length - 1] = 0;
 
-         */
+        //double[] curvature = new double[path.length];
+        //curvature[0] = 0;
+        //curvature[path.length - 1] = 0;
+
+
         path[0].curvature = 0;
         path[path.length - 1].curvature = 0;
 
@@ -178,7 +235,7 @@ public class Vector2 {
             path[i].curvature = curvatureOfPoint;
         }
     }
-
+*/
     public static void findPointVelocity(Vector2[] path) {
 
         double maxPathVelocity = 60; //in/s
