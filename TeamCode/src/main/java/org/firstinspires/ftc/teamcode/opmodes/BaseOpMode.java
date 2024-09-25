@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.drive.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.drive.DrivetrainTest;
 import org.firstinspires.ftc.teamcode.util.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.TriggerGamepadEx;
 
@@ -33,6 +34,7 @@ public class BaseOpMode extends CommandOpMode {
     protected ClawSubsystem claw;
     protected IntakeSubsystem intake;
     protected MecanumDrive rrDrive;
+    protected DrivetrainTest ppDrive;
 
     protected GamepadEx driverGamepad;
     protected GamepadEx operatorGamepad;
@@ -65,6 +67,7 @@ public class BaseOpMode extends CommandOpMode {
 
         drive = new DriveSubsystem(fL, fR, bL, bR, imu);
         rrDrive = new MecanumDrive(hardwareMap, startPose);
+        ppDrive = new DrivetrainTest(hardwareMap, startPose);
 
         arm = new ArmSubsystem(arm_left, arm_right);
         //liftT = new LiftSubsystemTele(slide_leftDC, slide_rightDC, intake,  intakeMotor2DC);

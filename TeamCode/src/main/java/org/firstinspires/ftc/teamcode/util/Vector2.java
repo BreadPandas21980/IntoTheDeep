@@ -244,7 +244,7 @@ public class Vector2 {
             path[i].velocity = Math.min(maxPathVelocity, k / path[i].curvature);
         }
     }
-
+/*
     public static void findTargetVelocityAtPoint(Vector2[] path) {
 
         //target velocity is minimum of point's current velocity and largest velocity reachable when starting at last point
@@ -265,6 +265,8 @@ public class Vector2 {
             );
         }
     }
+
+ */
 
 
 }

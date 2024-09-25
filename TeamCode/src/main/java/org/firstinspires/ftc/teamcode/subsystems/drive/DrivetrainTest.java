@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Localizer;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.TwoDeadWheelLocalizer;
@@ -89,6 +90,14 @@ public class DrivetrainTest {
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
 
+    public double getLeftWheelVel() {
+        leftWheelVel = leftFront.getVelocity();
+        return leftWheelVel;
+    }
+    public double getRightWheelVel() {
+        rightWheelVel = rightFront.getVelocity();
+        return rightWheelVel;
+    }
     public PoseVelocity2d updatePoseEstimate() {
         Twist2dDual<Time> twist = localizer.update();
         pose = pose.plus(twist.value());
@@ -105,6 +114,9 @@ public class DrivetrainTest {
 
     public Vector2 getPoseAsVector() {
         return new Vector2(pose.position.x, pose.position.y);
+    }
+    public double getHeading() {
+        return lazyImu.get().getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 
 

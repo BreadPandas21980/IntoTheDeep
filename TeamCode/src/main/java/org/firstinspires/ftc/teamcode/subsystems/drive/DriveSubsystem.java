@@ -32,6 +32,12 @@ public class DriveSubsystem extends SubsystemBase {
         bL.setInverted(true);
     }
 
+    public void setMotorPowers(double bLPower, double bRPower, double fLPower, double fRPower) {
+        bL.set(bLPower);
+        bR.set(bRPower);
+        fL.set(fLPower);
+        fR.set(fRPower);
+    }
     /**
      * Drives based on Gamepad inputs.
      */

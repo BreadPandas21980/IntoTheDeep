@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes;
-
+/*
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -156,7 +156,7 @@ public class BlueCloseLeft extends BaseOpMode {
 
 
          */
-
+/*
         try {
             camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
                 @Override
@@ -278,3 +278,4 @@ public class BlueCloseLeft extends BaseOpMode {
         telemetry.update();
     }
 }
+*/
