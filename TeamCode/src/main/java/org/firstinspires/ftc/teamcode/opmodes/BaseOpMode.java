@@ -94,7 +94,6 @@ public class BaseOpMode extends CommandOpMode {
             slide_right = new MotorEx(hardwareMap, "slide_right");
             arm_left = hardwareMap.get(Servo.class, "arm_left");
             arm_right = hardwareMap.get(Servo.class, "arm_right");
-            shootServo = hardwareMap.get(Servo.class, "shooter");
             left_fold = hardwareMap.get(Servo.class, "left_fold");
             right_fold = hardwareMap.get(Servo.class, "right_fold");
             clawServo = hardwareMap.get(Servo.class, "claw");

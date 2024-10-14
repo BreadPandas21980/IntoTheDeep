@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems.drive;
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
@@ -13,11 +14,13 @@ import java.util.function.DoubleSupplier;
 /**
  * Chassis
  */
+@Config
 public class DriveSubsystem extends SubsystemBase {
 
     private final MecanumDrive drive;
     private final RevIMU imu;
 
+    public static double rotateFactor = 0.75;
     public MotorEx fL, fR, bL, bR;
     public static double slowFactor = 2.2;
 
@@ -62,7 +65,7 @@ public class DriveSubsystem extends SubsystemBase {
                         strafe = 0;
                     }
                     if(Math.abs(rotate) > 0.1) {
-                        rotate = rotate * 0.5;
+                        rotate = rotate * rotateFactor;
                     } else {
                         rotate = 0;
                     }
