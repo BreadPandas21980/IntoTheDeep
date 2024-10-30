@@ -93,7 +93,6 @@ public class ActualTeleOpBackup extends LinearOpMode {
                 boolean extendoRetract = gamepad2.dpad_down;
                 double intakes = gamepad1.left_trigger;
                 double outtakes = gamepad1.right_trigger;
-        
 
                 double bLPower = forward - strafe + rotate; //
                 double bRPower = forward + strafe - rotate; //
@@ -115,7 +114,7 @@ public class ActualTeleOpBackup extends LinearOpMode {
                 }
 
                 if (gamepad2.left_trigger > 0.1) {
-                    drop_downintake.setPosition(0.07);
+                    drop_downintake.setPosition(0.0);
                     //claw.setPower(1);
                     bucketReset = false;
                     //down
@@ -163,8 +162,8 @@ public class ActualTeleOpBackup extends LinearOpMode {
                 telemetry.addData("Clawpower: ", claw.getPosition());
                 telemetry.addData("ClawOpen: ",clawopen);
                 telemetry.addData("Bucketpower: ", drop_downintake.getPosition());
-                telemetry.addData("BucketReset: ",clawopen);
-                telemetry.addData("forward: ", bucketReset);
+                telemetry.addData("BucketReset: ",bucketReset);
+
                 telemetry.addData("strafe: ", strafe);
                 telemetry.addData("rotate: ", rotate);
                 telemetry.update();
