@@ -23,8 +23,8 @@ public class ClawSubsystem extends SubsystemBase {
     Gamepad gamepad = new Gamepad();
 
     private final Servo claw;
-    public static  double FULLY_OPEN = 0.35;
-    public static  double NOT_OPEN = 0;
+    public static  double FULLY_OPEN = 0.07;
+    public static  double NOT_OPEN = 0.35;
 
     public ClawSubsystem(Servo claw   ) {
         this.claw = claw;
