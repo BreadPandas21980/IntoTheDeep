@@ -16,12 +16,13 @@ import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.RIGHT_TRIGGER;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
 
 @Config
-//@Disabled
+@Disabled
 @TeleOp(name = "ActualTeleOp", group = "!!!super cool!")
 public class ActualTeleOp extends BaseOpMode {
     @Override

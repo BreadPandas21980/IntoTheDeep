@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -10,8 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "ActualTeleOpMeet0")
-public class ActualTeleOpBackup extends LinearOpMode {
+@Config
+@TeleOp(name = "Meet0TeleOp")
+public class Meet0TeleOp extends LinearOpMode {
 
     private DcMotor front_left;
     private DcMotor back_left;
@@ -25,6 +25,15 @@ public class ActualTeleOpBackup extends LinearOpMode {
     private DcMotor slide;
     private IMU imu;
 
+    public static double slowFactor = 0.6;
+    public static double clawOpenPos = 0.07;
+    public static double clawClosedPos = 0.35;
+    public static double armOutPos = 0.35;
+    public static double armInPos = 0.1;
+    public static double extendoOutPos = 0;
+    public static double extendoInPos = 0.3;
+    public static double bucketDownPos = 0;
+    public static double bucketUpPos = 1;
     private void setDrivePowers(double bLPower, double bRPower, double fLPower, double fRPower) {
         double maxSpeed = 1.0;
         maxSpeed = Math.max(maxSpeed, Math.abs(bLPower));
@@ -81,14 +90,22 @@ public class ActualTeleOpBackup extends LinearOpMode {
         //drop_downintake.setPosition(1);
         waitForStart();
         if (opModeIsActive()) {
+            extendo_linkage.setPosition(extendoInPos);
+            arm.setPosition(armInPos);
+            drop_downintake.setPosition(bucketUpPos);
+            claw.setPosition(clawOpenPos);
             // Put run blocks here.
             telemetry.addData("Status", "Initiallized");
             while (opModeIsActive()) {
                 double forward = -0.85 * gamepad1.left_stick_y;
                 double strafe = 0.85 * gamepad1.right_stick_x;
                 double rotate = 0.85 * 0.7 * gamepad1.left_stick_x;
-                double slides = -gamepad2.right_stick_y;
-                double arms = -gamepad2.left_stick_y;
+                if(gamepad1.left_bumper) {
+                    forward *= slowFactor;
+                    strafe *= slowFactor;
+                    rotate *= slowFactor;
+                }
+                double slides = -gamepad2.left_stick_y;
                 boolean extendoForward = gamepad2.dpad_up;
                 boolean extendoRetract = gamepad2.dpad_down;
                 double intakes = gamepad1.left_trigger;
@@ -102,33 +119,33 @@ public class ActualTeleOpBackup extends LinearOpMode {
                 // reset speed variables
 
                 if (gamepad2.x) {
-                    claw.setPosition(0.07);
+                    claw.setPosition(clawOpenPos);
                     //claw.setPower(1);
                     clawopen = true;
 
                 } else if (gamepad2.b) {
-                    claw.setPosition(0.35);
+                    claw.setPosition(clawClosedPos);
                     //claw.setPower(-1);
 
                     clawopen = false;
                 }
 
                 if (gamepad2.left_trigger > 0.1) {
-                    drop_downintake.setPosition(0.0);
+                    drop_downintake.setPosition(bucketDownPos);
                     //claw.setPower(1);
                     bucketReset = false;
                     //down
                 } else if (gamepad2.right_trigger > 0.1) {
-                    drop_downintake.setPosition(1);
+                    drop_downintake.setPosition(bucketUpPos);
                     //claw.setPower(-1);
                     //up
                     bucketReset = true;
                 }
 
                 if (extendoForward) {
-                    extendo_linkage.setPosition(0.);
+                    extendo_linkage.setPosition(extendoOutPos);
                 } else if (extendoRetract) {
-                    extendo_linkage.setPosition(0.3);
+                    extendo_linkage.setPosition(extendoInPos);
                 }// else {
 //                    extendo_linkage.setPower(0.0);
                 //}
@@ -142,9 +159,9 @@ public class ActualTeleOpBackup extends LinearOpMode {
                 }
 
                 if (gamepad2.y) {
-                    arm.setPosition(0.35);
+                    arm.setPosition(armOutPos);
                 } else if (gamepad2.a) {
-                    arm.setPosition(1);
+                    arm.setPosition(armInPos);
                 }// else {
                   //  arm.setPower(0.0);
              //   }
@@ -155,7 +172,7 @@ public class ActualTeleOpBackup extends LinearOpMode {
                 } else if (slides < -0.2) {
                     slide.setPower(-1);
                 } else {
-                    slide.setPower(0.05);
+                    slide.setPower(0.035);
                 }
                 // set motor parameters to driver station
                 telemetry.addData("slide pos: ", slide.getCurrentPosition());
