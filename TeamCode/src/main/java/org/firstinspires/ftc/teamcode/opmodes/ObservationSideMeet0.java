@@ -11,17 +11,12 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.mechanisms.LiftMechanism;
-import org.firstinspires.ftc.teamcode.opmodes.BaseOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
-import org.firstinspires.ftc.teamcode.vision.BlueAlliancePipeline;
-import org.firstinspires.ftc.teamcode.vision.RedAlliancePipeline;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Config
 //@Disabled
-@Autonomous(name = "RRAutoObs", group = "advanced", preselectTeleOp = "ActualTeleOp")
-public class RedCloseLeft extends BaseOpMode {
+@Autonomous(name = "ObservationSideAUTO", group = "advanced", preselectTeleOp = "ActualTeleOp")
+public class ObservationSideMeet0 extends BaseOpMode0 {
 
     @Override
     public void initialize() {
@@ -40,38 +35,46 @@ public class RedCloseLeft extends BaseOpMode {
 //middle
 
         Action trajHighChamberOne = rrDrive.actionBuilder(rrDrive.pose)
-                .strafeTo(new Vector2d(8, -30))
-                .afterDisp(2, new SequentialAction(
-                        lift.autoLift(LiftMechanism.specimenPrepareHeight)
-                    //    claw.autoClaw(ClawSubsystem.NOT_OPEN)
+                .strafeTo(new Vector2d(8, -32.5))
+                .afterDisp(0, new SequentialAction(
+                        lift.autoLift(LiftMechanism.specimenPrepareHeight),
+                        claw.autoClaw(ClawSubsystem.NOT_OPEN)
                 ))
                 .build();
-        Action trajMoveToSamples = rrDrive.actionBuilder(new Pose2d(8, -30, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(24, -48), Math.toRadians(45))
-                .strafeToLinearHeading(new Vector2d(36, -24), Math.toRadians(-90))
+        Action trajMoveToSamples = rrDrive.actionBuilder(new Pose2d(8, -32.5, Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(8, -40), Math.toRadians(90))
+                .turn(Math.toRadians(-90))
+                .strafeToLinearHeading(new Vector2d(40, -40), Math.toRadians(0))
+              //  .turn(Math.toRadians(-90))
+                .strafeToLinearHeading(new Vector2d(40, -4), Math.toRadians(0))
+                .turn(Math.toRadians(-90))
+           //     .strafeToLinearHeading(new Vector2d(54, -25), Math.toRadians(-90))
                 .afterTime(0.25, new SequentialAction(
                       lift.autoLift(LiftMechanism.groundHeight)
                 ))
-                .strafeToLinearHeading(new Vector2d(48, -12), Math.toRadians(-90))
+                .strafeToLinearHeading(new Vector2d(54, -4), Math.toRadians(-90))
                 .build();
-        Action trajPushToHP = rrDrive.actionBuilder(new Pose2d(48, -12, Math.toRadians(-90)))
-                .strafeToLinearHeading(new Vector2d(48, -60), Math.toRadians(-90))
-                .strafeToLinearHeading(new Vector2d(48, -42), Math.toRadians(-90))
+        Action trajPushToHP = rrDrive.actionBuilder(new Pose2d(54, -4, Math.toRadians(-90)))
+                .strafeToLinearHeading(new Vector2d(54, -52.5), Math.toRadians(-90))
+                .strafeToLinearHeading(new Vector2d(54, -40), Math.toRadians(-90))
                 .waitSeconds(4)
                 .build();
-        Action trajGrabSpecimen = rrDrive.actionBuilder(new Pose2d(48, -42, Math.toRadians(-90)))
-                .strafeToLinearHeading(new Vector2d(48, -60), Math.toRadians(-90))
+        Action trajGrabSpecimen = rrDrive.actionBuilder(new Pose2d(54, -40, Math.toRadians(-90)))
+                .strafeToLinearHeading(new Vector2d(54, -52.5), Math.toRadians(-90))
+                .waitSeconds(0.3)
                 .stopAndAdd(claw.autoClaw(ClawSubsystem.NOT_OPEN))
-                .strafeToLinearHeading(new Vector2d(48, -42), Math.toRadians(-90))
+                .waitSeconds(0.3)
+                .strafeToLinearHeading(new Vector2d(54, -40), Math.toRadians(-90))
                 .afterDisp(0, new SequentialAction(
                         lift.autoLift(LiftMechanism.specimenPrepareHeight)
                 ))
-                .strafeToLinearHeading(new Vector2d(12, -42), Math.toRadians(90))
-                .strafeToLinearHeading(new Vector2d(12, -30), Math.toRadians(90))
+                .turn(Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(0, -40), Math.toRadians(0))
+                .turn(Math.toRadians(110))
+                .strafeToLinearHeading(new Vector2d(0, -20), Math.toRadians(90))
 
-                .waitSeconds(4)
                 .build();
-        Action trajPark = rrDrive.actionBuilder(new Pose2d(12, -30, Math.toRadians(90)))
+        Action trajPark = rrDrive.actionBuilder(new Pose2d(0, -20, Math.toRadians(90)))
                 .strafeTo(new Vector2d(36, -60))
                 .build();
 
@@ -82,12 +85,13 @@ public class RedCloseLeft extends BaseOpMode {
 
         waitForStart();
         //   camera.closeCameraDevice();
-        while (opModeInInit())
+    //    while (opModeInInit())
 
             Actions.runBlocking(
 
                     new SequentialAction(
                             lift.autoLift(0),
+                            lift.autoLift(LiftMechanism.specimenPrepareHeight),
                             trajHighChamberOne,
                             lift.autoLift(LiftMechanism.specimenScoreHeight),
                             claw.autoClaw(ClawSubsystem.FULLY_OPEN),
@@ -96,7 +100,8 @@ public class RedCloseLeft extends BaseOpMode {
                             trajGrabSpecimen,
                             lift.autoLift(LiftMechanism.specimenScoreHeight),
                             claw.autoClaw(ClawSubsystem.FULLY_OPEN),
-                            trajPark
+                            trajPark,
+                            claw.autoDD(Meet0TeleOp.bucketDownPos)
 
                     )
             );

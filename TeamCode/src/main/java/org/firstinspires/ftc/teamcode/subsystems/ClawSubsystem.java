@@ -22,12 +22,14 @@ public class ClawSubsystem extends SubsystemBase {
 
     Gamepad gamepad = new Gamepad();
 
-    private final Servo claw;
-    public static  double FULLY_OPEN = 0.07;
+    private final Servo claw, armServo, ddServo;
+    public static  double FULLY_OPEN = 0.3;
     public static  double NOT_OPEN = 0.35;
 
-    public ClawSubsystem(Servo claw   ) {
+    public ClawSubsystem(Servo claw, Servo armServo, Servo ddServo   ) {
         this.claw = claw;
+        this.armServo = armServo;
+        this.ddServo = ddServo;
     }
 
 
@@ -44,6 +46,32 @@ public class ClawSubsystem extends SubsystemBase {
             public boolean run(@NonNull TelemetryPacket packet) {
                 timer.reset();
                 claw.setPosition(pos);
+
+
+                return false;
+            }
+        };
+    }
+    public Action autoArm(double pos) {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                armServo.setPosition(pos);
+
+
+                return false;
+            }
+        };
+    }
+    public Action autoDD(double pos) {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                ddServo.setPosition(pos);
 
 
                 return false;

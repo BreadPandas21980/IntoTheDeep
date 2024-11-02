@@ -21,21 +21,18 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Config
 public class ArmSubsystem extends SubsystemBase {
 
-    private Servo arm_left;
-    private Servo arm_right;
+    private Servo armServo;
     //intake is big
     //0.11
     //0.2
-    public static double WALL_POSITION = 0.28;
-    public static double SAMPLE_POSITION = -1;
+    public static double armInPos = 0.7;
+    public static double armOutPos = 0.1;
     //14 one = 0.21
     //flush = 0.18
     //angled = 0.22
 
-    public ArmSubsystem(Servo arm_left, Servo arm_right) {
-        this.arm_left = arm_left;
-        this.arm_right = arm_right;
-        arm_left.setDirection(Servo.Direction.REVERSE);
+    public ArmSubsystem(Servo armServo ) {
+        this.armServo = armServo;
     }
 
     /**
@@ -43,9 +40,9 @@ public class ArmSubsystem extends SubsystemBase {
      */
 
 
-    public Command armGround() {
+   /* public Command armGround() {
         return new InstantCommand(()-> {
-            arm_left.setPosition(SAMPLE_POSITION);
+            arm_left.setPosition(armInPos);
             arm_right.setPosition(SAMPLE_POSITION);
         }, this).andThen(
                 new WaitCommand(500)
@@ -60,19 +57,17 @@ public class ArmSubsystem extends SubsystemBase {
                 new WaitCommand(500)
         );
     }
-/*
-    public Action autoArm(boolean in) {
+
+   */ public Action autoArm(boolean in) {
         return new Action() {
             ElapsedTime timer = new ElapsedTime();
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 timer.reset();
                 if (in) {
-                    arm_left.setPosition(INTAKE_POSITION);
-                    arm_right.setPosition(INTAKE_POSITION);
+                    armServo.setPosition(armInPos);
                 } else {
-                    arm_left.setPosition(OUTTAKE_POSITION + 0.02);
-                    arm_right.setPosition(OUTTAKE_POSITION + 0.02);
+                    armServo.setPosition(armOutPos);
                 }
 
                 return false;
@@ -80,7 +75,7 @@ public class ArmSubsystem extends SubsystemBase {
         };
     }
 
- */
+
     @Override
     public void periodic(){
 

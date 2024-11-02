@@ -51,13 +51,13 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear OpMode")
-@Disabled
+@TeleOp(name="EncoderTest", group="Linear OpMode")
+//@Disabled
 public class EncoderTest extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor front_left;
+    private DcMotor front_left, slide;
     private DcMotor back_left;
     private DcMotor back_right;
     private DcMotor front_right;
@@ -74,6 +74,7 @@ public class EncoderTest extends LinearOpMode {
         back_left = hardwareMap.get(DcMotor.class, "back_left");
         back_right = hardwareMap.get(DcMotor.class, "back_right");
         front_right = hardwareMap.get(DcMotor.class, "front_right");
+        slide = hardwareMap.get(DcMotor.class, "slide");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -81,10 +82,10 @@ public class EncoderTest extends LinearOpMode {
 
         front_left.setDirection(DcMotorSimple.Direction.REVERSE);
         back_left.setDirection(DcMotorSimple.Direction.REVERSE);
-        back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+       // back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+       // back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+       // front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+     //   front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -93,6 +94,8 @@ public class EncoderTest extends LinearOpMode {
         front_right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         back_left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         back_right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Wait for the game to start (driver presses START)
         waitForStart();
@@ -101,6 +104,13 @@ public class EncoderTest extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
+            if(gamepad2.left_stick_y > 0.1) {
+                slide.setPower(0.5);
+            } else if(gamepad2.left_stick_y < -0.1) {
+                slide.setPower(-0.5);
+            } else {
+                slide.setPower(0);
+            }
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Front Left: ", front_left.getCurrentPosition());
@@ -110,6 +120,7 @@ public class EncoderTest extends LinearOpMode {
             telemetry.addData("avg?: ", (front_left.getCurrentPosition() + front_right.getCurrentPosition() +
                     front_left.getCurrentPosition() + front_right.getCurrentPosition())  / 4
             );
+            telemetry.addData("sldie: ", slide.getCurrentPosition());
             telemetry.update();
         }
     }

@@ -20,7 +20,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
-
+/*
 @Config
 @Disabled
 @TeleOp(name = "ActualTeleOp", group = "!!!super cool!")
@@ -55,6 +55,7 @@ public class ActualTeleOp extends BaseOpMode {
         );
 
  */
+/*
         gb1(LEFT_TRIGGER).whileActiveContinuous(
                 intake.inIntake()
         );
@@ -76,7 +77,7 @@ public class ActualTeleOp extends BaseOpMode {
         );
 
  */
-
+/*
 
         gb2(A).whenActive(arm.armWall());
         gb2(B).toggleWhenPressed(
@@ -120,3 +121,5 @@ public class ActualTeleOp extends BaseOpMode {
         telemetry.update();
     }
 }
+
+ */

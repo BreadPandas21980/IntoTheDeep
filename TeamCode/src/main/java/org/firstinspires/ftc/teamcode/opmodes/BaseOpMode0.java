@@ -10,31 +10,35 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.drive.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem0;
+import org.firstinspires.ftc.teamcode.subsystems.drive.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.drive.DrivetrainTest;
 import org.firstinspires.ftc.teamcode.util.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.TriggerGamepadEx;
 
 
-public class BaseOpMode extends CommandOpMode {
+public class BaseOpMode0 extends CommandOpMode {
 
-    protected MotorEx fL, fR, bL, bR, slide_left, slide_right, intakeMotor1, intakeMotor2;
+    protected MotorEx fL, fR, bL, bR, slide;
     protected Servo arm_left, arm_right, shootServo, left_fold, right_fold;
-    protected Servo clawServo;
+    protected Servo clawServo, ddServo, armServo, extendo_linkage;
+    protected CRServo intakeServo;
     protected DriveSubsystem drive;
-    protected LiftSubsystem lift;
+    protected LiftSubsystem0 lift;
     protected ArmSubsystem arm;
     protected ClawSubsystem claw;
-    protected IntakeSubsystem intake;
+ //   protected IntakeSubsystem intake;
     protected MecanumDrive rrDrive;
-    protected DrivetrainTest ppDrive;
 
     protected GamepadEx driverGamepad;
     protected GamepadEx operatorGamepad;
@@ -67,13 +71,13 @@ public class BaseOpMode extends CommandOpMode {
 
         drive = new DriveSubsystem(fL, fR, bL, bR, imu);
         rrDrive = new MecanumDrive(hardwareMap, startPose);
-        ppDrive = new DrivetrainTest(hardwareMap, startPose);
 
-        arm = new ArmSubsystem(arm_left, arm_right);
+     //   arm = new ArmSubsystem(armServo);
         //liftT = new LiftSubsystemTele(slide_leftDC, slide_rightDC, intake,  intakeMotor2DC);
-        lift = new LiftSubsystem(slide_left, slide_right, intakeMotor2);
-        intake = new IntakeSubsystem(intakeMotor1, intakeMotor2);
-        claw = new ClawSubsystem(clawServo );
+        lift = new LiftSubsystem0(slide);
+     //   intake = new IntakeSubsystem(intakeMotor1, intakeMotor2);
+        claw = new ClawSubsystem(clawServo, armServo, ddServo);
+
 
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -84,20 +88,30 @@ public class BaseOpMode extends CommandOpMode {
 
     protected void initHardware() {
    //     try {
-            fL = new MotorEx(hardwareMap, "front_left");
-            fR = new MotorEx(hardwareMap, "front_right");
-            bL = new MotorEx(hardwareMap, "back_left");
-            bR = new MotorEx(hardwareMap, "back_right");
-            intakeMotor1 = new MotorEx(hardwareMap, "intakeMotor1");
-            intakeMotor2 = new MotorEx(hardwareMap, "intakeMotor2");
-            slide_left = new MotorEx(hardwareMap, "slide_left");
-            slide_right = new MotorEx(hardwareMap, "slide_right");
-            arm_left = hardwareMap.get(Servo.class, "arm_left");
-            arm_right = hardwareMap.get(Servo.class, "arm_right");
-            left_fold = hardwareMap.get(Servo.class, "left_fold");
-            right_fold = hardwareMap.get(Servo.class, "right_fold");
-            clawServo = hardwareMap.get(Servo.class, "claw");
-          //  lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+        fL = new MotorEx(hardwareMap, "front_left");
+        fR = new MotorEx(hardwareMap, "front_right");
+        bL = new MotorEx(hardwareMap, "back_left");
+        bR = new MotorEx(hardwareMap, "back_right");
+        clawServo = hardwareMap.get(Servo.class, "claw");
+        ddServo = hardwareMap.get(Servo.class, "dropdown");
+    //    drop_downintake = hardwareMap.get(Servo.class, "dropdown");
+        //claw = hardwareMap.get(CRServo.class, "claw");
+    //    intake = hardwareMap.get(CRServo.class, "stupid");
+        extendo_linkage = hardwareMap.get(Servo.class, "extendo_linkage");
+        armServo = hardwareMap.get(Servo.class, "arm");
+        slide = new MotorEx(hardwareMap, "slide");
+        clawServo.setPosition(ClawSubsystem.NOT_OPEN);
+
+
+        // Put initialization blocks here.
+        fL.setInverted(true);
+        bL.setInverted(true);
+        //claw.setDirection(Servo.Direction.REVERSE);
+        slide.setInverted(true);
+
+        ddServo.setPosition(1);
+        extendo_linkage.setPosition(0.3);
+        //  lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
 
     //    }
      //   catch(Exception e) {
@@ -109,16 +123,10 @@ public class BaseOpMode extends CommandOpMode {
 
         clawServo.setDirection(Servo.Direction.REVERSE);
 
-        intakeMotor1.setInverted(true);
-        intakeMotor2.setInverted(false);
-        intakeMotor2.resetEncoder();
-        slide_left.setRunMode(Motor.RunMode.RawPower);
-        slide_right.setRunMode(Motor.RunMode.RawPower);
-        slide_left.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        slide_right.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        slide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        arm_left.setDirection(Servo.Direction.REVERSE);
-        left_fold.setDirection(Servo.Direction.REVERSE);
+    //    arm_left.setDirection(Servo.Direction.REVERSE);
+    //    left_fold.setDirection(Servo.Direction.REVERSE);
         //intakeMotor2.resetEncoder();
         //bigger number = higher up
         //left_fold.setPosition(0.8);

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -26,10 +27,10 @@ public class Meet0TeleOp extends LinearOpMode {
     private IMU imu;
 
     public static double slowFactor = 0.6;
-    public static double clawOpenPos = 0.07;
+    public static double clawOpenPos = 0.1;
     public static double clawClosedPos = 0.35;
-    public static double armOutPos = 0.35;
-    public static double armInPos = 0.1;
+    public static double armOutPos = 0.1;
+    public static double armInPos = 0.7;
     public static double extendoOutPos = 0;
     public static double extendoInPos = 0.3;
     public static double bucketDownPos = 0;
@@ -86,17 +87,26 @@ public class Meet0TeleOp extends LinearOpMode {
         //false = close
         boolean clawopen = false;
         boolean bucketReset = false;
+        boolean clawToggle = false;
+        Gamepad currentGamepad1 = new Gamepad();
+        Gamepad currentGamepad2 = new Gamepad();
+        Gamepad previousGamepad1 = new Gamepad();
+        Gamepad previousGamepad2 = new Gamepad();
         //claw.setPosition(1);
         //drop_downintake.setPosition(1);
         waitForStart();
         if (opModeIsActive()) {
-            extendo_linkage.setPosition(extendoInPos);
-            arm.setPosition(armInPos);
-            drop_downintake.setPosition(bucketUpPos);
-            claw.setPosition(clawOpenPos);
+        //    extendo_linkage.setPosition(extendoInPos);
+        //    arm.setPosition(armInPos);
+           // drop_downintake.setPosition(bucketUpPos);
+           // claw.setPosition(clawOpenPos);
             // Put run blocks here.
             telemetry.addData("Status", "Initiallized");
             while (opModeIsActive()) {
+                previousGamepad1.copy(currentGamepad1);
+                previousGamepad2.copy(currentGamepad2);
+                currentGamepad1.copy(gamepad1);
+                currentGamepad2.copy(gamepad2);
                 double forward = -0.85 * gamepad1.left_stick_y;
                 double strafe = 0.85 * gamepad1.right_stick_x;
                 double rotate = 0.85 * 0.7 * gamepad1.left_stick_x;
@@ -118,9 +128,12 @@ public class Meet0TeleOp extends LinearOpMode {
                 setDrivePowers(bLPower, bRPower, fLPower, fRPower);
                 // reset speed variables
 
+                if(currentGamepad2.x && !previousGamepad2.x) {
+                    clawToggle = !clawToggle;
+                }
                 if (gamepad2.x) {
                     claw.setPosition(clawOpenPos);
-                    //claw.setPower(1);
+                    //claw.setPower(1); //x
                     clawopen = true;
 
                 } else if (gamepad2.b) {

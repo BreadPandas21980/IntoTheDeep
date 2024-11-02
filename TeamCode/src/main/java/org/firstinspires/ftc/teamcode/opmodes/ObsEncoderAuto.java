@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -18,8 +19,9 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 @Config
+@Disabled
 @Autonomous(name = "ObsZoneAutoMeet0")
-public class ObsZoneAutoMeet0 extends LinearOpMode {
+public class ObsEncoderAuto extends LinearOpMode {
     //Time
     private ElapsedTime runtime = new ElapsedTime();
 

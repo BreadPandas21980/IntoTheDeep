@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -18,8 +19,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.mechanisms.LiftMechanism;
 
 @Config
+@Disabled
 @Autonomous(name = "NetZoneAutoMeet0")
-public class NetZoneAutoMeet0 extends LinearOpMode {
+public class NetEncoderAuto extends LinearOpMode {
     //Time
     private ElapsedTime runtime = new ElapsedTime();
 
