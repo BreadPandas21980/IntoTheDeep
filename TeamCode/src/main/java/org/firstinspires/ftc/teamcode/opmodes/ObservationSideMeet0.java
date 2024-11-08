@@ -35,7 +35,7 @@ public class ObservationSideMeet0 extends BaseOpMode0 {
 //middle
 
         Action trajHighChamberOne = rrDrive.actionBuilder(rrDrive.pose)
-                .strafeTo(new Vector2d(8, -32.5))
+                .strafeTo(new Vector2d(8, -32))
                 .afterDisp(0, new SequentialAction(
                         lift.autoLift(LiftMechanism.specimenPrepareHeight),
                         claw.autoClaw(ClawSubsystem.NOT_OPEN)
