@@ -96,10 +96,10 @@ public class Meet0TeleOp extends LinearOpMode {
         //drop_downintake.setPosition(1);
         waitForStart();
         if (opModeIsActive()) {
-        //    extendo_linkage.setPosition(extendoInPos);
-        //    arm.setPosition(armInPos);
-           // drop_downintake.setPosition(bucketUpPos);
-           // claw.setPosition(clawOpenPos);
+            extendo_linkage.setPosition(extendoInPos);
+            arm.setPosition(armInPos);
+            drop_downintake.setPosition(bucketUpPos);
+            claw.setPosition(clawOpenPos);
             // Put run blocks here.
             telemetry.addData("Status", "Initiallized");
             while (opModeIsActive()) {
@@ -110,7 +110,7 @@ public class Meet0TeleOp extends LinearOpMode {
                 double forward = -0.85 * gamepad1.left_stick_y;
                 double strafe = 0.85 * gamepad1.right_stick_x;
                 double rotate = 0.85 * 0.7 * gamepad1.left_stick_x;
-                if(gamepad1.left_bumper) {
+                if(gamepad1.right_bumper) {
                     forward *= slowFactor;
                     strafe *= slowFactor;
                     rotate *= slowFactor;
