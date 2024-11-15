@@ -27,13 +27,13 @@ public class Meet0TeleOp extends LinearOpMode {
     private IMU imu;
 
     public static double slowFactor = 0.6;
-    public static double clawOpenPos = 0.1;
-    public static double clawClosedPos = 0.35;
+    public static double clawOpenPos = 0.;
+    public static double clawClosedPos = 0.2;
     public static double armOutPos = 0.1;
     public static double armInPos = 0.7;
     public static double extendoOutPos = 0;
     public static double extendoInPos = 0.3;
-    public static double bucketDownPos = 0;
+    public static double bucketDownPos = 0.1;
     public static double bucketUpPos = 1;
     private void setDrivePowers(double bLPower, double bRPower, double fLPower, double fRPower) {
         double maxSpeed = 1.0;
@@ -116,8 +116,8 @@ public class Meet0TeleOp extends LinearOpMode {
                     rotate *= slowFactor;
                 }
                 double slides = -gamepad2.left_stick_y;
-                boolean extendoForward = gamepad2.dpad_up;
-                boolean extendoRetract = gamepad2.dpad_down;
+                boolean extendoForward = gamepad2.dpad_down;
+                boolean extendoRetract = gamepad2.dpad_up;
                 double intakes = gamepad1.left_trigger;
                 double outtakes = gamepad1.right_trigger;
 
@@ -189,6 +189,7 @@ public class Meet0TeleOp extends LinearOpMode {
                 }
                 // set motor parameters to driver station
                 telemetry.addData("slide pos: ", slide.getCurrentPosition());
+                telemetry.addData("slides: ", slides);
                 telemetry.addData("Clawpower: ", claw.getPosition());
                 telemetry.addData("ClawOpen: ",clawopen);
                 telemetry.addData("Bucketpower: ", drop_downintake.getPosition());
