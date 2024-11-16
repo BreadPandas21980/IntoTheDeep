@@ -12,6 +12,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.opmodes.Meet0TeleOp;
+
 /**
  * A gripper mechanism that grabs a stone from the quarry.
  * Centered around the Skystone game for FTC that was done in the 2019
@@ -23,8 +25,8 @@ public class ClawSubsystem extends SubsystemBase {
     Gamepad gamepad = new Gamepad();
 
     private final Servo claw, armServo, ddServo;
-    public static  double FULLY_OPEN = 0.3;
-    public static  double NOT_OPEN = 0.35;
+    public static  double NOT_OPEN = Meet0TeleOp.clawOpenPos;
+    public static  double FULLY_OPEN = Meet0TeleOp.clawClosedPos;
 
     public ClawSubsystem(Servo claw, Servo armServo, Servo ddServo   ) {
         this.claw = claw;

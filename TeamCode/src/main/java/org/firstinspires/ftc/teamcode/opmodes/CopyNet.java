@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 
 @Config
 //@Disabled
-@Autonomous(name = "NetSideAUTO", group = "advanced", preselectTeleOp = "Meet0TeleOp")
-public class NetSideMeet0 extends BaseOpMode0 {
+@Autonomous(name = "copyNet", group = "advanced", preselectTeleOp = "Meet0TeleOp")
+public class CopyNet extends BaseOpMode0 {
 
     @Override
     public void initialize() {
@@ -35,25 +35,14 @@ public class NetSideMeet0 extends BaseOpMode0 {
 //middle
 
         Action trajHighChamberOne = rrDrive.actionBuilder(rrDrive.pose)
-                .strafeTo(new Vector2d(-8, -28))
+                .strafeToLinearHeading(new Vector2d(-8, -31), Math.toRadians(90))
                 .afterDisp(0, new SequentialAction(
                         lift.autoLift(LiftMechanism.specimenPrepareHeight),
-                        claw.autoClaw(ClawSubsystem.NOT_OPEN),
-
                         claw.autoClaw(ClawSubsystem.NOT_OPEN)
                 ))
                 .build();
         Action trajMoveToSamples = rrDrive.actionBuilder(new Pose2d(-8, -31, Math.toRadians(90)))
                 .strafeToLinearHeading(new Vector2d(-8, -40), Math.toRadians(90))
-                .turn(Math.toRadians(-90))
-                .strafeToLinearHeading(new Vector2d(-37, -56), Math.toRadians(0))
-              //  .turn(Math.toRadians(0))
-                .strafeToLinearHeading(new Vector2d(-37, -2), Math.toRadians(0))
-           //     .strafeToLinearHeading(new Vector2d(54, -25), Math.toRadians(-90))
-                .afterTime(0.25, new SequentialAction(
-                      lift.autoLift(1530)
-                ))
-                .strafeToLinearHeading(new Vector2d(-26, -2), Math.toRadians(0))
                 .build();
 
 
@@ -69,19 +58,7 @@ public class NetSideMeet0 extends BaseOpMode0 {
 
                     new SequentialAction(
                             lift.autoLift(0),
-                            lift.autoLift(LiftMechanism.specimenPrepareHeight),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
                             trajHighChamberOne,
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            lift.autoLift(LiftMechanism.specimenScoreHeight),
-                            claw.autoClaw(ClawSubsystem.FULLY_OPEN),
                             trajMoveToSamples
                     )
             );

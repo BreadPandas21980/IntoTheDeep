@@ -2,7 +2,7 @@
 <Robot type="FirstInspires-FTC">
     <LynxUsbDevice name="Expansion Hub Portal 1" serialNumber="DQ3MKMP6" parentModuleAddress="2">
         <LynxModule name="Expansion Hub 2" port="2">
-            <goBILDA5202SeriesMotor name="slide" port="0" />
+            <goBILDA5202SeriesMotor name="slide" port="2" />
             <ContinuousRotationServo name="stupid" port="0" />
             <Servo name="dropdown" port="2" />
             <Servo name="extendo_linkage" port="4" />

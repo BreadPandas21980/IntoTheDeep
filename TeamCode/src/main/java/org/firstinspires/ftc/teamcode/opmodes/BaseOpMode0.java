@@ -100,7 +100,7 @@ public class BaseOpMode0 extends CommandOpMode {
         extendo_linkage = hardwareMap.get(Servo.class, "extendo_linkage");
         armServo = hardwareMap.get(Servo.class, "arm");
         slide = new MotorEx(hardwareMap, "slide");
-        clawServo.setPosition(ClawSubsystem.NOT_OPEN);
+    //    clawServo.setPosition(0.2);
 
 
         // Put initialization blocks here.
@@ -110,7 +110,7 @@ public class BaseOpMode0 extends CommandOpMode {
         slide.setInverted(true);
 
         ddServo.setPosition(1);
-        extendo_linkage.setPosition(0.3);
+        extendo_linkage.setPosition(0);
         //  lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
 
     //    }
@@ -121,7 +121,7 @@ public class BaseOpMode0 extends CommandOpMode {
 
     protected void setupHardware() {
 
-        clawServo.setDirection(Servo.Direction.REVERSE);
+     //   clawServo.setDirection(Servo.Direction.REVERSE);
 
         slide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 

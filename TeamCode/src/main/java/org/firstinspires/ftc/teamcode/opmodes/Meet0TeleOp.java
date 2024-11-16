@@ -31,9 +31,9 @@ public class Meet0TeleOp extends LinearOpMode {
     public static double clawClosedPos = 0.2;
     public static double armOutPos = 0.1;
     public static double armInPos = 0.7;
-    public static double extendoOutPos = 0;
-    public static double extendoInPos = 0.3;
-    public static double bucketDownPos = 0.1;
+    public static double extendoOutPos = 0.4;
+    public static double extendoInPos = 0.;
+    public static double bucketDownPos = 0.15;
     public static double bucketUpPos = 1;
     private void setDrivePowers(double bLPower, double bRPower, double fLPower, double fRPower) {
         double maxSpeed = 1.0;
@@ -116,8 +116,8 @@ public class Meet0TeleOp extends LinearOpMode {
                     rotate *= slowFactor;
                 }
                 double slides = -gamepad2.left_stick_y;
-                boolean extendoForward = gamepad2.dpad_down;
-                boolean extendoRetract = gamepad2.dpad_up;
+                boolean extendoForward = gamepad2.dpad_up;
+                boolean extendoRetract = gamepad2.dpad_down;
                 double intakes = gamepad1.left_trigger;
                 double outtakes = gamepad1.right_trigger;
 
@@ -131,12 +131,12 @@ public class Meet0TeleOp extends LinearOpMode {
                 if(currentGamepad2.x && !previousGamepad2.x) {
                     clawToggle = !clawToggle;
                 }
-                if (gamepad2.x) {
+                if (gamepad2.b) {
                     claw.setPosition(clawOpenPos);
                     //claw.setPower(1); //x
                     clawopen = true;
 
-                } else if (gamepad2.b) {
+                } else if (gamepad2.x) {
                     claw.setPosition(clawClosedPos);
                     //claw.setPower(-1);
 
