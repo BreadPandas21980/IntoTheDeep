@@ -53,7 +53,7 @@ public class NetSideMeet0 extends BaseOpMode0 {
                 .afterTime(0.25, new SequentialAction(
                       lift.autoLift(1530)
                 ))
-                .strafeToLinearHeading(new Vector2d(-26, -2), Math.toRadians(0))
+                .strafeToLinearHeading(new Vector2d(-23.5, -2), Math.toRadians(0))
                 .build();
 
 

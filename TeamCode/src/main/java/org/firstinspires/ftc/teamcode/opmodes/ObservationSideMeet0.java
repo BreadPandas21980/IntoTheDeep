@@ -56,14 +56,14 @@ public class ObservationSideMeet0 extends BaseOpMode0 {
                 .afterTime(0.25, new SequentialAction(
                       lift.autoLift(LiftMechanism.groundHeight)
                 ))
-                .strafeToLinearHeading(new Vector2d(62.5, -8), Math.toRadians(-90))
+                .strafeToLinearHeading(new Vector2d(58, -8), Math.toRadians(-90))
               //  .turn(Math.toRadians(180))
                 .build();
-        Action trajPushToHP = rrDrive.actionBuilder(new Pose2d(62.5, -8, Math.toRadians(-90)))
-                .strafeToLinearHeading(new Vector2d(57, -65), Math.toRadians(-90))
+        Action trajPushToHP = rrDrive.actionBuilder(new Pose2d(58, -8, Math.toRadians(-90)))
+                .strafeToLinearHeading(new Vector2d(57, -64), Math.toRadians(-90))
            //     .waitSeconds(4)
                 .build();
-        Action trajHighChamber2 = rrDrive.actionBuilder(new Pose2d(57, -65, Math.toRadians(-90)))
+        Action trajHighChamber2 = rrDrive.actionBuilder(new Pose2d(57, -64, Math.toRadians(-90)))
                 .strafeToLinearHeading(new Vector2d(57, -50), Math.toRadians(-90))
                 .afterDisp(0.1, new SequentialAction(
                         lift.autoLift(LiftMechanism.specimenPrepareHeight2)
@@ -71,10 +71,10 @@ public class ObservationSideMeet0 extends BaseOpMode0 {
              //   .turn(Math.toRadians(90))
                 .strafeToLinearHeading(new Vector2d(4, -50), Math.toRadians(90))
             //    .turn(Math.toRadians(180))
-                .strafeToLinearHeading(new Vector2d(4, -31), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(4, -28.5), Math.toRadians(90))
                 .waitSeconds(0.5)
                 .build();
-        Action trajGrabSpecimen = rrDrive.actionBuilder(new Pose2d(4, -32, Math.toRadians(90)))
+        Action trajGrabSpecimen = rrDrive.actionBuilder(new Pose2d(4, -28.5, Math.toRadians(90)))
                 .strafeToLinearHeading(new Vector2d(4, -50), Math.toRadians(90))
            //     .afterDisp(0, claw.autoClaw(ClawSubsystem.FULLY_OPEN))
           //      .turn(Math.toRadians(180))
@@ -85,21 +85,21 @@ public class ObservationSideMeet0 extends BaseOpMode0 {
                 .strafeToLinearHeading(new Vector2d(60, -50), Math.toRadians(-90))
                 .strafeToLinearHeading(new Vector2d(60, -67), Math.toRadians(-90))
 
-                .waitSeconds(0.1)
+                .waitSeconds(0.3)
                 .build();
         Action trajHighChamber3 = rrDrive.actionBuilder(new Pose2d(60, -67, Math.toRadians(-90)))
-                .waitSeconds(0.4)
+                .waitSeconds(0.5)
                 .strafeToLinearHeading(new Vector2d(60, -55), Math.toRadians(-90))
                 .afterDisp(0.1, new SequentialAction(
                         lift.autoLift(LiftMechanism.specimenPrepareHeight2)
                 ))
                 //   .turn(Math.toRadians(90))
-                .strafeToLinearHeading(new Vector2d(15, -55), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(0, -55), Math.toRadians(90))
                // .turn(Math.toRadians(180))
-                .strafeToLinearHeading(new Vector2d(15, -34), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(0, -30), Math.toRadians(90))
                 .waitSeconds(0.5)
                 .build();
-        Action trajPark = rrDrive.actionBuilder(new Pose2d(15, -35, Math.toRadians(90)))
+        Action trajPark = rrDrive.actionBuilder(new Pose2d(0, -30, Math.toRadians(90)))
                 .strafeTo(new Vector2d(60, -68))
                 .afterDisp(0.1, claw.autoClaw(ClawSubsystem.FULLY_OPEN))
                 .build();
