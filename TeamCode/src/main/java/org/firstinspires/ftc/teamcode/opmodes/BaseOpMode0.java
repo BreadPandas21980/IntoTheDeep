@@ -76,7 +76,7 @@ public class BaseOpMode0 extends CommandOpMode {
         //liftT = new LiftSubsystemTele(slide_leftDC, slide_rightDC, intake,  intakeMotor2DC);
         lift = new LiftSubsystem0(slide);
      //   intake = new IntakeSubsystem(intakeMotor1, intakeMotor2);
-        claw = new ClawSubsystem(clawServo, armServo, ddServo);
+        claw = new ClawSubsystem(clawServo, extendo_linkage, ddServo, intakeServo);
 
 
 
@@ -92,6 +92,7 @@ public class BaseOpMode0 extends CommandOpMode {
         fR = new MotorEx(hardwareMap, "front_right");
         bL = new MotorEx(hardwareMap, "back_left");
         bR = new MotorEx(hardwareMap, "back_right");
+        intakeServo = hardwareMap.get(CRServo.class, "stupid");
         clawServo = hardwareMap.get(Servo.class, "claw");
         ddServo = hardwareMap.get(Servo.class, "dropdown");
     //    drop_downintake = hardwareMap.get(Servo.class, "dropdown");

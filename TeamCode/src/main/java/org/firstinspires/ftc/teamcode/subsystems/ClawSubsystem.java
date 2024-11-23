@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -24,13 +25,19 @@ public class ClawSubsystem extends SubsystemBase {
 
     Gamepad gamepad = new Gamepad();
 
-    private final Servo claw, armServo, ddServo;
+    private final Servo claw, extendoServo, ddServo;
+    private final CRServo intakeServo;
     public static  double NOT_OPEN = Meet0TeleOp.clawOpenPos;
     public static  double FULLY_OPEN = Meet0TeleOp.clawClosedPos;
 
-    public ClawSubsystem(Servo claw, Servo armServo, Servo ddServo   ) {
+    public static double ddUp = Meet0TeleOp.bucketUpPos;
+    public static double ddDown = Meet0TeleOp.bucketDownPos;
+    public static double extOut = Meet0TeleOp.extendoOutPos;
+    public static double extIn = Meet0TeleOp.extendoInPos;
+    public ClawSubsystem(Servo claw, Servo extendoServo, Servo ddServo, CRServo intakeServo) {
         this.claw = claw;
-        this.armServo = armServo;
+        this.intakeServo = intakeServo;
+        this.extendoServo = extendoServo;
         this.ddServo = ddServo;
     }
 
@@ -54,33 +61,97 @@ public class ClawSubsystem extends SubsystemBase {
             }
         };
     }
-    public Action autoArm(double pos) {
+    public Action autoIntakeIn() {
         return new Action() {
             ElapsedTime timer = new ElapsedTime();
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 timer.reset();
-                armServo.setPosition(pos);
+                intakeServo.setPower(1);
 
 
                 return false;
             }
         };
     }
-    public Action autoDD(double pos) {
+    public Action autoIntakeOut() {
         return new Action() {
             ElapsedTime timer = new ElapsedTime();
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 timer.reset();
-                ddServo.setPosition(pos);
+                intakeServo.setPower(-1);
 
 
                 return false;
             }
         };
     }
+    public Action autoIntakeIdle() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                intakeServo.setPower(0);
 
+
+                return false;
+            }
+        };
+    }
+    public Action autoExtOut() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                extendoServo.setPosition(ClawSubsystem.extOut);
+
+
+                return false;
+            }
+        };
+    }
+    public Action autoExtIn() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                extendoServo.setPosition(ClawSubsystem.extIn);
+
+
+                return false;
+            }
+        };
+    }
+    public Action autoDDUp() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                ddServo.setPosition(ClawSubsystem.ddUp);
+
+
+                return false;
+            }
+        };
+    }
+    public Action autoDDDown() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                ddServo.setPosition(ClawSubsystem.ddDown);
+
+
+                return false;
+            }
+        };
+    }
 /*
     @Override
     public void periodic() {
