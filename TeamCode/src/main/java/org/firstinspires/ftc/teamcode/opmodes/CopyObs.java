@@ -39,7 +39,7 @@ public class CopyObs extends BaseOpMode0 {
         Action trajHighChamber1 = rrDrive.actionBuilder(rrDrive.pose)
                 .strafeTo(new Vector2d(8, -28))
                 .afterDisp(0, new SequentialAction(
-                        lift.autoLift(LiftMechanism.specimenPrepareHeight)
+                   //     lift.autoLift(LiftMechanism.specimenPrepareHeight)
                 ))
                 .waitSeconds(0.5)
                 .build();
@@ -48,22 +48,26 @@ public class CopyObs extends BaseOpMode0 {
                 .strafeToLinearHeading(new Vector2d(8, -40), Math.toRadians(90))
            //     .afterDisp(0, claw.autoClaw(ClawSubsystem.NOT_OPEN))
           //      .turn(Math.toRadians(-90))
-                .strafeToLinearHeading(new Vector2d(37, -36), Math.toRadians(225))
-                .afterDisp(0, claw.autoClaw(ClawSubsystem.FULLY_OPEN))
                 .afterDisp(0, new ParallelAction(
                         claw.autoDDDown(),
                         claw.autoExtOut(),
                         claw.autoIntakeIn()
                 ))
-                .waitSeconds(0.5)
+                .strafeToLinearHeading(new Vector2d(34, -26), Math.toRadians(225))
+                .afterDisp(0, claw.autoClaw(ClawSubsystem.FULLY_OPEN))
+
+                .waitSeconds(0.9)
                 .turn(Math.toRadians(-90))
                 .afterTime(0.2, claw.autoIntakeOut())
-                .waitSeconds(0.5)
+                .waitSeconds(0.6)
                 .afterTime(0.5, claw.autoIntakeIn())
-                .strafeToLinearHeading(new Vector2d(53, -20), Math.toRadians(225))
+              //  .afterTime(0.6, claw.autoDDUp())
+                .strafeToLinearHeading(new Vector2d(50, -14), Math.toRadians(225))
                 .afterDisp(0, new ParallelAction(
                         claw.autoIntakeIn()
+                //        ,claw.autoDDDown()
                 ))
+                .waitSeconds(0.55)
                 .afterTime(0.25, new SequentialAction(
                         lift.autoLift(LiftMechanism.groundHeight)
                 ))
@@ -72,11 +76,12 @@ public class CopyObs extends BaseOpMode0 {
                 .afterTime(0.2, claw.autoIntakeOut())
                 .waitSeconds(0.5)
             //    .afterTime(0.4, claw.autoExtIn())
-                .strafeToLinearHeading(new Vector2d(68, -6), Math.toRadians(180))
-                .afterDisp(2, new ParallelAction(
+                .strafeToLinearHeading(new Vector2d(62, 7), Math.toRadians(180))
+                .afterDisp(0, new ParallelAction(
                         claw.autoIntakeIn()
                 ))
-                .turn(Math.toRadians(-90))
+                .waitSeconds(0.8)
+                .strafeToLinearHeading(new Vector2d(58, -33), Math.toRadians(-90))
                 .afterTime(0.2,
                         new SequentialAction(
                                 claw.autoExtOut(),
@@ -205,9 +210,9 @@ public class CopyObs extends BaseOpMode0 {
                     new SequentialAction(
                             lift.autoLift(0),
                             claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            lift.autoLift(LiftMechanism.specimenPrepareHeight),
+                       //     lift.autoLift(LiftMechanism.specimenPrepareHeight),
                             trajHighChamber1,
-                            lift.autoLift(LiftMechanism.specimenScoreHeight),
+                        //    lift.autoLift(LiftMechanism.specimenScoreHeight),
                             claw.autoClaw(ClawSubsystem.NOT_OPEN),
                             claw.autoClaw(ClawSubsystem.NOT_OPEN),
                             claw.autoClaw(ClawSubsystem.NOT_OPEN),
