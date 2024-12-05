@@ -124,7 +124,7 @@ public class LiftSubsystem0 extends SubsystemBase {
                     slide.set(0.08);
                     return false;
                 }
-                if (Math.abs(slide.getCurrentPosition() - t) > 30){
+                if (Math.abs(slide.getCurrentPosition() - t) > 100){
                     return true;
                 } else {
                     slide.set(0.08);
