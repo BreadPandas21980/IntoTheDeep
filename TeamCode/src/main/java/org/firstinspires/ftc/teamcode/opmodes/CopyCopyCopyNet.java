@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 
 @Config
 //@Disabled
-@Autonomous(name = "CopyCopyNet", group = "advanced", preselectTeleOp = "Meet0TeleOp")
-public class CopyCopyNet extends BaseOpMode0 {
+@Autonomous(name = "CopyCopyCopyNet", group = "advanced", preselectTeleOp = "Meet0TeleOp")
+public class CopyCopyCopyNet extends BaseOpMode0 {
 
 
 
