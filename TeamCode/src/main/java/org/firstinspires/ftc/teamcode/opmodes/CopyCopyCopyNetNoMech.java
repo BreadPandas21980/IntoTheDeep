@@ -63,7 +63,7 @@ public class CopyCopyCopyNetNoMech extends BaseOpMode0 {
 
         Action trajHighChamberOne = rrDrive.actionBuilder(rrDrive.pose)
                 .strafeToLinearHeading(new Vector2d(-4, -26), Math.toRadians(90))
-                .strafeToLinearHeading(new Vector2d(20, -42), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(30, -42), Math.toRadians(90))
                 .strafeToLinearHeading(new Vector2d(40,-17), Math.toRadians(-35))
                 .strafeToLinearHeading(new Vector2d(37, -55), Math.toRadians(270))
                 //     .strafeToLinearHeading(new Vector2d(37, -14), Math.toRadians(270))
@@ -90,56 +90,13 @@ public class CopyCopyCopyNetNoMech extends BaseOpMode0 {
                 .waitSeconds(.3)
                 .strafeToLinearHeading(new Vector2d(-24, -30), Math.toRadians(90))
                 ///         .strafeToLinearHeading(new Vector2d(-24,-45 ), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(40, -67), Math.toRadians(270))
+                .waitSeconds(.3)
+                .strafeToLinearHeading(new Vector2d(-24, -30), Math.toRadians(90))
                 // CLAW CODE ON RACKS
                 //.waitSeconds(0.5)
                 .strafeToLinearHeading(new Vector2d(60, -65), Math.toRadians(135))
                 .build();
-
-
-
-
-        //SKIBIDI SIGMA SLICER +1
-//                .strafeToLinearHeading(new Vector2d(8, -45), Math.toRadians(90))
-//                .splineTo(new Vector2d(36.8,-27), Math.toRadians(25))
-//                .splineTo(new Vector2d(48, -55), Math.toRadians(225))
-//                .strafeToLinearHeading(new Vector2d(50, -67), Math.toRadians(270))
-//                .build();
-        //SKIBIDI SIGMA SLICER +2
-//
-//                .strafeToLinearHeading(new Vector2d(8, -45), Math.toRadians(90))
-//                .splineTo(new Vector2d(54,-26), Math.toRadians(25))
-//                .splineTo(new Vector2d(50, -54), Math.toRadians(225))
-//                .strafeToLinearHeading(new Vector2d(50, -67), Math.toRadians(270))
-//                .build();
-
-
-
-
-        // SKIBIDI SIGMA SLICER +3
-//                .strafeToLinearHeading(new Vector2d(8, -45), Math.toRadians(90))
-//                .splineTo(new Vector2d(67.5,-24), Math.toRadians(-30))
-//                //.splineTo(new Vector2d(50, -54), Math.toRadians(225))
-//                .strafeToLinearHeading(new Vector2d(68, -60), Math.toRadians(0))
-//                .strafeToLinearHeading(new Vector2d(52, -64), Math.toRadians(270))
-//                .strafeToLinearHeading(new Vector2d(52, -67), Math.toRadians(270))
-//                .build();
-
-
-
-
-
-
-
-
-//left
-
-
-
-
-
-
-
-
 
 
 
