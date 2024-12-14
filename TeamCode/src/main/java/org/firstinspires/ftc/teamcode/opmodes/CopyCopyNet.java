@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 
 @Config
 //@Disabled
-@Autonomous(name = "CopyCopyNet", group = "advanced", preselectTeleOp = "Meet0TeleOp")
+@Autonomous(name = "NetSideAUTO", group = "advanced", preselectTeleOp = "Meet0TeleOp")
 public class CopyCopyNet extends BaseOpMode0 {
 
 
@@ -97,19 +97,20 @@ public class CopyCopyNet extends BaseOpMode0 {
                 .strafeToLinearHeading(new Vector2d(37, -55), Math.toRadians(270))
 
 
-                .strafeToLinearHeading(new Vector2d(37, -14), Math.toRadians(270))
-                .strafeToLinearHeading(new Vector2d(53, -14), Math.toRadians(270))
-                .strafeToLinearHeading(new Vector2d(53, -67), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(50, -14), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(58, -14), Math.toRadians(270))
+                .afterDisp(52, new SequentialAction(claw.autoClaw(ClawSubsystem.NOT_OPEN)))
+                .strafeToLinearHeading(new Vector2d(58, -67), Math.toRadians(270))
+                .afterDisp(0, new SequentialAction(lift.autoLift(LiftMechanism.specimenPrepareHeight)))
                 /*
                 //skibidi!!!!!!
                 .strafeToLinearHeading(new Vector2d(52, -67), Math.toRadians(270))
                  */
                 // CLAW CODE ON WALL
-                .afterTime(0, new SequentialAction(claw.autoClaw(ClawSubsystem.NOT_OPEN)))
-                .afterDisp(1.5, new SequentialAction(lift.autoLift(LiftMechanism.specimenPrepareHeight)))
+                .strafeToLinearHeading(new Vector2d(55, -60), Math.toRadians(270))
                 //.waitSeconds(0.5)
              //   .strafeToLinearHeading(new Vector2d(30, -50), Math.toRadians(0))
-                .strafeToLinearHeading(new Vector2d(-12, -32), Math.toRadians(90))
+//                .strafeToLinearHeading(new Vector2d(-12, -32), Math.toRadians(90))
 
 
                 .strafeToLinearHeading(new Vector2d(-12, -28), Math.toRadians(90))
@@ -129,17 +130,17 @@ public class CopyCopyNet extends BaseOpMode0 {
              //   .strafeToLinearHeading(new Vector2d(60.5,-28), Math.toRadians(0))
 
 
-                .strafeToLinearHeading(new Vector2d(36, -60), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(39.5, -60), Math.toRadians(270))
 
 
-                .strafeToLinearHeading(new Vector2d(36, -70), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(39.5, -70), Math.toRadians(270))
                 // CLAW CODE ON WALL
                 .afterTime(0.01, new SequentialAction( claw.autoClaw(ClawSubsystem.NOT_OPEN)))
                 .waitSeconds(0.25)
                 .afterDisp(1, new SequentialAction(lift.autoLift(LiftMechanism.specimenPrepareHeight)))
                // .strafeToLinearHeading(new Vector2d(35, -50), Math.toRadians(0))
                 //     .strafeToLinearHeading(new Vector2d(25, -50), Math.toRadians(0))
-                .strafeToLinearHeading(new Vector2d(-18, -30), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(-18, -29), Math.toRadians(90))
                 .afterDisp(4, claw.autoClaw(ClawSubsystem.FULLY_OPEN))
                 .afterDisp(.4, new SequentialAction(lift.autoLift(LiftMechanism.specimenScoreHeight)))
 
@@ -155,9 +156,9 @@ public class CopyCopyNet extends BaseOpMode0 {
 
               //  .strafeToLinearHeading(new Vector2d(40, -50), Math.toRadians(270))
 
-                .strafeToLinearHeading(new Vector2d(40, -60), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(38, -60), Math.toRadians(270))
 
-                .strafeToLinearHeading(new Vector2d(40, -67), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(38, -67), Math.toRadians(270))
                 .afterTime(0, new SequentialAction(claw.autoClaw(ClawSubsystem.NOT_OPEN)))
                 .waitSeconds(.3)
                 .afterDisp(0.1, new SequentialAction(lift.autoLift(LiftMechanism.specimenPrepareHeight)))
@@ -168,25 +169,18 @@ public class CopyCopyNet extends BaseOpMode0 {
 
 
 
-                .strafeToLinearHeading(new Vector2d(-24, -30), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(-24, -29), Math.toRadians(90))
                 .afterDisp(0, new SequentialAction(lift.autoLift(LiftMechanism.specimenScoreHeight)))
-                .afterTime(1.16, new SequentialAction(lift.autoLift(LiftMechanism.groundHeight)))
-
-
-                .strafeToLinearHeading(new Vector2d(-24,-45 ), Math.toRadians(90))
-
-
-
-
-                .afterDisp(6, new SequentialAction(
-                        claw.autoClaw(ClawSubsystem.FULLY_OPEN)
-                ))
-                // CLAW CODE ON RACKS
-                //.waitSeconds(0.5)
-                .strafeToLinearHeading(new Vector2d(60, -65), Math.toRadians(135))
                 .afterDisp(0, new SequentialAction(
                         claw.autoExtOut(),
                         claw.autoDDDown()
+                ))
+
+                // CLAW CODE ON RACKS
+                //.waitSeconds(0.5)
+                .strafeToLinearHeading(new Vector2d(60, -65), Math.toRadians(135))
+                .afterDisp(6, new SequentialAction(
+                        claw.autoClaw(ClawSubsystem.FULLY_OPEN)
                 ))
                 //.afterTime(0, claw.autoClaw(ClawSubsystem.FULLY_OPEN))
                 .build();

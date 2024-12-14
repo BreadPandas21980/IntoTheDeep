@@ -13,8 +13,7 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 import org.firstinspires.ftc.teamcode.mechanisms.LiftMechanism;
@@ -24,7 +23,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 
 
 @Config
-//@Disabled
+@Disabled
 @Autonomous(name = "copyNet", group = "advanced", preselectTeleOp = "Meet0TeleOp")
 public class CopyNet extends BaseOpMode0 {
 

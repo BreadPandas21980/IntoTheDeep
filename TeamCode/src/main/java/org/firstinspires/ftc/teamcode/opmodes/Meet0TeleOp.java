@@ -181,9 +181,9 @@ public class Meet0TeleOp extends LinearOpMode {
 
 
                 if (slides > 0.2) {
-                    slide.setPower(1);
+                    slide.setPower(slides);
                 } else if (slides < -0.2) {
-                    slide.setPower(-1);
+                    slide.setPower(slides);
                 } else {
                     slide.setPower(0.035);
                 }

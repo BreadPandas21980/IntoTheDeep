@@ -9,13 +9,14 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.mechanisms.LiftMechanism;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 
 @Config
-//@Disabled
-@Autonomous(name = "NetSideAUTO", group = "advanced", preselectTeleOp = "Meet0TeleOp")
+@Disabled
+@Autonomous(name = "NetSideMeet0", group = "advanced", preselectTeleOp = "Meet0TeleOp")
 public class NetSideMeet0 extends BaseOpMode0 {
 
     @Override
