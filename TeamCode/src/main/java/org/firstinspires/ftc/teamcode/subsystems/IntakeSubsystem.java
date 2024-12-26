@@ -9,6 +9,8 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -19,33 +21,60 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Config
 public class IntakeSubsystem extends SubsystemBase {
 
-    private final MotorEx intakeMotor1, intakeMotor2;
+    private final MotorEx intakeMotor;
+    private final Servo dropdownServo;
+    //private final ColorSensor colorSensor;
 
     public static double targetPower = 0;
-    public static double inPower = 1;
-    public static double outPower = -0.6;
+    public static double IN_POWER = 1;
+    public static double OUT_POWER = -0.6;
+    public static double DROPDOWN_DOWN = 0;
+    public static double DROPDOWN_UP = 1;
 
 
-    public IntakeSubsystem(MotorEx intakeMotor1, MotorEx intakeMotor2 ) {
-        this.intakeMotor1 = intakeMotor1;
-        this.intakeMotor2 = intakeMotor2;
+    public IntakeSubsystem(MotorEx intakeMotor, Servo dropdownServo){//, ColorSensor colorSensor ) {
+        this.intakeMotor = intakeMotor;
+        this.dropdownServo = dropdownServo;
+        //this.colorSensor = colorSensor;
 
     }
 
-    public int getPos() {
-        return intakeMotor2.getCurrentPosition();
-    }
 
     public Command inIntake() {
         return new RunCommand(() -> {
-            intakeMotor1.set(inPower);
-            intakeMotor2.set(inPower);
+            intakeMotor.set(IN_POWER);
         }, this);
     }
-
-    public void update() {
-        intakeMotor1.set(targetPower);
-        intakeMotor2.set(targetPower);
+    public Command outIntake() {
+        return new RunCommand(() -> {
+            intakeMotor.set(OUT_POWER);
+        }, this);
+    }
+    public Command idle() {
+        return new RunCommand(() -> {
+            intakeMotor.set(0);
+        }, this);
+    }
+    public Command flipDown() {
+        return new RunCommand(() -> {
+            dropdownServo.setPosition(DROPDOWN_DOWN);
+        }, this);
+    }
+    public Command flipUp() {
+        return new RunCommand(() -> {
+            dropdownServo.setPosition(DROPDOWN_UP);
+        }, this);
+    }
+    public Action autoInIntake() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                intakeMotor.set(IN_POWER);
+                return false;
+            }
+        };
     }
     public Action autoOutIntake() {
         return new Action() {
@@ -53,10 +82,7 @@ public class IntakeSubsystem extends SubsystemBase {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 timer.reset();
-                intakeMotor1.set(-0.3);
-                intakeMotor2.set(-0.3);
-
-
+                intakeMotor.set(OUT_POWER);
                 return false;
             }
         };
@@ -67,44 +93,32 @@ public class IntakeSubsystem extends SubsystemBase {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 timer.reset();
-                intakeMotor1.set(0);
-                intakeMotor2.set(0);
-
-
+                intakeMotor.set(0);
                 return false;
             }
         };
     }
-    public Command outIntake() {
-        return new RunCommand(() -> {
-            intakeMotor1.set(outPower);
-            intakeMotor2.set(outPower);
-        }, this);
-    }
-
-    public Command idle() {
-        return new RunCommand(() -> {
-            intakeMotor1.set(0);
-            intakeMotor2.set(0);
-        }, this);
-    }
-
-    public void autoIdle() {
-        targetPower = 0;
-    }
-
-    public Command setPower(double power) {
-        return new RunCommand(() -> {
-            if (power > 0.2) {
-                intakeMotor1.set(1);
-                intakeMotor2.set(1);
-            } else if (power < -0.2) {
-                intakeMotor1.set(-1);
-                intakeMotor2.set(-1);
-            } else {
-                intakeMotor1.set(0);
-                intakeMotor2.set(0);
+    public Action autoFlipDown() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                dropdownServo.setPosition(DROPDOWN_DOWN);
+                return false;
             }
-        }, this);
+        };
     }
+    public Action autoFlipUp() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                dropdownServo.setPosition(DROPDOWN_UP);
+                return false;
+            }
+        };
+    }
+
 }

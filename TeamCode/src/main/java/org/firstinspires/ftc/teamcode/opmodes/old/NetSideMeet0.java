@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.old;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -9,10 +9,9 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.mechanisms.LiftMechanism;
-import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.old.ClawSubsystem0;
 
 @Config
 //@Disabled
@@ -39,9 +38,9 @@ public class NetSideMeet0 extends BaseOpMode0 {
                 .strafeTo(new Vector2d(-8, -28))
                 .afterDisp(0, new SequentialAction(
                         lift.autoLift(LiftMechanism.specimenPrepareHeight),
-                        claw.autoClaw(ClawSubsystem.NOT_OPEN),
+                        claw.autoClaw(ClawSubsystem0.NOT_OPEN),
 
-                        claw.autoClaw(ClawSubsystem.NOT_OPEN)
+                        claw.autoClaw(ClawSubsystem0.NOT_OPEN)
                 ))
                 .build();
         Action trajMoveToSamples = rrDrive.actionBuilder(new Pose2d(-8, -31, Math.toRadians(90)))
@@ -71,18 +70,18 @@ public class NetSideMeet0 extends BaseOpMode0 {
                     new SequentialAction(
                             lift.autoLift(0),
                             lift.autoLift(LiftMechanism.specimenPrepareHeight),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
+                            claw.autoClaw(ClawSubsystem0.NOT_OPEN),
+                            claw.autoClaw(ClawSubsystem0.NOT_OPEN),
+                            claw.autoClaw(ClawSubsystem0.NOT_OPEN),
+                            claw.autoClaw(ClawSubsystem0.NOT_OPEN),
+                            claw.autoClaw(ClawSubsystem0.NOT_OPEN),
+                            claw.autoClaw(ClawSubsystem0.NOT_OPEN),
+                            claw.autoClaw(ClawSubsystem0.NOT_OPEN),
+                            claw.autoClaw(ClawSubsystem0.NOT_OPEN),
                             trajHighChamberOne,
-                            claw.autoClaw(ClawSubsystem.NOT_OPEN),
+                            claw.autoClaw(ClawSubsystem0.NOT_OPEN),
                             lift.autoLift(LiftMechanism.specimenScoreHeight),
-                            claw.autoClaw(ClawSubsystem.FULLY_OPEN),
+                            claw.autoClaw(ClawSubsystem0.FULLY_OPEN),
                             trajMoveToSamples
                     )
             );

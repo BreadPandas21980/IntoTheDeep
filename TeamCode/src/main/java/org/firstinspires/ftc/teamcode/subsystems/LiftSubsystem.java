@@ -23,31 +23,33 @@ import java.util.function.DoubleSupplier;
 public class LiftSubsystem extends SubsystemBase {
 
     public static double output = 0;
-    private final MotorEx slide_left, slide_right, intakeMotor2;
+    private final MotorEx leftSlide, rightSlide;
     private PIDController controller;
-
-    boolean climb = false;
     public boolean heighting = false;
     public static double slackTime = 1.5;
+/*
+    boolean climb = false;
+
     public static double slackTimeG = .1;
+
+ */
 
     public static double kP = 0.01;
     public static double kI = 0;
     public static double kD = 0;
     public static double tolerance = 10;
     public static int targetPos = 0;
-    public static int threshold = 30;
     ElapsedTime lifttimer1 = new ElapsedTime();
-    public static class Presets {
-        public static int CLIMB_HEIGHT = 1520;
-        public static int SAMPLE_HEIGHT = 250;
 
-    }
-    public LiftSubsystem(MotorEx slide_left, MotorEx slide_right, MotorEx intakeMotor2) {
-        this.slide_left = slide_left;
-        this.slide_right = slide_right;
-        this.intakeMotor2 = intakeMotor2;
-        slide_left.setInverted(true);
+    public static int CLIMB_HEIGHT_ONE_UP = 1000;
+    public static int CLIMB_HEIGHT_TWO_DOWN = 500;
+    public static int CLIMB_HEIGHT_THREE_UP = 2000;
+    public static int CLIMB_HEIGHT_FOUR_DOWN = 1500;
+
+    public LiftSubsystem(MotorEx leftSlide, MotorEx rightSlide) {
+        this.leftSlide = leftSlide;
+        this.rightSlide = rightSlide;
+        leftSlide.setInverted(true);
 
         controller = new PIDController(kP, kI, kD);
         controller.setTolerance(tolerance);
@@ -61,22 +63,24 @@ public class LiftSubsystem extends SubsystemBase {
         return new InstantCommand(() -> heighting = false, this);
     }
 
+
+
     public int getLeftEncoderVal() {
-        return intakeMotor2.getCurrentPosition();
+        return leftSlide.getCurrentPosition();
     }
 
     public void resetEnc() {
-        intakeMotor2.resetEncoder();
+        leftSlide.resetEncoder();
     }
     public boolean atTarget() {
-        return intakeMotor2.getCurrentPosition() < targetPos + threshold  &&
-                intakeMotor2.getCurrentPosition() > targetPos - threshold;
+        return getLeftEncoderVal() < targetPos + tolerance  &&
+                getLeftEncoderVal() > targetPos - tolerance;
     }
 
-    public int getCurrentGoal() {
+    public int getTargetPos() {
         return targetPos;
     }
-
+/*
     //was used to bring slides down and fully suspend after robot was on truss
     public Command climb() {
         return new InstantCommand(() -> climb = true, this);
@@ -84,6 +88,8 @@ public class LiftSubsystem extends SubsystemBase {
     public Command unclimb() {
         return new InstantCommand(() -> climb = false, this);
     }
+
+
     public Command setPower(DoubleSupplier power) {
         return new RunCommand(() -> {
 
@@ -108,11 +114,42 @@ public class LiftSubsystem extends SubsystemBase {
         }, this);
 
     }
+ */
+
 
     private void setTargetPos(int pos) {
         targetPos = pos;
     }
 
+
+    public Command climbHeightOne() {
+        return new RunCommand(() -> setTargetPos(CLIMB_HEIGHT_ONE_UP), this);
+    }
+    public Command climbHeightTwo() {
+        return new RunCommand(() -> setTargetPos(CLIMB_HEIGHT_TWO_DOWN), this);
+    }
+    public Command climbHeightThree() {
+        return new RunCommand(() -> setTargetPos(CLIMB_HEIGHT_THREE_UP), this);
+    }
+    public Command climbHeightFour() {
+        return new RunCommand(() -> setTargetPos(CLIMB_HEIGHT_FOUR_DOWN), this);
+    }
+    public Command setPower(DoubleSupplier power) {
+        return new RunCommand(() -> {
+
+            if(power.getAsDouble() > 0.2) {
+                leftSlide.set(1);
+                rightSlide.set(1);
+            } else if (power.getAsDouble() < -0.2) {
+                leftSlide.set(-0.9);
+                rightSlide.set(-0.9);
+            } else {
+                leftSlide.set(0);
+                rightSlide.set(0);
+            }
+        }, this);
+
+    }
 
     public Action autoLift(int t) {
         return new Action() {
@@ -126,29 +163,27 @@ public class LiftSubsystem extends SubsystemBase {
                     initialized = true;
                 }
                 controller.setPID(kP, kI, kD);
-                double output1 = controller.calculate(getLeftEncoderVal(), getCurrentGoal());
-                slide_left.set(output1);
-                slide_right.set(output1);
+                double output1 = controller.calculate(getLeftEncoderVal(), getTargetPos());
+                leftSlide.set(output1);
+                rightSlide.set(output1);
                 if(a.seconds() > 1 ) {
-                    slide_right.set(0.08);
-                    slide_left.set(0.08);
+                    leftSlide.set(0.08);
+                    rightSlide.set(0.08);
                     return false;
                 }
-                if (Math.abs(intakeMotor2.getCurrentPosition() - t) > 7.5){
+                if (Math.abs(getLeftEncoderVal() - t) > 7.5){
                     return true;
                 } else {
-                    slide_right.set(0.08);
-                    slide_left.set(0.08);
+                    leftSlide.set(0.08);
+                    rightSlide.set(0.08);
                     return false;
                 }
             }
         };
     }
 
+
     public void resetLiftTimer(){
-        lifttimer1.reset();
-    }
-    public void resetLiftTimerG(){
         lifttimer1.reset();
     }
     public boolean liftTimer() {
@@ -158,13 +193,8 @@ public class LiftSubsystem extends SubsystemBase {
             return false;
         }
     }
-    public boolean liftTimerG() {
-        if(lifttimer1.seconds() > slackTimeG) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
+
     public Command goToActual(int tick) {
         return new InstantCommand(() -> setTargetPos(tick), this)
                 .andThen(new WaitUntilCommand(this::atTarget))
@@ -172,20 +202,12 @@ public class LiftSubsystem extends SubsystemBase {
                 .andThen(new WaitUntilCommand(this::liftTimer))
                 .andThen(unheighting());
     }
-    public Command goToActualGround(int tick) {
-        return new InstantCommand(() -> setTargetPos(tick), this)
-                .andThen(new WaitUntilCommand(this::atTarget))
-                .andThen(new InstantCommand(()-> resetLiftTimerG(), this))
-                .andThen(new WaitUntilCommand(this::liftTimerG))
-                .andThen(unheighting());
-    }
 
-    public Command goToActualTest(int tick) {
-        return new InstantCommand(() -> setTargetPos(tick), this);
-    }
+
 
     @Override
     public void periodic() {
+        /*
         if(atTarget()){
             heighting = false;
         }
@@ -202,6 +224,8 @@ public class LiftSubsystem extends SubsystemBase {
         } else {
             controller.setPID(0, 0, 0);
         }
+
+         */
 
     }
 

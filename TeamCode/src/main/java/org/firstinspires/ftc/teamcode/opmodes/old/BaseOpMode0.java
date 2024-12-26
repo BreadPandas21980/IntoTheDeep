@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.old;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -11,18 +11,13 @@ import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem0;
-import org.firstinspires.ftc.teamcode.subsystems.drive.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.drive.DrivetrainTest;
+import org.firstinspires.ftc.teamcode.subsystems.old.ClawSubsystem0;
+import org.firstinspires.ftc.teamcode.subsystems.old.LiftSubsystem0;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.util.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.TriggerGamepadEx;
 
@@ -36,7 +31,7 @@ public class BaseOpMode0 extends CommandOpMode {
     protected DriveSubsystem drive;
     protected LiftSubsystem0 lift;
     protected ArmSubsystem arm;
-    protected ClawSubsystem claw;
+    protected ClawSubsystem0 claw;
  //   protected IntakeSubsystem intake;
     protected MecanumDrive rrDrive;
 
@@ -76,7 +71,7 @@ public class BaseOpMode0 extends CommandOpMode {
         //liftT = new LiftSubsystemTele(slide_leftDC, slide_rightDC, intake,  intakeMotor2DC);
         lift = new LiftSubsystem0(slide);
      //   intake = new IntakeSubsystem(intakeMotor1, intakeMotor2);
-        claw = new ClawSubsystem(clawServo, extendo_linkage, ddServo, intakeServo);
+        claw = new ClawSubsystem0(clawServo, extendo_linkage, ddServo, intakeServo);
 
 
 

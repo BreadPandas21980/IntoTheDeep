@@ -7,10 +7,15 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import java.util.function.DoubleSupplier;
 
 
 /**
@@ -21,61 +26,71 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Config
 public class ArmSubsystem extends SubsystemBase {
 
-    private Servo armServo;
-    //intake is big
-    //0.11
-    //0.2
-    public static double armInPos = 0.7;
-    public static double armOutPos = 0.1;
-    //14 one = 0.21
-    //flush = 0.18
-    //angled = 0.22
+    private CRServo leftArm;
+    private CRServo rightArm;
 
-    public ArmSubsystem(Servo armServo ) {
-        this.armServo = armServo;
+    public static double OUT_POWER = 1;
+    public static double IN_POWER = -1;
+    public ArmSubsystem(CRServo leftArm, CRServo rightArm ) {
+        this.leftArm = leftArm;
+        this.rightArm = rightArm;
+        leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    /**
-     * Moves arm to depositing position.
-     */
+    public Command setPower(DoubleSupplier power) {
+        return new RunCommand(() -> {
 
+            if(power.getAsDouble() > 0.2) {
+                leftArm.setPower(OUT_POWER);
+                rightArm.setPower(OUT_POWER);
+            } else if (power.getAsDouble() < -0.2) {
+                leftArm.setPower(IN_POWER);
+                rightArm.setPower(IN_POWER);
+            } else {
+                leftArm.setPower(0);
+                rightArm.setPower(0);
+            }
+    }, this);
 
-   /* public Command armGround() {
-        return new InstantCommand(()-> {
-            arm_left.setPosition(armInPos);
-            arm_right.setPosition(SAMPLE_POSITION);
-        }, this).andThen(
-                new WaitCommand(500)
-        );
     }
 
-    public Command armWall() {
-        return new InstantCommand(()-> {
-            arm_left.setPosition(WALL_POSITION);
-            arm_right.setPosition(WALL_POSITION);
-        }, this).andThen(
-                new WaitCommand(500)
-        );
-    }
-
-   */ public Action autoArm(boolean in) {
+    public Action autoArmIn() {
         return new Action() {
             ElapsedTime timer = new ElapsedTime();
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 timer.reset();
-                if (in) {
-                    armServo.setPosition(armInPos);
-                } else {
-                    armServo.setPosition(armOutPos);
-                }
-
+                leftArm.setPower(IN_POWER);
+                rightArm.setPower(IN_POWER);
+                return false;
+            }
+        };
+    }
+    public Action autoArmOut() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                leftArm.setPower(OUT_POWER);
+                rightArm.setPower(OUT_POWER);
                 return false;
             }
         };
     }
 
-
+    public Action autoArmIdle() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                leftArm.setPower(0);
+                rightArm.setPower(0);
+                return false;
+            }
+        };
+    }
     @Override
     public void periodic(){
 
