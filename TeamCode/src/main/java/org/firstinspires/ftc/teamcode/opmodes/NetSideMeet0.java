@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.mechanisms.LiftMechanism;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 
 @Config
-@Disabled
-@Autonomous(name = "NetSideMeet0", group = "advanced", preselectTeleOp = "Meet0TeleOp")
+//@Disabled
+@Autonomous(name = "NetSideAUTO", group = "advanced", preselectTeleOp = "Meet0TeleOp")
 public class NetSideMeet0 extends BaseOpMode0 {
 
     @Override

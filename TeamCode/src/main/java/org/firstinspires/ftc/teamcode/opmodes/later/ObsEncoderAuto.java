@@ -1,16 +1,11 @@
 
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.later;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -18,10 +13,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.mechanisms.LiftMechanism;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 @Config
 @Disabled
-@Autonomous(name = "NetZoneAutoMeet0")
-public class NetEncoderAuto extends LinearOpMode {
+@Autonomous(name = "ObsZoneAutoMeet0")
+public class ObsEncoderAuto extends LinearOpMode {
     //Time
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -184,8 +184,7 @@ public class NetEncoderAuto extends LinearOpMode {
             encoderFunction();
             setPZero();
             runtime.reset();
-            //turn to net side
-            rotate(-90, 0.5);
+            rotate(90, 0.5);
             encoderFunction();
             setPZero();
             runtime.reset();
@@ -228,11 +227,11 @@ public class NetEncoderAuto extends LinearOpMode {
             }
             setPZero();
             encoderFunction();
-            rotate(-135, 0.5);
+            rotate(135, 0.5);
             encoderFunction();
             runtime.reset();
             setPZero();
-            //bring sample to net zone
+            //bring sample to human player
             while((Math.abs(Math.abs(back_left.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
                     (Math.abs(Math.abs(back_right.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
                     (Math.abs(Math.abs(front_left.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
@@ -247,13 +246,14 @@ public class NetEncoderAuto extends LinearOpMode {
                 telemetry.update();
             }
             setPZero();
+            //turn to face cone stack
             encoderFunction();
             runtime.reset();
-            //back away from net zone
-            while((Math.abs(Math.abs(back_left.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(back_right.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(front_left.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(front_right.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
+            //move away human player
+            while((Math.abs(Math.abs(back_left.getCurrentPosition()) - 12 * COUNTS_PER_INCH * fixFactor) > 15) &&
+                    (Math.abs(Math.abs(back_right.getCurrentPosition()) - 12 * COUNTS_PER_INCH * fixFactor) > 15) &&
+                    (Math.abs(Math.abs(front_left.getCurrentPosition()) - 12 * COUNTS_PER_INCH * fixFactor) > 15) &&
+                    (Math.abs(Math.abs(front_right.getCurrentPosition()) - 12 * COUNTS_PER_INCH * fixFactor) > 15) &&
                     opModeIsActive()){
 
                 correction = checkDirection();
@@ -266,101 +266,133 @@ public class NetEncoderAuto extends LinearOpMode {
             setPZero();
             encoderFunction();
             runtime.reset();
-            encoderStrafe(0.3, -18, 18, 18, -18, 2.0);
-            encoderFunction();
-            runtime.reset();
-            setPZero();
-            //bring sample to net zone
-            while((Math.abs(Math.abs(back_left.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(back_right.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(front_left.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(front_right.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    opModeIsActive()){
+            //wait for humna player done
+            while (runtime.seconds() < 5 && opModeIsActive()) {
 
-                correction = checkDirection();
-                back_left.setPower(0.55 - correction);
-                back_right.setPower(0.55 + correction);
-                front_left.setPower(0.55 - correction);
-                front_right.setPower(0.55 + correction);
-                telemetry.update();
             }
-            setPZero();
-            encoderFunction();
-            runtime.reset();
-            //back away from net zone
-            while((Math.abs(Math.abs(back_left.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(back_right.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(front_left.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(front_right.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    opModeIsActive()){
-
-                correction = checkDirection();
-                back_left.setPower(-0.4 - correction);
-                back_right.setPower(-0.4 + correction);
-                front_left.setPower(-0.4 - correction);
-                front_right.setPower(-0.4 + correction);
-                telemetry.update();
-            }
-            setPZero();
-            encoderFunction();
-            runtime.reset();
-            encoderStrafe(0.3, -18, 18, 18, -18, 2.0);
-            encoderFunction();
-            runtime.reset();
-            setPZero();
-            //bring sample to net zone
-            while((Math.abs(Math.abs(back_left.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(back_right.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(front_left.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(front_right.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    opModeIsActive()){
-
-                correction = checkDirection();
-                back_left.setPower(0.55 - correction);
-                back_right.setPower(0.55 + correction);
-                front_left.setPower(0.55 - correction);
-                front_right.setPower(0.55 + correction);
-                telemetry.update();
-            }
-            setPZero();
-            encoderFunction();
-            runtime.reset();
-            //back away from net zone
-            while((Math.abs(Math.abs(back_left.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(back_right.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(front_left.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(front_right.getCurrentPosition()) - 36 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    opModeIsActive()){
-
-                correction = checkDirection();
-                back_left.setPower(-0.4 - correction);
-                back_right.setPower(-0.4 + correction);
-                front_left.setPower(-0.4 - correction);
-                front_right.setPower(-0.4 + correction);
-                telemetry.update();
-            }
-            setPZero();
-            encoderFunction();
-            runtime.reset();
-            encoderStrafe(0.3, 36, -36, -36, 36, 3.0);
-            lift.setTarget(LiftMechanism.specimenScoreHeight);
-            while((Math.abs(Math.abs(back_left.getCurrentPosition()) - 48 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(back_right.getCurrentPosition()) - 48 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(front_left.getCurrentPosition()) - 48 * COUNTS_PER_INCH * fixFactor) > 15) &&
-                    (Math.abs(Math.abs(front_right.getCurrentPosition()) - 48 * COUNTS_PER_INCH * fixFactor) > 15) &&
+            //move to grab specimen
+            while ((Math.abs(Math.abs(back_left.getCurrentPosition()) - 20 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(back_right.getCurrentPosition()) - 20 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(front_left.getCurrentPosition()) - 20 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(front_right.getCurrentPosition()) - 20 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
                     opModeIsActive()){
 
                 lift.update();
                 correction = checkDirection();
-                back_left.setPower(-0.4 - correction);
-                back_right.setPower(-0.4 + correction);
-                front_left.setPower(-0.4 - correction);
-                front_right.setPower(-0.4 + correction);
+                back_left.setPower(0.5 - correction);
+                back_right.setPower(0.5 + correction);
+                front_left.setPower(0.5 - correction);
+                front_right.setPower(0.5 + correction);
                 telemetry.update();
             }
-            encoderStrafe(0.3, 4, -4, -4, 4, 2.0);
             setPZero();
-            lift.idle();
+            runtime.reset();
+            //grab thing
+            while (runtime.seconds() < 0.3 && opModeIsActive()) {
+                claw.setPosition(clawClosedPos);
+                lift.update();
+            }
+            setPZero();
+            encoderFunction();
+            runtime.reset();
+            //move back
+            while((Math.abs(Math.abs(back_left.getCurrentPosition()) - 24 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(back_right.getCurrentPosition()) - 24 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(front_left.getCurrentPosition()) - 24 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(front_right.getCurrentPosition()) - 24 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    opModeIsActive()){
+
+                lift.update();
+                correction = checkDirection();
+                back_left.setPower(-0.5 - correction);
+                back_right.setPower(-0.5 + correction);
+                front_left.setPower(-0.5 - correction);
+                front_right.setPower(-0.5 + correction);
+                telemetry.update();
+            }
+            setPZero();
+            runtime.reset();
+            //drop lift
+            rotate(90, 0.5);
+            encoderFunction();
+            runtime.reset();
+            lift.setTarget(LiftMechanism.specimenPrepareHeight);
+            //move back toward pole
+            while((Math.abs(Math.abs(back_left.getCurrentPosition()) - 29 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(back_right.getCurrentPosition()) - 29 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(front_left.getCurrentPosition()) - 29 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(front_right.getCurrentPosition()) - 29 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    opModeIsActive()){
+
+                lift.update();
+                correction = checkDirection();
+                back_left.setPower(0.5 - correction);
+                back_right.setPower(0.5 + correction);
+                front_left.setPower(0.5 - correction);
+                front_right.setPower(0.5 + correction);
+                telemetry.update();
+            }
+            setPZero();
+            //fix angle
+            rotate(-getAngle(), 0.45);
+            //rotate toward alliance
+            rotate(90, 0.4);
+            encoderFunction();
+            //drive forward to chamber
+            while((Math.abs(Math.abs(back_left.getCurrentPosition()) - 14 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(back_right.getCurrentPosition()) - 14 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(front_left.getCurrentPosition()) - 14 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(front_right.getCurrentPosition()) - 14 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    opModeIsActive()){
+
+                lift.update();
+                correction = checkDirection();
+                back_left.setPower(0.5);
+                back_right.setPower(0.5);
+                front_left.setPower(0.5);
+                front_right.setPower(0.5);
+                telemetry.update();
+            }
+            //fix angle
+            rotate(-getAngle(), 0.45);
+            runtime.reset();
+            lift.setTarget(LiftMechanism.specimenScoreHeight);
+            //lift slides
+            while (runtime.seconds() < 0.5 && opModeIsActive()) {
+                lift.update();
+            }
+            encoderFunction();
+            //release specimen
+            runtime.reset();
+            while (runtime.seconds() < 0.3 && opModeIsActive()) {
+                claw.setPosition(clawOpenPos);
+            }
+            runtime.reset();
+            //move away
+            while ((Math.abs(Math.abs(back_left.getCurrentPosition()) - 24 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(back_right.getCurrentPosition()) - 24 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(front_left.getCurrentPosition()) - 24 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    (Math.abs(Math.abs(front_right.getCurrentPosition()) - 24 * COUNTS_PER_INCH * 30.0 / 30.75) > 15) &&
+                    opModeIsActive()) {
+
+                lift.update();
+                correction = checkDirection();
+                back_left.setPower(-0.2 - correction);
+                back_right.setPower(-0.2 + correction);
+                front_left.setPower(-0.2 - correction);
+                front_right.setPower(-0.2 + correction);
+                telemetry.addData("pos ", Math.abs(back_left.getCurrentPosition()));
+                telemetry.addData("target ", 5 * COUNTS_PER_INCH * 30.0 / 30.75);
+                telemetry.addData("whole thing ", Math.abs(Math.abs(back_left.getCurrentPosition()) - 5 * COUNTS_PER_INCH * 30.0 / 30.7));
+                telemetry.update();
+            }
+            encoderFunction();
+            setPZero();
+            runtime.reset();
+
+            encoderStrafe(0.8, -23, 23, 23, -23, 3.0);
+            setPZero();
+
         }
     }
     /* Update the telemetry */

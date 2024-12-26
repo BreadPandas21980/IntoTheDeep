@@ -18,7 +18,7 @@ public class LiftMechanism {
     private DcMotorEx slide;
     public static int specimenPrepareHeight = 1800;
     public static int specimenPrepareHeight2 = 1625;
-    public static int specimenScoreHeight = 950;
+    public static int specimenScoreHeight = 1050;
     public static int groundHeight = 0;
     public static int highBucketHeight = 800;
 
