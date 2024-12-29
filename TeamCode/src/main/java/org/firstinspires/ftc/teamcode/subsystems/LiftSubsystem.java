@@ -207,7 +207,7 @@ public class LiftSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        /*
+
         if(atTarget()){
             heighting = false;
         }
@@ -216,16 +216,16 @@ public class LiftSubsystem extends SubsystemBase {
             ElapsedTime timer = new ElapsedTime();
             timer.reset();
             controller.setPID(kP, kI, kD);
-            output = controller.calculate(getLeftEncoderVal(), getCurrentGoal());
-            slide_left.set(output);
-            slide_right.set(output);
+            output = controller.calculate(getLeftEncoderVal(), getTargetPos());
+            leftSlide.set(output);
+            rightSlide.set(output);
 
             super.periodic();
         } else {
             controller.setPID(0, 0, 0);
         }
 
-         */
+
 
     }
 

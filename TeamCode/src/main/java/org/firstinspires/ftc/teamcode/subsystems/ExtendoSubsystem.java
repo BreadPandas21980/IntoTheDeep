@@ -31,6 +31,8 @@ public class ExtendoSubsystem extends SubsystemBase {
     public static int targetPos = 0;
     public ExtendoSubsystem(MotorEx extendoMotor ) {
         this.extendoMotor = extendoMotor;
+        controller = new PIDController(kP, kI, kD);
+        controller.setTolerance(tolerance);
     }
 
     /*
