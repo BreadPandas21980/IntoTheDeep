@@ -40,7 +40,7 @@ public class BaseOpMode extends CommandOpMode {
 
     protected MotorEx fL, fR, bL, bR, intakeMotor, extendoMotor, leftSlide, rightSlide;
     protected Servo clawServo, clawWristServo, flipServo, dropdownServo, leftStilt, rightStilt;
-    protected CRServo leftArm, rightArm;
+    protected Servo leftArm, rightArm;
     //protected OpenCvCamera camera;
     protected DriveSubsystem driveSubsystem;
     protected LiftSubsystem liftSubsystem;
@@ -120,8 +120,8 @@ public class BaseOpMode extends CommandOpMode {
             dropdownServo = hardwareMap.get(Servo.class, "dropdownServo");
             leftStilt = hardwareMap.get(Servo.class, "leftStilt");
             rightStilt = hardwareMap.get(Servo.class, "rightStilt");
-            leftArm = hardwareMap.get(CRServo.class, "leftArm");
-            rightArm = hardwareMap.get(CRServo.class, "rightArm");
+            leftArm = hardwareMap.get(Servo.class, "leftArm");
+            rightArm = hardwareMap.get(Servo.class, "rightArm");
           //  lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
 
         }

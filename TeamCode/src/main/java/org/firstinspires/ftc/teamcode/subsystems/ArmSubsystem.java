@@ -26,45 +26,27 @@ import java.util.function.DoubleSupplier;
 @Config
 public class ArmSubsystem extends SubsystemBase {
 
-    private CRServo leftArm;
-    private CRServo rightArm;
+    private Servo leftArm;
+    private Servo rightArm;
 
-    public static double OUT_POWER = 1;
-    public static double IN_POWER = -1;
-    public ArmSubsystem(CRServo leftArm, CRServo rightArm ) {
+    public static double OUT_POS = 1;
+    public static double IN_POS = -1;
+    public ArmSubsystem(Servo leftArm, Servo rightArm ) {
         this.leftArm = leftArm;
         this.rightArm = rightArm;
-        leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftArm.setDirection(Servo.Direction.REVERSE);
     }
-
-    public Command setPower(DoubleSupplier power) {
+    public Command armOut() {
         return new RunCommand(() -> {
-
-            if(power.getAsDouble() > 0.2) {
-                leftArm.setPower(OUT_POWER);
-                rightArm.setPower(OUT_POWER);
-            } else if (power.getAsDouble() < -0.2) {
-                leftArm.setPower(IN_POWER);
-                rightArm.setPower(IN_POWER);
-            } else {
-                leftArm.setPower(0);
-                rightArm.setPower(0);
-            }
-    }, this);
-
+            leftArm.setPosition(OUT_POS);
+            rightArm.setPosition(OUT_POS);
+        }, this);
     }
-
-    public Action autoArmIn() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                leftArm.setPower(IN_POWER);
-                rightArm.setPower(IN_POWER);
-                return false;
-            }
-        };
+    public Command armIn() {
+        return new RunCommand(() -> {
+            leftArm.setPosition(IN_POS);
+            rightArm.setPosition(IN_POS);
+        }, this);
     }
     public Action autoArmOut() {
         return new Action() {
@@ -72,21 +54,24 @@ public class ArmSubsystem extends SubsystemBase {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 timer.reset();
-                leftArm.setPower(OUT_POWER);
-                rightArm.setPower(OUT_POWER);
+                leftArm.setPosition(OUT_POS);
+                rightArm.setPosition(OUT_POS);
+
+
                 return false;
             }
         };
     }
-
-    public Action autoArmIdle() {
+    public Action autoArmIn() {
         return new Action() {
             ElapsedTime timer = new ElapsedTime();
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 timer.reset();
-                leftArm.setPower(0);
-                rightArm.setPower(0);
+                leftArm.setPosition(IN_POS);
+                rightArm.setPosition(IN_POS);
+
+
                 return false;
             }
         };

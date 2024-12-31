@@ -60,6 +60,14 @@ public class ActualTeleOp extends BaseOpMode {
 
 
 
+        gb2(Y).whenActive(
+                armSubsystem.armOut()
+        );
+        gb2(A).whenActive(
+                armSubsystem.armIn()
+        );
+
+
         gb2(B).whenActive(
                 clawSubsystem.notOpen()
         );
@@ -122,7 +130,7 @@ public class ActualTeleOp extends BaseOpMode {
         register(driveSubsystem, clawSubsystem, wristSubsystem, intakeSubsystem, extendoSubsystem, liftSubsystem, armSubsystem, stiltSubsystem);
         driveSubsystem.setDefaultCommand(driveSubsystem.drobotCentric(driverGamepad::getRightX, driverGamepad::getLeftY, driverGamepad::getLeftX));
         liftSubsystem.setDefaultCommand(liftSubsystem.setPower(operatorGamepad::getLeftY));
-        armSubsystem.setDefaultCommand(armSubsystem.setPower(operatorGamepad::getRightY));
+        armSubsystem.setDefaultCommand(armSubsystem.armIn());
         intakeSubsystem.setDefaultCommand(intakeSubsystem.idle());
         clawSubsystem.setDefaultCommand(clawSubsystem.fullyOpen());
         stiltSubsystem.setDefaultCommand(stiltSubsystem.stiltsUp());
