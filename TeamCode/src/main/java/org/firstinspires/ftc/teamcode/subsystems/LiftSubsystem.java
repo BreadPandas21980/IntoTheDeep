@@ -26,6 +26,7 @@ public class LiftSubsystem extends SubsystemBase {
     private final MotorEx leftSlide, rightSlide;
     private PIDController controller;
     public boolean heighting = false;
+    public boolean transfer = false;
     public static double slackTime = 1.5;
 /*
     boolean climb = false;
@@ -41,10 +42,12 @@ public class LiftSubsystem extends SubsystemBase {
     public static int targetPos = 0;
     ElapsedTime lifttimer1 = new ElapsedTime();
 
+    public static int GROUND_HEIGHT = 0;
     public static int CLIMB_HEIGHT_ONE_UP = 1000;
     public static int CLIMB_HEIGHT_TWO_DOWN = 500;
     public static int CLIMB_HEIGHT_THREE_UP = 2000;
     public static int CLIMB_HEIGHT_FOUR_DOWN = 1500;
+    public static int TRANSFER_HEIGHT_ONE_UP = 400;
 
     public LiftSubsystem(MotorEx leftSlide, MotorEx rightSlide) {
         this.leftSlide = leftSlide;
@@ -64,6 +67,12 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
 
+    public Command transferring() {
+        return new InstantCommand(() -> transfer = true, this);
+    }
+    public Command untransferring() {
+        return new InstantCommand(() -> transfer = false, this);
+    }
 
     public int getLeftEncoderVal() {
         return leftSlide.getCurrentPosition();
@@ -122,6 +131,9 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
 
+    public Command groundHeight() {
+        return new RunCommand(() -> setTargetPos(GROUND_HEIGHT), this);
+    }
     public Command climbHeightOne() {
         return new RunCommand(() -> setTargetPos(CLIMB_HEIGHT_ONE_UP), this);
     }
@@ -133,6 +145,9 @@ public class LiftSubsystem extends SubsystemBase {
     }
     public Command climbHeightFour() {
         return new RunCommand(() -> setTargetPos(CLIMB_HEIGHT_FOUR_DOWN), this);
+    }
+    public Command transferHeightOne() {
+        return new RunCommand(() -> setTargetPos(TRANSFER_HEIGHT_ONE_UP), this);
     }
     public Command setPower(DoubleSupplier power) {
         return new RunCommand(() -> {
@@ -209,7 +224,7 @@ public class LiftSubsystem extends SubsystemBase {
     public void periodic() {
 
         if(atTarget()){
-            heighting = false;
+            transfer = false;
         }
 
         if(heighting) {
@@ -221,6 +236,15 @@ public class LiftSubsystem extends SubsystemBase {
             rightSlide.set(output);
 
             super.periodic();
+        } else if (transfer) {
+                ElapsedTime timer = new ElapsedTime();
+                timer.reset();
+                controller.setPID(kP, kI, kD);
+                output = controller.calculate(getLeftEncoderVal(), getTargetPos());
+                leftSlide.set(output);
+                rightSlide.set(output);
+
+                super.periodic();
         } else {
             controller.setPID(0, 0, 0);
         }

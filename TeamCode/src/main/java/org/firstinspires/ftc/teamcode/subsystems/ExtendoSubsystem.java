@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -22,6 +23,7 @@ public class ExtendoSubsystem extends SubsystemBase {
     public static double output = 0;
     public static int EXTENDO_OUT_POS = 1500;
     public static int EXTENDO_IN_POS = 0;
+    public boolean extending = false;
 
     private PIDController controller;
     public static double kP = 0.01;
@@ -35,7 +37,7 @@ public class ExtendoSubsystem extends SubsystemBase {
         controller.setTolerance(tolerance);
     }
 
-    /*
+
     public Command setPower(DoubleSupplier power) {
         return new RunCommand(() -> {
 
@@ -50,7 +52,13 @@ public class ExtendoSubsystem extends SubsystemBase {
 
     }
 
-     */
+
+    public Command extending() {
+        return new InstantCommand(() -> extending = true, this);
+    }
+    public Command unextending() {
+        return new InstantCommand(() -> extending = false, this);
+    }
 
     public int getTargetPos() {
         return targetPos;
@@ -58,6 +66,11 @@ public class ExtendoSubsystem extends SubsystemBase {
     private void setTargetPos(int pos) {
         targetPos = pos;
     }
+    public boolean atTarget() {
+        return getEncoderVal() < targetPos + tolerance  &&
+                getEncoderVal() > targetPos - tolerance;
+    }
+
     public Command extendoIn() {
         return new RunCommand(() -> setTargetPos(EXTENDO_IN_POS), this);
     }
@@ -98,11 +111,18 @@ public class ExtendoSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        ElapsedTime timer = new ElapsedTime();
-        timer.reset();
-        controller.setPID(kP, kI, kD);
-        output = controller.calculate(getEncoderVal(), getTargetPos());
-        extendoMotor.set(output);
+        if(atTarget()) {
+            extending = false;
+        }
+        if(extending) {
+            ElapsedTime timer = new ElapsedTime();
+            timer.reset();
+            controller.setPID(kP, kI, kD);
+            output = controller.calculate(getEncoderVal(), getTargetPos());
+            extendoMotor.set(output);
+        } else {
+            controller.setPID(0, 0, 0);
+        }
 
         super.periodic();
     }

@@ -29,17 +29,31 @@ public class ArmSubsystem extends SubsystemBase {
     private Servo leftArm;
     private Servo rightArm;
 
-    public static double OUT_POS = 1;
+    public static double SAMP_POS = 0.5;
+    public static double SPEC_POS = 0;
     public static double IN_POS = -1;
+    public static double WALL_POS = 1;
     public ArmSubsystem(Servo leftArm, Servo rightArm ) {
         this.leftArm = leftArm;
         this.rightArm = rightArm;
         leftArm.setDirection(Servo.Direction.REVERSE);
     }
-    public Command armOut() {
+    public Command armSamp() {
         return new RunCommand(() -> {
-            leftArm.setPosition(OUT_POS);
-            rightArm.setPosition(OUT_POS);
+            leftArm.setPosition(SAMP_POS);
+            rightArm.setPosition(SAMP_POS);
+        }, this);
+    }
+    public Command armSpec() {
+        return new RunCommand(() -> {
+            leftArm.setPosition(SPEC_POS);
+            rightArm.setPosition(SPEC_POS);
+        }, this);
+    }
+    public Command armWall() {
+        return new RunCommand(() -> {
+            leftArm.setPosition(WALL_POS);
+            rightArm.setPosition(WALL_POS);
         }, this);
     }
     public Command armIn() {
@@ -48,14 +62,42 @@ public class ArmSubsystem extends SubsystemBase {
             rightArm.setPosition(IN_POS);
         }, this);
     }
-    public Action autoArmOut() {
+    public Action autoArmSamp() {
         return new Action() {
             ElapsedTime timer = new ElapsedTime();
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 timer.reset();
-                leftArm.setPosition(OUT_POS);
-                rightArm.setPosition(OUT_POS);
+                leftArm.setPosition(SAMP_POS);
+                rightArm.setPosition(SAMP_POS);
+
+
+                return false;
+            }
+        };
+    }
+    public Action autoArmSpec() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                leftArm.setPosition(SPEC_POS);
+                rightArm.setPosition(SPEC_POS);
+
+
+                return false;
+            }
+        };
+    }
+    public Action autoArmWall() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                leftArm.setPosition(WALL_POS);
+                rightArm.setPosition(WALL_POS);
 
 
                 return false;
