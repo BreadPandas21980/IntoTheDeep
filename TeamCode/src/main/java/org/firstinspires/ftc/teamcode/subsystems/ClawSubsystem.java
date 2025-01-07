@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -20,8 +21,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class ClawSubsystem extends SubsystemBase {
 
     private final Servo clawServo;
-    public static  double NOT_OPEN = 0;
-    public static  double FULLY_OPEN = 1;
+    public static  double NOT_OPEN = 0.6;
+    public static  double FULLY_OPEN = 0.3;
 
     public ClawSubsystem(Servo clawServo) {
         this.clawServo = clawServo;
@@ -29,10 +30,10 @@ public class ClawSubsystem extends SubsystemBase {
 
 
     public Command fullyOpen() {
-        return new RunCommand(() -> clawServo.setPosition(FULLY_OPEN), this);
+        return new InstantCommand(() -> clawServo.setPosition(FULLY_OPEN), this);
     }
     public Command notOpen() {
-        return new RunCommand(() -> clawServo.setPosition(NOT_OPEN), this);
+        return new InstantCommand(() -> clawServo.setPosition(NOT_OPEN), this);
     }
     public Action autoClawOpen() {
         return new Action() {

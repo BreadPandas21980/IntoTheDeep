@@ -1,27 +1,30 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <Robot type="FirstInspires-FTC">
-    <Webcam name="Webcam 1" serialNumber="773ECF60" />
-    <LynxUsbDevice name="Expansion Hub Portal 1" serialNumber="DQ2D5WLK" parentModuleAddress="4">
-        <LynxModule name="Expansion Hub 4" port="4">
-            <goBILDA5202SeriesMotor name="slide_right" port="0" />
-            <goBILDA5202SeriesMotor name="intakeMotor1" port="1" />
-            <goBILDA5202SeriesMotor name="intakeMotor2" port="2" />
-            <goBILDA5202SeriesMotor name="slide_left" port="3" />
-            <Servo name="arm_right" port="1" />
-            <Servo name="arm_left" port="3" />
-            <Servo name="claw" port="5" />
+    <LynxUsbDevice name="Expansion Hub Portal 1" serialNumber="DQ92KR78" parentModuleAddress="2">
+        <LynxModule name="Expansion Hub 2" port="2">
+            <goBILDA5202SeriesMotor name="intakeMotor" port="0" />
+            <goBILDA5202SeriesMotor name="leftSlide" port="1" />
+            <goBILDA5202SeriesMotor name="extendoMotor" port="2" />
+            <goBILDA5202SeriesMotor name="rightSlide" port="3" />
+            <Servo name="dropdownServo" port="2" />
+            <Servo name="flipServo" port="4" />
+            <RevColorSensorV3 name="colorSensor" port="0" bus="1" />
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
         </LynxModule>
     </LynxUsbDevice>
     <LynxUsbDevice name="Control Hub Portal" serialNumber="(embedded)" parentModuleAddress="173">
         <LynxModule name="Control Hub" port="173">
-            <goBILDA5202SeriesMotor name="back_right" port="0" />
-            <goBILDA5202SeriesMotor name="front_right" port="1" />
-            <goBILDA5202SeriesMotor name="back_left" port="2" />
-            <goBILDA5202SeriesMotor name="front_left" port="3" />
-            <Servo name="right_fold" port="0" />
-            <Servo name="left_fold" port="2" />
-            <LynxEmbeddedIMU name="imu 1" port="0" bus="0" />
+            <goBILDA5202SeriesMotor name="front_left" port="0" />
+            <goBILDA5202SeriesMotor name="back_left" port="1" />
+            <goBILDA5202SeriesMotor name="front_right" port="2" />
+            <goBILDA5202SeriesMotor name="back_right" port="3" />
+            <Servo name="clawServo" port="0" />
+            <Servo name="leftArm" port="1" />
+            <Servo name="clawWristServo" port="2" />
+            <RevBlinkinLedDriver name="lights" port="4" />
+            <Servo name="rightArm" port="5" />
+            <ControlHubImuBHI260AP name="imu" port="0" bus="0" />
+            <SparkFunOTOS name="sensor_otos" port="0" bus="1" />
         </LynxModule>
     </LynxUsbDevice>
 </Robot>

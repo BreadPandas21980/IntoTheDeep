@@ -28,7 +28,7 @@ public class StiltSubsystem extends SubsystemBase {
     public StiltSubsystem(Servo leftStilt, Servo rightStilt) {
         this.leftStilt = leftStilt;
         this.rightStilt = rightStilt;
-        leftStilt.setDirection(Servo.Direction.REVERSE);
+        //leftStilt.setDirection(Servo.Direction.REVERSE);
     }
 
 

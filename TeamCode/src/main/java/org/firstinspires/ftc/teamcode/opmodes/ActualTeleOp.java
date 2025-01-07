@@ -19,6 +19,7 @@ import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.RIGHT_TRIGGER;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -65,41 +66,27 @@ public class ActualTeleOp extends BaseOpMode {
         //goes to samp score pos
         //do it when detect color?
         gb2(Y).whenActive(
+
                 new SequentialCommandGroup(
-                        clawSubsystem.fullyOpen(),
-                        intakeSubsystem.flipUp(),
-                        new SequentialCommandGroup(
-                                extendoSubsystem.extending(),
-                                extendoSubsystem.extendoIn()
-                        ),
-                        new WaitUntilCommand(() -> extendoSubsystem.atTarget()),
-                        clawSubsystem.notOpen(),
-                        new SequentialCommandGroup(
-                                liftSubsystem.transferring(),
-                                liftSubsystem.transferHeightOne()
-                        ),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                        armSubsystem.armSamp()//,
-                      //  wristSubsystem.wristFlipOut() //?
+
+                            clawSubsystem.fullyOpen(),
+                            clawSubsystem.notOpen(),
+                        armSubsystem.armSamp(),
+                        wristSubsystem.wristFlipOut()
                 )
+
+
+
+
         );
 
-        //specimen level
+        //specimen wall
         gb2(A).whenActive(
                 new SequentialCommandGroup(
                         clawSubsystem.fullyOpen(),
-                        new SequentialCommandGroup(
-                                liftSubsystem.transferring(),
-                                liftSubsystem.transferHeightOne()
-                        ),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                        armSubsystem.armWall(),
-                        new SequentialCommandGroup(
-                                liftSubsystem.transferring(),
-                                liftSubsystem.groundHeight()
-                        ),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget())//,
-                      //  wristSubsystem.wristFlipOut() //?
+                        wristSubsystem.wristFlipWall(),
+                        armSubsystem.armWall()
+
                 )
         );
 
@@ -108,20 +95,22 @@ public class ActualTeleOp extends BaseOpMode {
                 new SequentialCommandGroup(
                         clawSubsystem.notOpen(),
                         armSubsystem.armSpec(),
+                        wristSubsystem.clawWristServoOut(),
                         wristSubsystem.wristFlipOut()
                 )
         );
 
-        gb2(B).whenActive(
-                clawSubsystem.fullyOpen()
+        gb2(B).toggleWhenPressed(
+                clawSubsystem.fullyOpen(),
+                clawSubsystem.notOpen()
         );
 
 
         gb2(LEFT_BUMPER).whenActive(
-                wristSubsystem.clawWristParallel()
+                wristSubsystem.clawWristServoIn()
         );
         gb2(RIGHT_BUMPER).whenActive(
-                wristSubsystem.clawWristPerpendicular()
+                wristSubsystem.clawWristServoOut()
         );
 
 
@@ -137,12 +126,21 @@ public class ActualTeleOp extends BaseOpMode {
                 new SequentialCommandGroup(
                         liftSubsystem.climbHeightTwo(),
                         new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                        stiltSubsystem.stiltsDown(),
+                        //stiltSubsystem.stiltsDown(),
                         liftSubsystem.climbHeightThree(),
                         new WaitUntilCommand(() -> liftSubsystem.atTarget()),
                         liftSubsystem.climbHeightFour(),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                        stiltSubsystem.stiltsUp()
+                        new WaitUntilCommand(() -> liftSubsystem.atTarget())
+                        //stiltSubsystem.stiltsUp()
+
+                )
+        );
+        gb2(DPAD_LEFT).whenActive(
+                new SequentialCommandGroup(
+                        wristSubsystem.clawWristServoIn(),
+                        armSubsystem.armIn(),
+                        clawSubsystem.fullyOpen(),
+                        wristSubsystem.wristFlipIn()
 
                 )
         );
@@ -155,7 +153,7 @@ public class ActualTeleOp extends BaseOpMode {
         gb2(LEFT_TRIGGER).whenActive(
                 intakeSubsystem.flipDown()
         );
-
+/*
         gb2(LEFT_STICK_BUTTON).whenActive(
                 new SequentialCommandGroup(
                         extendoSubsystem.extending(),
@@ -163,22 +161,16 @@ public class ActualTeleOp extends BaseOpMode {
                 )
         );
 
+ */
+
 
 
         //gb2(START).and(gb2(BACK)).whenActive(drive.drivetrainBrake().alongWith(lift.idle()).alongWith(intake.idle()));
 
-        register(driveSubsystem, clawSubsystem, wristSubsystem, intakeSubsystem, extendoSubsystem, liftSubsystem, armSubsystem, stiltSubsystem);
+        register(driveSubsystem, clawSubsystem, wristSubsystem, intakeSubsystem, extendoSubsystem, liftSubsystem, armSubsystem);
         driveSubsystem.setDefaultCommand(driveSubsystem.drobotCentric(driverGamepad::getRightX, driverGamepad::getLeftY, driverGamepad::getLeftX));
         liftSubsystem.setDefaultCommand(liftSubsystem.setPower(operatorGamepad::getRightY));
-        armSubsystem.setDefaultCommand(armSubsystem.armIn());
-        intakeSubsystem.setDefaultCommand(intakeSubsystem.idle());
-        clawSubsystem.setDefaultCommand(clawSubsystem.fullyOpen());
-        stiltSubsystem.setDefaultCommand(stiltSubsystem.stiltsUp());
         extendoSubsystem.setDefaultCommand(extendoSubsystem.setPower(operatorGamepad::getLeftY));
-        wristSubsystem.setDefaultCommand(new SequentialCommandGroup(
-                wristSubsystem.clawWristParallel(),
-                wristSubsystem.wristFlipIn()
-        ));
         //led.setDefaultCommand(led.checkDist());
         //dropbox.setDefaultCommand(dropbox.setPower(operatorGamepad::getRightY));
     }
@@ -188,8 +180,10 @@ public class ActualTeleOp extends BaseOpMode {
         super.run();
         telemetry.addData("left motor", leftSlide.getCurrentPosition());
         telemetry.addData("slide target: ", liftSubsystem.getTargetPos());
+        telemetry.addData("at target: ", liftSubsystem.atTarget());
         telemetry.addData("extendo motor", extendoMotor.getCurrentPosition());
         telemetry.addData("extendo target: ", extendoSubsystem.getTargetPos());
+        telemetry.addData("extendo pwr: ", operatorGamepad.getLeftY());
         //telemetry.addData("left slide pwr: ", lift.getLeftMotorPower());
         //telemetry.addData("right slide pwr: ", lift.getRightMotorPower());
         telemetry.update();

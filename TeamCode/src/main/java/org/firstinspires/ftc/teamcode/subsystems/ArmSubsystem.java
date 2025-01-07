@@ -26,38 +26,37 @@ import java.util.function.DoubleSupplier;
 @Config
 public class ArmSubsystem extends SubsystemBase {
 
-    private Servo leftArm;
+    private final Servo leftArm;
     private Servo rightArm;
 
-    public static double SAMP_POS = 0.5;
-    public static double SPEC_POS = 0;
-    public static double IN_POS = -1;
-    public static double WALL_POS = 1;
+    public static double SAMP_POS = 0.75;
+    public static double SPEC_POS = 0.3;
+    public static double IN_POS = 0.03;
+    public static double WALL_POS = 0.98;
     public ArmSubsystem(Servo leftArm, Servo rightArm ) {
         this.leftArm = leftArm;
         this.rightArm = rightArm;
-        leftArm.setDirection(Servo.Direction.REVERSE);
     }
     public Command armSamp() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             leftArm.setPosition(SAMP_POS);
             rightArm.setPosition(SAMP_POS);
         }, this);
     }
     public Command armSpec() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             leftArm.setPosition(SPEC_POS);
             rightArm.setPosition(SPEC_POS);
         }, this);
     }
     public Command armWall() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             leftArm.setPosition(WALL_POS);
             rightArm.setPosition(WALL_POS);
         }, this);
     }
     public Command armIn() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             leftArm.setPosition(IN_POS);
             rightArm.setPosition(IN_POS);
         }, this);

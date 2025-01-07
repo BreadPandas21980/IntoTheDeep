@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -23,11 +24,13 @@ public class WristSubsystem extends SubsystemBase {
     private final Servo clawWristServo, flipServo;
 
     //parallel is ready to intake
-    public static  double CLAW_PARALLEL = 0;
-    public static  double CLAW_PERPENDICULAR = 1;
+    public static  double CLAW_SERVO_IN = 0.315; //.884
+    public static double CLAW_SERVO_OUT = 0.884;
 
-    public static double WRIST_INTAKE_POS = 0;
-    public static double WRIST_OUTTAKE_POS = 1;
+    public static double WRIST_INTAKE_POS = 0.1;
+    public static double WRIST_OUTTAKE_POS = 0.38;
+    public static double WRIST_WALL_POS = 0.1;
+
 
     public WristSubsystem(Servo clawWristServo, Servo flipServo) {
         this.clawWristServo = clawWristServo;
@@ -35,41 +38,43 @@ public class WristSubsystem extends SubsystemBase {
     }
 
 
-    public Command clawWristParallel() {
-        return new RunCommand(() -> clawWristServo.setPosition(CLAW_PARALLEL), this);
+    public Command clawWristServoOut() {
+        return new InstantCommand(() -> clawWristServo.setPosition(CLAW_SERVO_OUT), this);
     }
-    public Command clawWristPerpendicular() {
-        return new RunCommand(() -> clawWristServo.setPosition(CLAW_PERPENDICULAR), this);
+    public Command clawWristServoIn() {
+        return new InstantCommand(() -> clawWristServo.setPosition(CLAW_SERVO_IN), this);
     }
     public Command wristFlipOut() {
-        return new RunCommand(() -> flipServo.setPosition(WRIST_OUTTAKE_POS), this);
+        return new InstantCommand(() -> flipServo.setPosition(WRIST_OUTTAKE_POS), this);
     }
     public Command wristFlipIn() {
-        return new RunCommand(() -> flipServo.setPosition(WRIST_INTAKE_POS), this);
+        return new InstantCommand(() -> flipServo.setPosition(WRIST_INTAKE_POS), this);
     }
-    public Action autoParallel() {
+    public Command wristFlipWall() {
+        return new InstantCommand(() -> flipServo.setPosition(WRIST_WALL_POS), this);
+    }
+    public Action autoClawServoIn() {
         return new Action() {
             ElapsedTime timer = new ElapsedTime();
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 timer.reset();
-                clawWristServo.setPosition(CLAW_PARALLEL);
+                clawWristServo.setPosition(CLAW_SERVO_IN);
                 return false;
             }
         };
     }
-    public Action autoPerpendicular() {
+    public Action autoClawServoOut() {
         return new Action() {
             ElapsedTime timer = new ElapsedTime();
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 timer.reset();
-                clawWristServo.setPosition(CLAW_PARALLEL);
+                clawWristServo.setPosition(CLAW_SERVO_OUT);
                 return false;
             }
         };
     }
-
     public Action autoFlipOut() {
         return new Action() {
             ElapsedTime timer = new ElapsedTime();
@@ -88,6 +93,17 @@ public class WristSubsystem extends SubsystemBase {
             public boolean run(@NonNull TelemetryPacket packet) {
                 timer.reset();
                 flipServo.setPosition(WRIST_INTAKE_POS);
+                return false;
+            }
+        };
+    }
+    public Action autoFlipWall() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                flipServo.setPosition(WRIST_WALL_POS);
                 return false;
             }
         };

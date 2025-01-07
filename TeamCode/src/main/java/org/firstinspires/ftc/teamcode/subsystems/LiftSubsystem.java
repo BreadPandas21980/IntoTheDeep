@@ -27,7 +27,7 @@ public class LiftSubsystem extends SubsystemBase {
     private PIDController controller;
     public boolean heighting = false;
     public boolean transfer = false;
-    public static double slackTime = 1.5;
+    public static double slackTime = 0.01;
 /*
     boolean climb = false;
 
@@ -35,7 +35,7 @@ public class LiftSubsystem extends SubsystemBase {
 
  */
 
-    public static double kP = 0.01;
+    public static double kP = 0.005;
     public static double kI = 0;
     public static double kD = 0;
     public static double tolerance = 10;
@@ -47,12 +47,11 @@ public class LiftSubsystem extends SubsystemBase {
     public static int CLIMB_HEIGHT_TWO_DOWN = 500;
     public static int CLIMB_HEIGHT_THREE_UP = 2000;
     public static int CLIMB_HEIGHT_FOUR_DOWN = 1500;
-    public static int TRANSFER_HEIGHT_ONE_UP = 400;
+    public static int TRANSFER_HEIGHT_ONE_UP = 360;
 
     public LiftSubsystem(MotorEx leftSlide, MotorEx rightSlide) {
         this.leftSlide = leftSlide;
         this.rightSlide = rightSlide;
-        leftSlide.setInverted(true);
 
         controller = new PIDController(kP, kI, kD);
         controller.setTolerance(tolerance);
@@ -135,29 +134,29 @@ public class LiftSubsystem extends SubsystemBase {
         return new RunCommand(() -> setTargetPos(GROUND_HEIGHT), this);
     }
     public Command climbHeightOne() {
-        return new RunCommand(() -> setTargetPos(CLIMB_HEIGHT_ONE_UP), this);
+        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_ONE_UP), this);
     }
     public Command climbHeightTwo() {
-        return new RunCommand(() -> setTargetPos(CLIMB_HEIGHT_TWO_DOWN), this);
+        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_TWO_DOWN), this);
     }
     public Command climbHeightThree() {
-        return new RunCommand(() -> setTargetPos(CLIMB_HEIGHT_THREE_UP), this);
+        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_THREE_UP), this);
     }
     public Command climbHeightFour() {
-        return new RunCommand(() -> setTargetPos(CLIMB_HEIGHT_FOUR_DOWN), this);
+        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_FOUR_DOWN), this);
     }
     public Command transferHeightOne() {
-        return new RunCommand(() -> setTargetPos(TRANSFER_HEIGHT_ONE_UP), this);
+        return new InstantCommand(() -> setTargetPos(TRANSFER_HEIGHT_ONE_UP), this);
     }
     public Command setPower(DoubleSupplier power) {
         return new RunCommand(() -> {
 
             if(power.getAsDouble() > 0.2) {
-                leftSlide.set(1);
-                rightSlide.set(1);
+                leftSlide.set(-1);
+                rightSlide.set(-1);
             } else if (power.getAsDouble() < -0.2) {
-                leftSlide.set(-0.9);
-                rightSlide.set(-0.9);
+                leftSlide.set(0.9);
+                rightSlide.set(0.9);
             } else {
                 leftSlide.set(0);
                 rightSlide.set(0);
@@ -215,17 +214,13 @@ public class LiftSubsystem extends SubsystemBase {
                 .andThen(new WaitUntilCommand(this::atTarget))
                 .andThen(new InstantCommand(()-> resetLiftTimer(), this))
                 .andThen(new WaitUntilCommand(this::liftTimer))
-                .andThen(unheighting());
+                .andThen(untransferring());
     }
 
 
 
     @Override
     public void periodic() {
-
-        if(atTarget()){
-            transfer = false;
-        }
 
         if(heighting) {
             ElapsedTime timer = new ElapsedTime();

@@ -13,13 +13,16 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.internal.network.ControlHubApChannelManager;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 //import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
@@ -41,6 +44,9 @@ public class BaseOpMode extends CommandOpMode {
     protected MotorEx fL, fR, bL, bR, intakeMotor, extendoMotor, leftSlide, rightSlide;
     protected Servo clawServo, clawWristServo, flipServo, dropdownServo, leftStilt, rightStilt;
     protected Servo leftArm, rightArm;
+    protected ColorSensor colorSensor;
+    protected ControlHubApChannelManager chub;
+
     //protected OpenCvCamera camera;
     protected DriveSubsystem driveSubsystem;
     protected LiftSubsystem liftSubsystem;
@@ -58,7 +64,7 @@ public class BaseOpMode extends CommandOpMode {
     protected TriggerGamepadEx driverTriggerGamepad;
     protected TriggerGamepadEx operatorTriggerGamepad;
 
-    protected RevIMU imu;
+    protected IMU imu;
 
     protected Pose2d startPose = new Pose2d(-12, -62, Math.toRadians(90));
 
@@ -75,8 +81,6 @@ public class BaseOpMode extends CommandOpMode {
         initHardware();
         setupHardware();
 
-        imu = new RevIMU(hardwareMap);
-        imu.init();
 
 /*
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -85,17 +89,17 @@ public class BaseOpMode extends CommandOpMode {
 
  */
 
-        driveSubsystem = new DriveSubsystem(fL, fR, bL, bR, imu);
+        driveSubsystem = new DriveSubsystem(fL, fR, bL, bR);
         rrDrive = new MecanumDrive(hardwareMap, startPose);
 
         liftSubsystem = new LiftSubsystem(leftSlide, rightSlide);
         armSubsystem = new ArmSubsystem(leftArm, rightArm);
-        //liftT = new LiftSubsystemTele(slide_leftDC, slide_rightDC, intake,  intakeMotor2DC);
-        intakeSubsystem = new IntakeSubsystem(intakeMotor, dropdownServo);
-        stiltSubsystem = new StiltSubsystem(leftStilt, rightStilt);
+        intakeSubsystem = new IntakeSubsystem(intakeMotor, dropdownServo, colorSensor);
+        //stiltSubsystem = new StiltSubsystem(leftStilt, rightStilt);
         wristSubsystem = new WristSubsystem(clawWristServo, flipServo);
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);
         clawSubsystem = new ClawSubsystem(clawServo);
+
 
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -118,11 +122,12 @@ public class BaseOpMode extends CommandOpMode {
             clawWristServo = hardwareMap.get(Servo.class, "clawWristServo");
             flipServo = hardwareMap.get(Servo.class, "flipServo");
             dropdownServo = hardwareMap.get(Servo.class, "dropdownServo");
-            leftStilt = hardwareMap.get(Servo.class, "leftStilt");
-            rightStilt = hardwareMap.get(Servo.class, "rightStilt");
+            //leftStilt = hardwareMap.get(Servo.class, "leftStilt");
+            //rightStilt = hardwareMap.get(Servo.class, "rightStilt");
             leftArm = hardwareMap.get(Servo.class, "leftArm");
             rightArm = hardwareMap.get(Servo.class, "rightArm");
           //  lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+            colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
         }
         catch(Exception e) {
@@ -139,11 +144,19 @@ public class BaseOpMode extends CommandOpMode {
         leftSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
+        leftSlide.resetEncoder();
         extendoMotor.resetEncoder();
         extendoMotor.setRunMode(Motor.RunMode.RawPower);
         extendoMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-
+        //
+        flipServo.setDirection(Servo.Direction.REVERSE);
+        fL.setInverted(true);
+        bL.setInverted(true);
+        intakeMotor.setInverted(true);
+        clawServo.setDirection(Servo.Direction.REVERSE);
+        rightSlide.setInverted(true);
+        rightArm.setDirection(Servo.Direction.REVERSE);
     }
 
     public GamepadButton gb1(GamepadKeys.Button button) {

@@ -21,7 +21,7 @@ public class ExtendoSubsystem extends SubsystemBase {
     private final MotorEx extendoMotor;
 
     public static double output = 0;
-    public static int EXTENDO_OUT_POS = 1500;
+    public static int EXTENDO_OUT_POS = 1000;
     public static int EXTENDO_IN_POS = 0;
     public boolean extending = false;
 
@@ -75,7 +75,7 @@ public class ExtendoSubsystem extends SubsystemBase {
         return new RunCommand(() -> setTargetPos(EXTENDO_IN_POS), this);
     }
     public Command extendoOut() {
-        return new RunCommand(() -> setTargetPos(EXTENDO_OUT_POS), this);
+        return new InstantCommand(() -> setTargetPos(EXTENDO_OUT_POS), this);
     }
     public int getEncoderVal() {
         return extendoMotor.getCurrentPosition();

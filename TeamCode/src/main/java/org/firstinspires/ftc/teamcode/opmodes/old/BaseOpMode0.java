@@ -64,7 +64,7 @@ public class BaseOpMode0 extends CommandOpMode {
         imu = new RevIMU(hardwareMap);
         imu.init();
 
-        drive = new DriveSubsystem(fL, fR, bL, bR, imu);
+        drive = new DriveSubsystem(fL, fR, bL, bR);
         rrDrive = new MecanumDrive(hardwareMap, startPose);
 
      //   arm = new ArmSubsystem(armServo);

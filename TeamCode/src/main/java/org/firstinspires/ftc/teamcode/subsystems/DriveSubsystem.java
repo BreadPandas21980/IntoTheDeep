@@ -18,21 +18,17 @@ import java.util.function.DoubleSupplier;
 public class DriveSubsystem extends SubsystemBase {
 
     private final MecanumDrive drive;
-    private final RevIMU imu;
 
     public static double rotateFactor = 0.75;
     public MotorEx fL, fR, bL, bR;
     public static double slowFactor = 2.2;
 
-    public DriveSubsystem(MotorEx fL, MotorEx fR, MotorEx bL, MotorEx bR, RevIMU imu) {
-        this.imu = imu;
+    public DriveSubsystem(MotorEx fL, MotorEx fR, MotorEx bL, MotorEx bR ) {
         this.fL = fL;
         this.fR = fR;
         this.bL = bL;
         this.bR = bR;
         drive = new MecanumDrive(true, fL, fR, bL, bR);
-        fL.setInverted(true);
-        bL.setInverted(true);
     }
 
     public void setMotorPowers(double bLPower, double bRPower, double fLPower, double fRPower) {
@@ -169,15 +165,6 @@ public class DriveSubsystem extends SubsystemBase {
                 },
                 this
         );
-    }
-
-
-    public double getRawExternalHeading() {
-        return imu.getRevIMU().getAngularOrientation().firstAngle;
-    }
-
-    public Double getExternalHeadingVelocity() {
-        return (double) imu.getRevIMU().getAngularVelocity().zRotationRate;
     }
 
 
