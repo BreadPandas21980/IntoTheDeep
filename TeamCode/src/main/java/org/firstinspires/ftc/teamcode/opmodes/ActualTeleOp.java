@@ -2,28 +2,22 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.A;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.B;
-import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.BACK;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_DOWN;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_LEFT;
-import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_RIGHT;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_UP;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.LEFT_BUMPER;
-import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.LEFT_STICK_BUTTON;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.RIGHT_BUMPER;
-import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.START;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.X;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.Y;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.LEFT_TRIGGER;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.RIGHT_TRIGGER;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystemRed;
 
 @Config
 //@Disabled
@@ -55,6 +49,16 @@ public class ActualTeleOp extends BaseOpMode {
         gb1(LEFT_TRIGGER).whileActiveContinuous(
                 intakeSubsystem.inIntake()
         );
+        if(IntakeSubsystemRed.colorSeen) {
+            new SequentialCommandGroup(
+                    intakeSubsystem.flipUp(),
+                    extendoSubsystem.extending(),
+                    extendoSubsystem.extendoIn(),
+                    new WaitUntilCommand(()-> extendoSubsystem.atTarget()),
+                    intakeSubsystem.idle(),
+                    clawSubsystem.notOpen()
+            );
+        }
 
         gb1(RIGHT_TRIGGER).whileActiveContinuous(
                 intakeSubsystem.outIntake()
@@ -153,6 +157,8 @@ public class ActualTeleOp extends BaseOpMode {
         gb2(LEFT_TRIGGER).whenActive(
                 intakeSubsystem.flipDown()
         );
+
+
 /*
         gb2(LEFT_STICK_BUTTON).whenActive(
                 new SequentialCommandGroup(
@@ -167,10 +173,11 @@ public class ActualTeleOp extends BaseOpMode {
 
         //gb2(START).and(gb2(BACK)).whenActive(drive.drivetrainBrake().alongWith(lift.idle()).alongWith(intake.idle()));
 
-        register(driveSubsystem, clawSubsystem, wristSubsystem, intakeSubsystem, extendoSubsystem, liftSubsystem, armSubsystem);
+        register(driveSubsystem, clawSubsystem, wristSubsystem, intakeSubsystem, extendoSubsystem, liftSubsystem, armSubsystem, colorSubsystem);
         driveSubsystem.setDefaultCommand(driveSubsystem.drobotCentric(driverGamepad::getRightX, driverGamepad::getLeftY, driverGamepad::getLeftX));
         liftSubsystem.setDefaultCommand(liftSubsystem.setPower(operatorGamepad::getRightY));
         extendoSubsystem.setDefaultCommand(extendoSubsystem.setPower(operatorGamepad::getLeftY));
+        colorSubsystem.setDefaultCommand(colorSubsystem.senseColor());
         //led.setDefaultCommand(led.checkDist());
         //dropbox.setDefaultCommand(dropbox.setPower(operatorGamepad::getRightY));
     }

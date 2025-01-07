@@ -11,12 +11,10 @@ import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.JavaUtil;
+import java.util.ArrayList;
 
 /**
  * A gripper mechanism that grabs a stone from the quarry.
@@ -24,24 +22,22 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
  * to 2020 season.
  */
 @Config
-public class IntakeSubsystem extends SubsystemBase {
+public class IntakeSubsystemBlue extends SubsystemBase {
 
     private final MotorEx intakeMotor;
     private final Servo dropdownServo;
-    private final ColorSensor colorSensor;
 
     public static double targetPower = 0;
     public static double IN_POWER = 1;
     public static double OUT_POWER = -1;
     public static double DROPDOWN_DOWN = 0.75;
     public static double DROPDOWN_UP = 0.1;
-    public static float gain = 2;
 
+    public boolean colorSeen = false;
 
-    public IntakeSubsystem(MotorEx intakeMotor, Servo dropdownServo, ColorSensor colorSensor ) {
+    public IntakeSubsystemBlue(MotorEx intakeMotor, Servo dropdownServo) {
         this.intakeMotor = intakeMotor;
         this.dropdownServo = dropdownServo;
-        this.colorSensor = colorSensor;
 
     }
 
@@ -49,6 +45,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command inIntake() {
         return new RunCommand(() -> {
             intakeMotor.set(IN_POWER);
+            if(ColorSubsystem.getColor() == 2 || ColorSubsystem.getColor() == 3) {
+                colorSeen = true;
+            } else {
+                colorSeen = false;
+            }
         }, this);
     }
     public Command outIntake() {
@@ -69,31 +70,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command flipUp() {
         return new InstantCommand(() -> {
             dropdownServo.setPosition(DROPDOWN_UP);
-        }, this);
-    }
-
-    public Command senseColor() {
-        return new RunCommand(() -> {
-            ((NormalizedColorSensor) colorSensor).setGain(gain);
-
-            NormalizedRGBA normalizedColors = ((NormalizedColorSensor) colorSensor).getNormalizedColors();
-            int color = normalizedColors.toColor();
-            float hue = JavaUtil.colorToHue(color);
-            float saturation = JavaUtil.colorToSaturation(color);
-            float value = JavaUtil.colorToValue(color);
-            if (hue < 30) {
-                telemetry.addData("Color", "Red"); //red
-            } else if (hue < 90) {
-                telemetry.addData("Color", "Yellow"); //yellow
-            } else if (hue < 150) {
-                telemetry.addData("Color", "Green"); //nothing
-            } else if (hue < 225) {
-                telemetry.addData("Color", "Blue"); //blue
-            } else if (hue < 350) {
-                telemetry.addData("Color", "purple"); //blue
-            } else {
-                telemetry.addData("Color", "Red"); //red
-            }
         }, this);
     }
     public Action autoInIntake() {

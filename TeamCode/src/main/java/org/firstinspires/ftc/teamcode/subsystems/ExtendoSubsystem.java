@@ -31,6 +31,10 @@ public class ExtendoSubsystem extends SubsystemBase {
     public static double kD = 0;
     public static double tolerance = 10;
     public static int targetPos = 0;
+
+    public static int SOFTWARE_LIMIT = 1000;
+    public static int limitTolerance = 20;
+
     public ExtendoSubsystem(MotorEx extendoMotor ) {
         this.extendoMotor = extendoMotor;
         controller = new PIDController(kP, kI, kD);
@@ -41,13 +45,15 @@ public class ExtendoSubsystem extends SubsystemBase {
     public Command setPower(DoubleSupplier power) {
         return new RunCommand(() -> {
 
-            if(power.getAsDouble() > 0.2) {
-                extendoMotor.set(1);
+            double outPower = 0;
+
+            if(power.getAsDouble() > 0.2 && (getEncoderVal() >= SOFTWARE_LIMIT - tolerance)) {
+                outPower = 1;
             } else if (power.getAsDouble() < -0.2) {
-                extendoMotor.set(-0.9);
-            } else {
-                extendoMotor.set(0);
+                outPower = -1;
             }
+
+            extendoMotor.set(outPower);
         }, this);
 
     }

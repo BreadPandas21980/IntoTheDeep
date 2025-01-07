@@ -8,35 +8,27 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.internal.network.ControlHubApChannelManager;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 //import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ColorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ExtendoSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystemRed;
 import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.StiltSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WristSubsystem;
 import org.firstinspires.ftc.teamcode.util.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.TriggerGamepadEx;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
 
 
 public class BaseOpMode extends CommandOpMode {
@@ -51,13 +43,14 @@ public class BaseOpMode extends CommandOpMode {
     protected DriveSubsystem driveSubsystem;
     protected LiftSubsystem liftSubsystem;
     protected ArmSubsystem armSubsystem;
-    protected IntakeSubsystem intakeSubsystem;
+    protected IntakeSubsystemRed intakeSubsystem;
     protected StiltSubsystem stiltSubsystem;
     protected WristSubsystem wristSubsystem;
     protected ExtendoSubsystem extendoSubsystem;
     protected ClawSubsystem clawSubsystem;
+    protected ColorSubsystem colorSubsystem;
     protected MecanumDrive rrDrive;
-    //public RevBlinkinLedDriver lights;
+    public RevBlinkinLedDriver lights;
 
     protected GamepadEx driverGamepad;
     protected GamepadEx operatorGamepad;
@@ -94,11 +87,12 @@ public class BaseOpMode extends CommandOpMode {
 
         liftSubsystem = new LiftSubsystem(leftSlide, rightSlide);
         armSubsystem = new ArmSubsystem(leftArm, rightArm);
-        intakeSubsystem = new IntakeSubsystem(intakeMotor, dropdownServo, colorSensor);
+        intakeSubsystem = new IntakeSubsystemRed(intakeMotor, dropdownServo, lights);
         //stiltSubsystem = new StiltSubsystem(leftStilt, rightStilt);
         wristSubsystem = new WristSubsystem(clawWristServo, flipServo);
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);
         clawSubsystem = new ClawSubsystem(clawServo);
+        colorSubsystem = new ColorSubsystem(colorSensor);
 
 
 
@@ -122,11 +116,12 @@ public class BaseOpMode extends CommandOpMode {
             clawWristServo = hardwareMap.get(Servo.class, "clawWristServo");
             flipServo = hardwareMap.get(Servo.class, "flipServo");
             dropdownServo = hardwareMap.get(Servo.class, "dropdownServo");
+            colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
             //leftStilt = hardwareMap.get(Servo.class, "leftStilt");
             //rightStilt = hardwareMap.get(Servo.class, "rightStilt");
             leftArm = hardwareMap.get(Servo.class, "leftArm");
             rightArm = hardwareMap.get(Servo.class, "rightArm");
-          //  lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+            lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
             colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
         }
