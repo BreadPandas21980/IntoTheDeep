@@ -34,6 +34,14 @@ public class ColorSubsystem extends SubsystemBase {
     private final ColorSensor colorSensor;
     public static float gain = 2;
 
+    public static double red = 0;
+    public static double blue = 0;
+    public static double yellow = 0;
+    public static double nothing = 0;
+    public static double redVal = 1;
+    public static double blueVal = 3;
+    public static double yellowVal = 2;
+    public static double nothingVal = -1;
     public static ArrayList<Integer> data = new ArrayList<Integer>(); //1 is red, 2 is yellow, 3 is blue, -1 is nothing
 
     public ColorSubsystem(ColorSensor colorSensor ) {
@@ -41,7 +49,6 @@ public class ColorSubsystem extends SubsystemBase {
         data.add(-1);
 
     }
-
     public static <T> T mostCommon(List<T> list) {
         Map<T, Integer> map = new HashMap<>();
 

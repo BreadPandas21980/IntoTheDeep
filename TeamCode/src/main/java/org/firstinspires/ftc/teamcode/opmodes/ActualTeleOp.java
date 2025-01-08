@@ -47,18 +47,17 @@ public class ActualTeleOp extends BaseOpMode {
 
  */
         gb1(LEFT_TRIGGER).whileActiveContinuous(
-                intakeSubsystem.inIntake()
+                new SequentialCommandGroup(
+                        intakeSubsystem.inIntake(),
+                        new WaitUntilCommand(()-> intakeSubsystem.colorSeen),
+                        intakeSubsystem.flipUp(),
+                        extendoSubsystem.extending(),
+                        extendoSubsystem.extendoIn(),
+                        new WaitUntilCommand(()-> extendoSubsystem.atTarget()),
+                        intakeSubsystem.idle(),
+                        clawSubsystem.notOpen()
+                )
         );
-        if(IntakeSubsystemRed.colorSeen) {
-            new SequentialCommandGroup(
-                    intakeSubsystem.flipUp(),
-                    extendoSubsystem.extending(),
-                    extendoSubsystem.extendoIn(),
-                    new WaitUntilCommand(()-> extendoSubsystem.atTarget()),
-                    intakeSubsystem.idle(),
-                    clawSubsystem.notOpen()
-            );
-        }
 
         gb1(RIGHT_TRIGGER).whileActiveContinuous(
                 intakeSubsystem.outIntake()

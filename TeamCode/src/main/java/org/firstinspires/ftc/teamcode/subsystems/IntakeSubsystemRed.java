@@ -49,7 +49,7 @@ public class IntakeSubsystemRed extends SubsystemBase {
 
 
     public Command inIntake() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             intakeMotor.set(IN_POWER);
             if(ColorSubsystem.getColor() == 1 || ColorSubsystem.getColor() == 2) {
                 colorSeen = true;
