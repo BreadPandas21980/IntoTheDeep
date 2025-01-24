@@ -119,7 +119,6 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
 
                         armSubsystem.armSamp(),
                         wristSubsystem.wristFlipSamp(),
-                        wristSubsystem.clawWristServoIn(),
                         extendoSubsystem.resetEnc()
                 )
 
@@ -132,8 +131,7 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
         gb2(A).whenActive(
                 new SequentialCommandGroup(
                         wristSubsystem.wristFlipWall(),
-                        armSubsystem.armWall(),
-                        wristSubsystem.clawWristServoOut()
+                        armSubsystem.armWall()
 
                 )
         );
@@ -142,7 +140,6 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
         gb2(DPAD_LEFT).whenActive(
                 new SequentialCommandGroup(
                         armSubsystem.armSpecIntake(),
-                        wristSubsystem.clawWristServoIn(),
                         wristSubsystem.wristFlipSpec()
                 )
         );
@@ -160,12 +157,6 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
         );
 
 
-        gb2(LEFT_BUMPER).whenActive(
-                wristSubsystem.clawWristServoIn()
-        );
-        gb2(RIGHT_BUMPER).whenActive(
-                wristSubsystem.clawWristServoOut()
-        );
 
 
         //climb automation
@@ -194,7 +185,6 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
          */
         gb2(X).whenActive(
                 new SequentialCommandGroup(
-                        wristSubsystem.clawWristServoIn(),
                         armSubsystem.armIn(),
                         clawSubsystem.fullyOpen(),
                         wristSubsystem.wristFlipIn()

@@ -65,6 +65,16 @@ public class ArmSubsystem extends SubsystemBase {
             rightArm.setPosition(IN_POS);
         }, this);
     }
+
+    public void autoArmSpec() {
+            leftArm.setPosition(SPEC_POS_INTAKE);
+            rightArm.setPosition(SPEC_POS_INTAKE);
+    }
+    public void autoArmWall() {
+            leftArm.setPosition(WALL_POS);
+            rightArm.setPosition(WALL_POS);
+    }
+
     @Override
     public void periodic(){
 

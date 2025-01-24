@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class WristSubsystem extends SubsystemBase {
 
     //other flipServo is the one inside the arm
-    private final Servo clawWristServo, flipServo;
+    private final Servo  flipServo;
 
     //parallel is ready to intake
     public static  double CLAW_SERVO_IN = 0.315; //.884
@@ -34,23 +34,23 @@ public class WristSubsystem extends SubsystemBase {
     public static double WRIST_WALL_POS = .33;
 
 
-    public WristSubsystem(Servo clawWristServo, Servo flipServo) {
-        this.clawWristServo = clawWristServo;
+    public WristSubsystem( Servo flipServo) {
         this.flipServo = flipServo;
     }
 
 
-    public Command clawWristServoOut() {
-        return new InstantCommand(() -> clawWristServo.setPosition(CLAW_SERVO_OUT), this);
-    }
-    public Command clawWristServoIn() {
-        return new InstantCommand(() -> clawWristServo.setPosition(CLAW_SERVO_IN), this);
-    }
     public Command wristFlipSpec() {
         return new InstantCommand(() -> flipServo.setPosition(WRIST_OUT_SPEC_POS), this);
     }
     public Command wristFlipSamp() {
         return new InstantCommand(() -> flipServo.setPosition(WRIST_OUT_SAMP_POS), this);
+    }
+
+    public void autoWristWall() {
+        flipServo.setPosition(WRIST_WALL_POS);
+    }
+    public void autoWristSpec() {
+        flipServo.setPosition(WRIST_OUT_SPEC_POS);
     }
 
     public Command wristDownIntake() {

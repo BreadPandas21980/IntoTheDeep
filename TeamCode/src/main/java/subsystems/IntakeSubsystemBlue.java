@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class IntakeSubsystemBlue extends SubsystemBase {
 
     ElapsedTime time = new ElapsedTime();
-    public static long flipUpTime = 75;
+    public static long flipUpTime = 0;
     public static boolean flippyUp;
     private final MotorEx intakeMotor;
     private final Servo dropdownServo;

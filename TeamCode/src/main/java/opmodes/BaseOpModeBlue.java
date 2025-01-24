@@ -51,7 +51,7 @@ public class BaseOpModeBlue extends CommandOpMode {
 
     protected MotorEx fL, fR, bL, bR, intakeMotor, extendoMotor, leftSlide, rightSlide;
     protected DcMotorEx fLDC, fRDC, bLDC, bRDC, intakeMotorDC, extendoMotorDC, leftSlideDC, rightSlideDC;
-    protected Servo clawServo, clawWristServo, flipServo, dropdownServo, leftStilt, rightStilt;
+    protected Servo clawServo, flipServo, dropdownServo, leftStilt, rightStilt;
     protected Servo leftArm, rightArm;
     protected ColorSensor colorSensor;
     protected DistanceSensor distanceSensor;
@@ -105,7 +105,7 @@ public class BaseOpModeBlue extends CommandOpMode {
         armSubsystem = new ArmSubsystem(leftArm, rightArm);
         intakeSubsystemBlue = new IntakeSubsystemBlue(intakeMotor, dropdownServo);
         //stiltSubsystem = new StiltSubsystem(leftStilt, rightStilt);
-        wristSubsystem = new WristSubsystem(clawWristServo, flipServo);
+        wristSubsystem = new WristSubsystem( flipServo);
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);
         clawSubsystem = new ClawSubsystem(clawServo);
         colorSubsystem = new ColorSubsystemBlue(colorSensor, lights);
@@ -138,7 +138,6 @@ public class BaseOpModeBlue extends CommandOpMode {
             leftSlideDC = hardwareMap.get(DcMotorEx.class, "leftSlide");
             rightSlideDC = hardwareMap.get(DcMotorEx.class, "rightSlide");
             clawServo = hardwareMap.get(Servo.class, "clawServo");
-            clawWristServo = hardwareMap.get(Servo.class, "clawWristServo");
             flipServo = hardwareMap.get(Servo.class, "flipServo");
             dropdownServo = hardwareMap.get(Servo.class, "dropdownServo");
             colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
