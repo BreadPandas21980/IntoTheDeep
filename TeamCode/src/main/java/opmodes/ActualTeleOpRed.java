@@ -5,13 +5,11 @@ import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.B;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_DOWN;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_LEFT;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_RIGHT;
-import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.LEFT_BUMPER;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.RIGHT_BUMPER;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.X;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.Y;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.LEFT_TRIGGER;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.RIGHT_TRIGGER;
-
 import static subsystems.IntakeSubsystemBlue.flipUpTime;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -26,8 +24,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Config
 //@Disabled
-@TeleOp(name = "ActualTeleOpBlue", group = "!!!super cool!")
-public class ActualTeleOpBlue extends BaseOpModeBlue {
+@TeleOp(name = "ActualTeleOpRed", group = "!!!super cool!")
+public class ActualTeleOpRed extends BaseOpModeRed {
     @Override
     public void initialize() {
         super.initialize();
@@ -52,41 +50,41 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
 
  */
         if(colorSubsystem.grrr) {
-            intakeSubsystemBlue.flipUp();
+            intakeSubsystemRed.flipUp();
         }
         if(colorSubsystem.pooping == false) {
             gb1(LEFT_TRIGGER).whileActiveContinuous(
                     new SequentialCommandGroup(
-                            intakeSubsystemBlue.inIntake(),
+                            intakeSubsystemRed.inIntake(),
                             new WaitUntilCommand(()-> colorSubsystem.grrr),
-                            intakeSubsystemBlue.idle(),
+                            intakeSubsystemRed.idle(),
                            // extendoSubsystem.extending(),
-                            intakeSubsystemBlue.flipUp(),
+                            intakeSubsystemRed.flipUp(),
                             new WaitCommand(10),
-                            intakeSubsystemBlue.outIntakeMini(),
+                            intakeSubsystemRed.outIntakeMini(),
 
                            // extendoSubsystem.extendoIn(),
                           //  new WaitUntilCommand(()-> extendoSubsystem.atTarget()),
                            // clawSubsystem.notOpen(),
                             new WaitCommand(flipUpTime),
-                            intakeSubsystemBlue.inIntake()
+                            intakeSubsystemRed.inIntake()
                             //intakeSubsystem.idle()
                     )
             );
         } else if (colorSubsystem.pooping == true) {
             gb1(LEFT_TRIGGER).whileActiveOnce(
                     new SequentialCommandGroup(
-                            intakeSubsystemBlue.inIntake(),
+                            intakeSubsystemRed.inIntake(),
                             new WaitUntilCommand(()-> colorSubsystem.grrr),
-                            intakeSubsystemBlue.idle(),
-                            intakeSubsystemBlue.idle(),
-                            intakeSubsystemBlue.idle(),
-                            intakeSubsystemBlue.idle(),
-                            intakeSubsystemBlue.idle(),
-                            intakeSubsystemBlue.idle(),
+                            intakeSubsystemRed.idle(),
+                            intakeSubsystemRed.idle(),
+                            intakeSubsystemRed.idle(),
+                            intakeSubsystemRed.idle(),
+                            intakeSubsystemRed.idle(),
+                            intakeSubsystemRed.idle(),
                             new WaitCommand(100),
-                            intakeSubsystemBlue.flipUp(),
-                            intakeSubsystemBlue.idle()
+                            intakeSubsystemRed.flipUp(),
+                            intakeSubsystemRed.idle()
                     )
             );
         }
@@ -102,19 +100,19 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
         );
 
         gb1(LEFT_TRIGGER).whenInactive(
-                intakeSubsystemBlue.idle()
+                intakeSubsystemRed.idle()
         );
 
         gb1(LEFT_TRIGGER).whileActiveContinuous(
-                intakeSubsystemBlue.inIntake()
+                intakeSubsystemRed.inIntake()
         );
 
         gb1(RIGHT_TRIGGER).whenInactive(
-                intakeSubsystemBlue.idle()
+                intakeSubsystemRed.idle()
         );
 
         gb1(RIGHT_TRIGGER).whileActiveContinuous(
-                intakeSubsystemBlue.outIntake()
+                intakeSubsystemRed.outIntake()
         );
 
 
@@ -204,17 +202,17 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
 
 
         gb2(RIGHT_TRIGGER).whenActive(
-                intakeSubsystemBlue.flipUp()
+                intakeSubsystemRed.flipUp()
         );
         gb2(LEFT_TRIGGER).whenActive(
-                intakeSubsystemBlue.flipDown()
+                intakeSubsystemRed.flipDown()
         );
 
         gb1(DPAD_LEFT).whenActive(
-                intakeSubsystemBlue.flipDown()
+                intakeSubsystemRed.flipDown()
         );
         gb1(DPAD_RIGHT).whenActive(
-                intakeSubsystemBlue.flipUp()
+                intakeSubsystemRed.flipUp()
         );
 
 /*
@@ -231,13 +229,13 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
 
         //gb2(START).and(gb2(BACK)).whenActive(drive.drivetrainBrake().alongWith(lift.idle()).alongWith(intake.idle()));
 
-        register(driveSubsystem, clawSubsystem, wristSubsystem, intakeSubsystemBlue, extendoSubsystem, liftSubsystem, armSubsystem, colorSubsystem);
+        register(driveSubsystem, clawSubsystem, wristSubsystem, intakeSubsystemRed, extendoSubsystem, liftSubsystem, armSubsystem, colorSubsystem);
         driveSubsystem.setDefaultCommand(driveSubsystem.drobotCentric(driverGamepad::getRightX, driverGamepad::getLeftY, driverGamepad::getLeftX));
         liftSubsystem.setDefaultCommand(liftSubsystem.setPower(operatorGamepad::getLeftY));
         extendoSubsystem.setDefaultCommand(extendoSubsystem.setPower(operatorGamepad::getRightY));
         colorSubsystem.setDefaultCommand(colorSubsystem.senseColor());
         distanceSubsystem.setDefaultCommand(distanceSubsystem.senseDist());
-        intakeSubsystemBlue.setDefaultCommand(intakeSubsystemBlue.runIdle());
+        intakeSubsystemRed.setDefaultCommand(intakeSubsystemRed.runIdle());
         //led.setDefaultCommand(led.checkDist());
         //dropbox.setDefaultCommand(dropbox.setPower(operatorGamepad::getRightY));
     }
@@ -253,10 +251,10 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
         telemetry.addData("extendo pwr: ", operatorGamepad.getLeftY());
         telemetry.addData("clor: ", colorSubsystem.getColor());
         telemetry.addData("cpsdfk color: ", colorSubsystem.grrr);
-        telemetry.addData("uhOhTwo: ", intakeSubsystemBlue.uhohTwo);
+        telemetry.addData("uhOhTwo: ", intakeSubsystemRed.uhohTwo);
         telemetry.addData("poop: ", colorSubsystem.pooping);
-        telemetry.addData("inp: ", intakeSubsystemBlue.IN_POWER);
-        telemetry.addData("flippy: ", intakeSubsystemBlue.flippyUp);
+        telemetry.addData("inp: ", intakeSubsystemRed.IN_POWER);
+        telemetry.addData("flippy: ", intakeSubsystemRed.flippyUp);
         telemetry.addData("disty: ", distanceSubsystem.inBox);
         telemetry.addData("smthIny: ", colorSubsystem.smthIn);
         telemetry.addData("range", String.format("%.01f mm", distanceSensor.getDistance(DistanceUnit.MM)));

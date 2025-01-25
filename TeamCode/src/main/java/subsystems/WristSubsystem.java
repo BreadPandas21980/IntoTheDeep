@@ -50,7 +50,13 @@ public class WristSubsystem extends SubsystemBase {
         flipServo.setPosition(WRIST_WALL_POS);
     }
     public void autoWristSpec() {
-        flipServo.setPosition(WRIST_OUT_SPEC_POS);
+        flipServo.setPosition(WRIST_OUT_SPEC_POS );
+    }
+    public void autoWristSamp() {
+        flipServo.setPosition(WRIST_OUT_SAMP_POS);
+    }
+    public void autoWristIn() {
+        flipServo.setPosition(WRIST_INTAKE_POS);
     }
 
     public Command wristDownIntake() {

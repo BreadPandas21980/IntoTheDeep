@@ -31,13 +31,13 @@ public class LiftSubsystem extends SubsystemBase {
 
  */
 
-    public static int specimenPrepareHeight = 1200;
+    public static int specimenPrepareHeight = 500;
     public static int sampPrepHeight = 1350;
-    public static int specimenScoreHeight = 650;
+    public static int specimenScoreHeight = 1400;
     public static int groundHeight = 0;
     public static int highBucketHeight = 800;
 
-    public static double kP = 0.1;
+    public static double kP = 0.01;
     public static double kI = 0;
     public static double kD = 0;
     public static double tolerance = 20;
@@ -194,8 +194,8 @@ public class LiftSubsystem extends SubsystemBase {
         double pid = controller.calculate(slidePosL, targetPos);
 
 
-        leftSlide.set(-pid + 0.08);
-        rightSlide.set(-pid + 0.08);
+        leftSlide.set(pid + 0.08);
+        rightSlide.set(pid + 0.08);
     }
 
 

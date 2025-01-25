@@ -81,7 +81,7 @@ public class ExtendoSubsystem extends SubsystemBase {
     public int getTargetPos() {
         return targetPos;
     }
-    private void setTargetPos(int pos) {
+    public void setTargetPos(int pos) {
         targetPos = pos;
     }
     public boolean atTarget() {
@@ -99,6 +99,15 @@ public class ExtendoSubsystem extends SubsystemBase {
         return extendoMotor.getCurrentPosition();
     }
 
+
+    public void update() {
+        controller.setPID(kP, kI, kD);
+        int slidePosL = getEncoderVal();
+        double pid = controller.calculate(slidePosL, targetPos);
+
+
+        extendoMotor.set(-pid + 0.2);
+    }
 
     @Override
     public void periodic() {

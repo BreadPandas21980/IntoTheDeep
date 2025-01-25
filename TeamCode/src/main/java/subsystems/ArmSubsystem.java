@@ -25,12 +25,12 @@ public class ArmSubsystem extends SubsystemBase {
     public static boolean sampSame = false;
     public static boolean sampIntake = false;
     public static double SAMP_POS = .57;
-    public static double MID_POS = .3;
+    public static double MID_POS = 0.1;
     public static double SPEC_POS_INTAKE = 0.24;
     public static double SPEC_POS_SAME = 0.6;
     public static double FIRST_POS = 0.06;
     public static double IN_POS = 0.068;
-    public static double WALL_POS = 0.91;
+    public static double WALL_POS = 0.95;
     public ArmSubsystem(Servo leftArm, Servo rightArm ) {
         this.leftArm = leftArm;
         this.rightArm = rightArm;
@@ -67,12 +67,25 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void autoArmSpec() {
-            leftArm.setPosition(SPEC_POS_INTAKE);
-            rightArm.setPosition(SPEC_POS_INTAKE);
+        leftArm.setPosition(SPEC_POS_INTAKE);
+        rightArm.setPosition(SPEC_POS_INTAKE);
+    }
+    public void autoArmMid() {
+        leftArm.setPosition(MID_POS);
+        rightArm.setPosition(MID_POS);
     }
     public void autoArmWall() {
             leftArm.setPosition(WALL_POS);
             rightArm.setPosition(WALL_POS);
+    }
+    public void autoArmSamp() {
+        leftArm.setPosition(SAMP_POS);
+        rightArm.setPosition(SAMP_POS);
+    }
+
+    public void autoArmIn() {
+        leftArm.setPosition(IN_POS);
+        rightArm.setPosition(IN_POS);
     }
 
     @Override

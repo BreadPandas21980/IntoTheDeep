@@ -46,7 +46,7 @@ public class ClawSubsystem extends SubsystemBase {
         clawServo.setPosition(FULLY_OPEN);
     }
     public void autoClawClosed() {
-        clawServo.setPosition(NOT_OPEN);
+        clawServo.setPosition(0.2);
     }
     public Command clawSwitch() {
         return new InstantCommand(() ->  {

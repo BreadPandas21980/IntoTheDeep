@@ -52,7 +52,7 @@ public class DriveSubsystem extends SubsystemBase {
                     double rotate = forwardSpeed.getAsDouble();
 
                     if(Math.abs(forward) > 0.1) {
-                        forward = forward;
+                        forward = forward * rotateFactor;
                     } else {
                         forward = 0;
                     }
@@ -62,7 +62,7 @@ public class DriveSubsystem extends SubsystemBase {
                         strafe = 0;
                     }
                     if(Math.abs(rotate) > 0.1) {
-                        rotate = rotate * rotateFactor;
+                        rotate = rotate;
                     } else {
                         rotate = 0;
                     }

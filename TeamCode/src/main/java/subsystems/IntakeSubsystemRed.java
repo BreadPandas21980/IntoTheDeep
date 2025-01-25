@@ -1,9 +1,6 @@
 package subsystems;
 
-import androidx.annotation.NonNull;
-
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
@@ -20,7 +17,7 @@ import java.util.ArrayList;
  * to 2020 season.
  */
 @Config
-public class IntakeSubsystemBlue extends SubsystemBase {
+public class IntakeSubsystemRed extends SubsystemBase {
 
     ElapsedTime time = new ElapsedTime();
     public static long flipUpTime = 0;
@@ -31,7 +28,7 @@ public class IntakeSubsystemBlue extends SubsystemBase {
 
     public static double targetPower = 0;
     public static double IN_POWER = 1;
-    public static double FULL_POWER = 1;
+    public static double FULL_POWER = .8;
     public static double OUT_POWER = -1;
     public static double MINI_OUT_POWER = -0.1;
     public static double IN_POWER_SAMP = .8;
@@ -44,7 +41,7 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public static boolean uhohTwo = false;
     ArrayList<Integer> data = new ArrayList<Integer>(); //1 is red, 2 is yellow, 3 is blue, -1 is nothing
 
-    public IntakeSubsystemBlue(MotorEx intakeMotor, Servo dropdownServo ) {
+    public IntakeSubsystemRed(MotorEx intakeMotor, Servo dropdownServo ) {
         this.intakeMotor = intakeMotor;
         this.dropdownServo = dropdownServo;
         data.add(-1);
@@ -63,7 +60,7 @@ public class IntakeSubsystemBlue extends SubsystemBase {
                 IN_POWER = 1;
             }
             */
-            if(ColorSubsystemBlue.pooping == true && ColorSubsystemBlue.grrr == true) {
+            if(ColorSubsystemRed.pooping == true && ColorSubsystemRed.grrr == true) {
                 IN_POWER = 0;
             }
             intakeMotor.set(IN_POWER);
@@ -122,7 +119,7 @@ public class IntakeSubsystemBlue extends SubsystemBase {
 
 
 
-        if (ColorSubsystemBlue.smthIn && DistanceSubsystem.inBox && flippyUp == true) {
+        if (ColorSubsystemRed.smthIn && DistanceSubsystem.inBox && flippyUp == true) {
             time.reset();
             uhohTwo = true;
          //   intakeMotor.set(-1);
