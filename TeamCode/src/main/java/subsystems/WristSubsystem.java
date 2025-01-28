@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -46,6 +47,85 @@ public class WristSubsystem extends SubsystemBase {
         return new InstantCommand(() -> flipServo.setPosition(WRIST_OUT_SAMP_POS), this);
     }
 
+    public Action autoFlipSamp() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                flipServo.setPosition(WRIST_OUT_SAMP_POS);
+                return false;
+            }
+        };
+    }
+    public Action autoFlipSpec(double add) {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                flipServo.setPosition(WRIST_OUT_SPEC_POS + add);
+                return false;
+            }
+        };
+    }
+    public Action autoFlipDown() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                flipServo.setPosition(WRIST_DOWN_POS_INTAKE);
+                return false;
+            }
+        };
+    }
+    public Action autoFlipIn() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                flipServo.setPosition(0.31);
+                return false;
+            }
+        };
+    }
+
+    public Action autoFlipIn2() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                flipServo.setPosition(0.29);
+                return false;
+            }
+        };
+    }
+
+    public Action autoFlipIn3() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                flipServo.setPosition(0.28);
+                return false;
+            }
+        };
+    }
+    public Action autoFlipWall() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                flipServo.setPosition(WRIST_WALL_POS);
+                return false;
+            }
+        };
+    }
     public void autoWristWall() {
         flipServo.setPosition(WRIST_WALL_POS);
     }

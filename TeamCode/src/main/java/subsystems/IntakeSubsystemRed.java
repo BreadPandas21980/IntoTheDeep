@@ -119,7 +119,7 @@ public class IntakeSubsystemRed extends SubsystemBase {
 
 
 
-        if (ColorSubsystemRed.smthIn && DistanceSubsystem.inBox && flippyUp == true) {
+        if (ColorSubsystemRed.smthIn &&  flippyUp == true) {
             time.reset();
             uhohTwo = true;
          //   intakeMotor.set(-1);

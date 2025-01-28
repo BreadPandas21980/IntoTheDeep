@@ -236,7 +236,6 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
         liftSubsystem.setDefaultCommand(liftSubsystem.setPower(operatorGamepad::getLeftY));
         extendoSubsystem.setDefaultCommand(extendoSubsystem.setPower(operatorGamepad::getRightY));
         colorSubsystem.setDefaultCommand(colorSubsystem.senseColor());
-        distanceSubsystem.setDefaultCommand(distanceSubsystem.senseDist());
         intakeSubsystemBlue.setDefaultCommand(intakeSubsystemBlue.runIdle());
         //led.setDefaultCommand(led.checkDist());
         //dropbox.setDefaultCommand(dropbox.setPower(operatorGamepad::getRightY));
@@ -257,9 +256,7 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
         telemetry.addData("poop: ", colorSubsystem.pooping);
         telemetry.addData("inp: ", intakeSubsystemBlue.IN_POWER);
         telemetry.addData("flippy: ", intakeSubsystemBlue.flippyUp);
-        telemetry.addData("disty: ", distanceSubsystem.inBox);
         telemetry.addData("smthIny: ", colorSubsystem.smthIn);
-        telemetry.addData("range", String.format("%.01f mm", distanceSensor.getDistance(DistanceUnit.MM)));
         telemetry.addData("claw: ", clawServo.getPosition());
         telemetry.addData("FL: ", fLDC.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("FR: ", fRDC.getCurrent(CurrentUnit.AMPS));

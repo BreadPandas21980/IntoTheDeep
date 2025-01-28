@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
@@ -94,10 +95,10 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public void autoIdle() {
         intakeMotor.set(0);
     }
-    public void autoFlipDown() {
+    public void autoFlipDown1() {
         dropdownServo.setPosition(DROPDOWN_DOWN);
     }
-    public void autoFlipUp() {
+    public void autoFlipUp1() {
         dropdownServo.setPosition(DROPDOWN_UP);
     }
     public Command runIdle() {
@@ -117,12 +118,81 @@ public class IntakeSubsystemBlue extends SubsystemBase {
             dropdownServo.setPosition(DROPDOWN_UP);
         }, this);
     }
+
+    public Action autoInSamp() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                intakeMotor.set(IN_POWER_SAMP);
+                return false;
+            }
+        };
+    }
+
+    public Action autoInSpec() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                intakeMotor.set(IN_POWER_SPEC);
+                return false;
+            }
+        };
+    }
+    public Action autoOutIntake() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                intakeMotor.set(OUT_POWER);
+                return false;
+            }
+        };
+    }
+    public Action autoIdleIntake() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                intakeMotor.set(0);
+                return false;
+            }
+        };
+    }
+    public Action autoFlipDown() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                dropdownServo.setPosition(DROPDOWN_DOWN);
+                return false;
+            }
+        };
+    }
+    public Action autoFlipUp() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                dropdownServo.setPosition(DROPDOWN_UP);
+                return false;
+            }
+        };
+    }
+
     @Override
     public void periodic() {
 
 
 
-        if (ColorSubsystemBlue.smthIn && DistanceSubsystem.inBox && flippyUp == true) {
+        if (ColorSubsystemBlue.smthIn &&  flippyUp == true) {
             time.reset();
             uhohTwo = true;
          //   intakeMotor.set(-1);

@@ -19,12 +19,9 @@ import org.firstinspires.ftc.robotcore.internal.network.ControlHubApChannelManag
 
 import subsystems.ArmSubsystem;
 import subsystems.ClawSubsystem;
-import subsystems.ColorSubsystemBlue;
 import subsystems.ColorSubsystemRed;
-import subsystems.DistanceSubsystem;
 import subsystems.DriveSubsystem;
 import subsystems.ExtendoSubsystem;
-import subsystems.IntakeSubsystemBlue;
 import subsystems.IntakeSubsystemRed;
 import subsystems.LiftSubsystem;
 import subsystems.StiltSubsystem;
@@ -32,7 +29,7 @@ import subsystems.WristSubsystem;
 import util.GamepadTrigger;
 import util.TriggerGamepadEx;
 /*
-import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.thing.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ColorSubsystemV2Blue;
@@ -56,7 +53,6 @@ public class BaseOpModeRed extends CommandOpMode {
     protected Servo clawServo, flipServo, dropdownServo, leftStilt, rightStilt;
     protected Servo leftArm, rightArm;
     protected ColorSensor colorSensor;
-    protected DistanceSensor distanceSensor;
     protected ControlHubApChannelManager chub;
 
     //protected OpenCvCamera camera;
@@ -69,9 +65,6 @@ public class BaseOpModeRed extends CommandOpMode {
     protected ExtendoSubsystem extendoSubsystem;
     protected ClawSubsystem clawSubsystem;
     protected ColorSubsystemRed colorSubsystem;
-    protected DistanceSubsystem distanceSubsystem;
-    public RevBlinkinLedDriver lights;
-
     protected GamepadEx driverGamepad;
     protected GamepadEx operatorGamepad;
     protected TriggerGamepadEx driverTriggerGamepad;
@@ -110,8 +103,7 @@ public class BaseOpModeRed extends CommandOpMode {
         wristSubsystem = new WristSubsystem( flipServo);
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);
         clawSubsystem = new ClawSubsystem(clawServo);
-        colorSubsystem = new ColorSubsystemRed(colorSensor, lights);
-        distanceSubsystem = new DistanceSubsystem(distanceSensor);
+        colorSubsystem = new ColorSubsystemRed(colorSensor );
 
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -147,10 +139,8 @@ public class BaseOpModeRed extends CommandOpMode {
             //rightStilt = hardwareMap.get(Servo.class, "rightStilt");
             leftArm = hardwareMap.get(Servo.class, "leftArm");
             rightArm = hardwareMap.get(Servo.class, "rightArm");
-            lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
             colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
-            distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
         }
         catch(Exception e) {

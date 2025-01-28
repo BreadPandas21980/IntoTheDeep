@@ -43,15 +43,13 @@ public class ColorSubsystemBlue extends SubsystemBase {
     public static int stupidstpid = -2;
     public static boolean smthIn = false;
     public static boolean pooping = false;
-    public RevBlinkinLedDriver lights;
     ElapsedTime timer = new ElapsedTime();
     public static boolean grrr = false;
     public static boolean grrrBox = false;
     public static ArrayList<Integer> data = new ArrayList<Integer>(); //1 is red, 2 is yellow, 3 is blue, -1 is nothing
 
-    public ColorSubsystemBlue(ColorSensor colorSensor, RevBlinkinLedDriver lights ) {
+    public ColorSubsystemBlue(ColorSensor colorSensor ) {
         this.colorSensor = colorSensor;
-        this.lights = lights;
         data.add(-1);
         timer.reset();
 
@@ -145,15 +143,6 @@ public class ColorSubsystemBlue extends SubsystemBase {
             } else {
                 stupidstpid = redVal;
                 timer.reset();
-            }
-            if (stupidstpid == redVal) {
-                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-            } else if (stupidstpid == blueVal) {
-                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
-            } else if (stupidstpid == yellowVal) {
-                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-            } else if (timer.seconds() > 1){
-                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
             }
         }, this);
     }

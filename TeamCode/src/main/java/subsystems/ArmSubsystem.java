@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -26,6 +27,7 @@ public class ArmSubsystem extends SubsystemBase {
     public static boolean sampIntake = false;
     public static double SAMP_POS = .57;
     public static double MID_POS = 0.1;
+    //if Mid_POS doesn't go to a high enough value change to .3
     public static double SPEC_POS_INTAKE = 0.24;
     public static double SPEC_POS_SAME = 0.6;
     public static double FIRST_POS = 0.06;
@@ -66,24 +68,124 @@ public class ArmSubsystem extends SubsystemBase {
         }, this);
     }
 
+    public Action autoArmSamp() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                leftArm.setPosition(SAMP_POS);
+                rightArm.setPosition(SAMP_POS);
+
+
+                return false;
+            }
+        };
+    }
+    public Action autoArmSpecIntake() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                leftArm.setPosition(SPEC_POS_INTAKE);
+                rightArm.setPosition(SPEC_POS_INTAKE);
+
+
+                return false;
+            }
+        };
+    }
+    public Action autoArmWall() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                leftArm.setPosition(WALL_POS);
+                rightArm.setPosition(WALL_POS);
+
+
+                return false;
+            }
+        };
+    }
+
+    public Action autoArmFirst() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                leftArm.setPosition(FIRST_POS);
+                rightArm.setPosition(FIRST_POS);
+
+
+                return false;
+            }
+        };
+    }
+
+    public Action autoArmMid() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                leftArm.setPosition(MID_POS);
+                rightArm.setPosition(MID_POS);
+
+
+                return false;
+            }
+        };
+    }
+    public Action autoArmSecond() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                leftArm.setPosition(0.1);
+                rightArm.setPosition(0.1);
+
+
+                return false;
+            }
+        };
+    }
+    public Action autoArmIn() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                leftArm.setPosition(IN_POS);
+                rightArm.setPosition(IN_POS);
+
+
+                return false;
+            }
+        };
+    }
     public void autoArmSpec() {
         leftArm.setPosition(SPEC_POS_INTAKE);
         rightArm.setPosition(SPEC_POS_INTAKE);
     }
-    public void autoArmMid() {
+    public void autoArmMid1() {
         leftArm.setPosition(MID_POS);
         rightArm.setPosition(MID_POS);
     }
-    public void autoArmWall() {
+    public void autoArmWall1() {
             leftArm.setPosition(WALL_POS);
             rightArm.setPosition(WALL_POS);
     }
-    public void autoArmSamp() {
+    public void autoArmSamp1() {
         leftArm.setPosition(SAMP_POS);
         rightArm.setPosition(SAMP_POS);
     }
 
-    public void autoArmIn() {
+    public void autoArmIn1() {
         leftArm.setPosition(IN_POS);
         rightArm.setPosition(IN_POS);
     }

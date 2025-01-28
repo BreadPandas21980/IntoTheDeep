@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -41,11 +42,37 @@ public class ClawSubsystem extends SubsystemBase {
             clawOpen = false;
         }, this);
     }
+    public Action autoClawOpen() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                clawServo.setPosition(FULLY_OPEN);
 
-    public void autoClawOpen() {
+
+                return false;
+            }
+        };
+    }
+    public Action autoClawClosed() {
+        return new Action() {
+            ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                timer.reset();
+                clawServo.setPosition(.2);
+
+
+                return false;
+            }
+        };
+    }
+
+    public void autoClawOpen1() {
         clawServo.setPosition(FULLY_OPEN);
     }
-    public void autoClawClosed() {
+    public void autoClawClosed1() {
         clawServo.setPosition(0.2);
     }
     public Command clawSwitch() {

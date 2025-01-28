@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
@@ -88,6 +89,35 @@ public class ExtendoSubsystem extends SubsystemBase {
         return getEncoderVal() < targetPos + tolerance  &&
                 getEncoderVal() > targetPos - tolerance;
     }
+
+    public Action autoExtend(int t) {
+        return new Action() {
+            ElapsedTime a = new ElapsedTime();
+            private boolean initialized = false;
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                a.reset();
+                if (!initialized) {
+                    setTargetPos(t);
+                    initialized = true;
+                }
+                controller.setPID(kP, kI, kD);
+                output = controller.calculate(getEncoderVal(), getTargetPos());
+                extendoMotor.set(-output +.1);
+                if(a.seconds() > 2 ) {
+                    extendoMotor.set(0.001);
+                    return false;
+                }
+                if (Math.abs(getEncoderVal() - t) > 10){
+                    return true;
+                } else {
+                    extendoMotor.set(0.001);
+                    return false;
+                }
+            }
+        };
+    }
+
 
     public Command extendoIn() {
         return new RunCommand(() -> setTargetPos(EXTENDO_IN_POS), this);

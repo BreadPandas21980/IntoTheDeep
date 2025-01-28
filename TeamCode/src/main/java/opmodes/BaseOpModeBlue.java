@@ -2,6 +2,7 @@ package opmodes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -20,17 +21,17 @@ import org.firstinspires.ftc.robotcore.internal.network.ControlHubApChannelManag
 import subsystems.ArmSubsystem;
 import subsystems.ClawSubsystem;
 import subsystems.ColorSubsystemBlue;
-import subsystems.DistanceSubsystem;
 import subsystems.DriveSubsystem;
 import subsystems.ExtendoSubsystem;
 import subsystems.IntakeSubsystemBlue;
 import subsystems.LiftSubsystem;
 import subsystems.StiltSubsystem;
 import subsystems.WristSubsystem;
+import thing.MecanumDrive;
 import util.GamepadTrigger;
 import util.TriggerGamepadEx;
 /*
-import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.thing.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ColorSubsystemV2Blue;
@@ -54,7 +55,6 @@ public class BaseOpModeBlue extends CommandOpMode {
     protected Servo clawServo, flipServo, dropdownServo, leftStilt, rightStilt;
     protected Servo leftArm, rightArm;
     protected ColorSensor colorSensor;
-    protected DistanceSensor distanceSensor;
     protected ControlHubApChannelManager chub;
 
     //protected OpenCvCamera camera;
@@ -67,8 +67,6 @@ public class BaseOpModeBlue extends CommandOpMode {
     protected ExtendoSubsystem extendoSubsystem;
     protected ClawSubsystem clawSubsystem;
     protected ColorSubsystemBlue colorSubsystem;
-    protected DistanceSubsystem distanceSubsystem;
-    public RevBlinkinLedDriver lights;
 
     protected GamepadEx driverGamepad;
     protected GamepadEx operatorGamepad;
@@ -76,7 +74,8 @@ public class BaseOpModeBlue extends CommandOpMode {
     protected TriggerGamepadEx operatorTriggerGamepad;
 
     protected IMU imu;
-
+    protected Pose2d startPose = new Pose2d(-12, -62, Math.toRadians(90));
+    protected MecanumDrive rrDrive;
 
 
     @Override
@@ -108,8 +107,8 @@ public class BaseOpModeBlue extends CommandOpMode {
         wristSubsystem = new WristSubsystem( flipServo);
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);
         clawSubsystem = new ClawSubsystem(clawServo);
-        colorSubsystem = new ColorSubsystemBlue(colorSensor, lights);
-        distanceSubsystem = new DistanceSubsystem(distanceSensor);
+        colorSubsystem = new ColorSubsystemBlue(colorSensor);
+        rrDrive = new MecanumDrive(hardwareMap, startPose);
 
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -145,10 +144,8 @@ public class BaseOpModeBlue extends CommandOpMode {
             //rightStilt = hardwareMap.get(Servo.class, "rightStilt");
             leftArm = hardwareMap.get(Servo.class, "leftArm");
             rightArm = hardwareMap.get(Servo.class, "rightArm");
-            lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
             colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
-            distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
         }
         catch(Exception e) {
