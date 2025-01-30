@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -68,124 +67,24 @@ public class ArmSubsystem extends SubsystemBase {
         }, this);
     }
 
-    public Action autoArmSamp() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                leftArm.setPosition(SAMP_POS);
-                rightArm.setPosition(SAMP_POS);
-
-
-                return false;
-            }
-        };
-    }
-    public Action autoArmSpecIntake() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                leftArm.setPosition(SPEC_POS_INTAKE);
-                rightArm.setPosition(SPEC_POS_INTAKE);
-
-
-                return false;
-            }
-        };
-    }
-    public Action autoArmWall() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                leftArm.setPosition(WALL_POS);
-                rightArm.setPosition(WALL_POS);
-
-
-                return false;
-            }
-        };
-    }
-
-    public Action autoArmFirst() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                leftArm.setPosition(FIRST_POS);
-                rightArm.setPosition(FIRST_POS);
-
-
-                return false;
-            }
-        };
-    }
-
-    public Action autoArmMid() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                leftArm.setPosition(MID_POS);
-                rightArm.setPosition(MID_POS);
-
-
-                return false;
-            }
-        };
-    }
-    public Action autoArmSecond() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                leftArm.setPosition(0.1);
-                rightArm.setPosition(0.1);
-
-
-                return false;
-            }
-        };
-    }
-    public Action autoArmIn() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                leftArm.setPosition(IN_POS);
-                rightArm.setPosition(IN_POS);
-
-
-                return false;
-            }
-        };
-    }
     public void autoArmSpec() {
         leftArm.setPosition(SPEC_POS_INTAKE);
         rightArm.setPosition(SPEC_POS_INTAKE);
     }
-    public void autoArmMid1() {
+    public void autoArmMid() {
         leftArm.setPosition(MID_POS);
         rightArm.setPosition(MID_POS);
     }
-    public void autoArmWall1() {
+    public void autoArmWall() {
             leftArm.setPosition(WALL_POS);
             rightArm.setPosition(WALL_POS);
     }
-    public void autoArmSamp1() {
+    public void autoArmSamp() {
         leftArm.setPosition(SAMP_POS);
         rightArm.setPosition(SAMP_POS);
     }
 
-    public void autoArmIn1() {
+    public void autoArmIn() {
         leftArm.setPosition(IN_POS);
         rightArm.setPosition(IN_POS);
     }

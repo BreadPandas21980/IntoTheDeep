@@ -77,13 +77,13 @@ public class FourSpec extends OpMode {
     private final Pose grabPrepPose2 = new Pose(30, 18, Math.toRadians(180));
     private final Pose push2EndPose = new Pose(16.5, 18, Math.toRadians(180));
     private final Pose scoreControlPose2 = new Pose(10, 67.5, Math.toRadians(180));
-    private final Pose scorePose2 = new Pose(35., 82, Math.toRadians(180));
+    private final Pose scorePose2 = new Pose(38, 82, Math.toRadians(180));
     private final Pose grabPrepPose3 = new Pose(22, 35, Math.toRadians(180));
     private final Pose grabPose3 = new Pose(15.25, 35, Math.toRadians(180));
-    private final Pose scorePose3 = new Pose(35.05, 80, Math.toRadians(180));
+    private final Pose scorePose3 = new Pose(38, 80, Math.toRadians(180));
     private final Pose grabPrepPose4 = new Pose(22, 35, Math.toRadians(180));
     private final Pose grabPose4 = new Pose(14.5, 35, Math.toRadians(180));
-    private final Pose scorePose4 = new Pose(34.3, 80, Math.toRadians(180));
+    private final Pose scorePose4 = new Pose(38, 80, Math.toRadians(180));
     private final Pose parkPose = new Pose(15, 35, Math.toRadians(180));
 
     /** Park Control Pose for our robot, this is used to manipulate the bezier curve that we will create for the parking.
@@ -248,7 +248,7 @@ public class FourSpec extends OpMode {
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     if(timer.seconds() > 0.2) {
                         liftSubsystem.setTargetPos(50);
-                        follower.followPath(push1Start,true);
+                        follower.followPath(push1Start,false);
                         timer.reset();
                         first = true;
                         setPathState(3);

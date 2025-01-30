@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
@@ -33,7 +32,7 @@ public class LiftSubsystem extends SubsystemBase {
  */
 
     public static int specimenPrepareHeight = 500;
-    public static int sampPrepHeight = 1350;
+    public static int sampPrepHeight = 1150;
     public static int specimenScoreHeight = 1400;
     public static int groundHeight = 0;
     public static int highBucketHeight = 800;
@@ -127,36 +126,6 @@ public class LiftSubsystem extends SubsystemBase {
     }
  */
 
-    public Action autoLift(int t) {
-        return new Action() {
-            ElapsedTime a = new ElapsedTime();
-            private boolean initialized = false;
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                a.reset();
-                if (!initialized) {
-                    setTargetPos(t);
-                    initialized = true;
-                }
-                controller.setPID(kP, kI, kD);
-                double output1 = controller.calculate(getLeftEncoderVal(), getTargetPos());
-                leftSlide.set(output1);
-                rightSlide.set(output1);
-                if(a.seconds() > 1 ) {
-                    leftSlide.set(0.08);
-                    rightSlide.set(0.08);
-                    return false;
-                }
-                if (Math.abs(getLeftEncoderVal() - t) > 7.5){
-                    return true;
-                } else {
-                    leftSlide.set(0.08);
-                    rightSlide.set(0.08);
-                    return false;
-                }
-            }
-        };
-    }
 
     public void setTargetPos(int pos) {
         targetPos = pos;

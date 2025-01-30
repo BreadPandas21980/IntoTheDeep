@@ -2,7 +2,6 @@ package opmodes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -27,7 +26,6 @@ import subsystems.IntakeSubsystemBlue;
 import subsystems.LiftSubsystem;
 import subsystems.StiltSubsystem;
 import subsystems.WristSubsystem;
-import thing.MecanumDrive;
 import util.GamepadTrigger;
 import util.TriggerGamepadEx;
 /*
@@ -74,10 +72,6 @@ public class BaseOpModeBlue extends CommandOpMode {
     protected TriggerGamepadEx operatorTriggerGamepad;
 
     protected IMU imu;
-    protected Pose2d startPose = new Pose2d(-12, -62, Math.toRadians(90));
-    protected MecanumDrive rrDrive;
-
-
     @Override
     public void initialize() {
         telemetry.addData("Mode", "Starting initialization");
@@ -108,7 +102,6 @@ public class BaseOpModeBlue extends CommandOpMode {
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);
         clawSubsystem = new ClawSubsystem(clawServo);
         colorSubsystem = new ColorSubsystemBlue(colorSensor);
-        rrDrive = new MecanumDrive(hardwareMap, startPose);
 
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());

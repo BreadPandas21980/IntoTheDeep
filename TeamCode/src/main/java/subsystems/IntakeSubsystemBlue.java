@@ -2,9 +2,6 @@ package subsystems;
 
 import androidx.annotation.NonNull;
 
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
@@ -13,6 +10,7 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import com.acmerobotics.dashboard.config.Config;
 import java.util.ArrayList;
 
 /**
@@ -93,12 +91,12 @@ public class IntakeSubsystemBlue extends SubsystemBase {
         intakeMotor.set(FULL_POWER);
     }
     public void autoIdle() {
-        intakeMotor.set(0);
+        intakeMotor.set(0.8);
     }
-    public void autoFlipDown1() {
+    public void autoFlipDown() {
         dropdownServo.setPosition(DROPDOWN_DOWN);
     }
-    public void autoFlipUp1() {
+    public void autoFlipUp() {
         dropdownServo.setPosition(DROPDOWN_UP);
     }
     public Command runIdle() {
@@ -119,73 +117,6 @@ public class IntakeSubsystemBlue extends SubsystemBase {
         }, this);
     }
 
-    public Action autoInSamp() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                intakeMotor.set(IN_POWER_SAMP);
-                return false;
-            }
-        };
-    }
-
-    public Action autoInSpec() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                intakeMotor.set(IN_POWER_SPEC);
-                return false;
-            }
-        };
-    }
-    public Action autoOutIntake() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                intakeMotor.set(OUT_POWER);
-                return false;
-            }
-        };
-    }
-    public Action autoIdleIntake() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                intakeMotor.set(0);
-                return false;
-            }
-        };
-    }
-    public Action autoFlipDown() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                dropdownServo.setPosition(DROPDOWN_DOWN);
-                return false;
-            }
-        };
-    }
-    public Action autoFlipUp() {
-        return new Action() {
-            ElapsedTime timer = new ElapsedTime();
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                timer.reset();
-                dropdownServo.setPosition(DROPDOWN_UP);
-                return false;
-            }
-        };
-    }
 
     @Override
     public void periodic() {
