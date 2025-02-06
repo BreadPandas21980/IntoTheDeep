@@ -25,6 +25,7 @@ public class ArmSubsystem extends SubsystemBase {
     public static boolean sampSame = false;
     public static boolean sampIntake = false;
     public static double SAMP_POS = .57;
+    public static double PARK_POS = .6;
     public static double MID_POS = 0.1;
     //if Mid_POS doesn't go to a high enough value change to .3
     public static double SPEC_POS_INTAKE = 0.24;
@@ -82,6 +83,10 @@ public class ArmSubsystem extends SubsystemBase {
     public void autoArmSamp() {
         leftArm.setPosition(SAMP_POS);
         rightArm.setPosition(SAMP_POS);
+    }
+    public void autoArmPark() {
+        leftArm.setPosition(PARK_POS);
+        rightArm.setPosition(PARK_POS);
     }
 
     public void autoArmIn() {

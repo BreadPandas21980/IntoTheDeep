@@ -34,9 +34,11 @@ import subsystems.WristSubsystem;
  * @version 2.0, 11/28/2024
  */
 
-@Autonomous(name = "FourSpec", group = "!!!!yay")
+@Autonomous(name = "FOURSpec", group = "!!!!yay")
 public class FourSpec extends OpMode {
 
+    public static boolean firstimu = true;
+    ElapsedTime timerImu = new ElapsedTime();
     protected MotorEx leftSlide, rightSlide, intakeMotor;
     protected DcMotor leftSlideDC;
     protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo;
@@ -65,7 +67,7 @@ public class FourSpec extends OpMode {
 
     /** Start Pose of our robot */
     private final Pose startPose = new Pose(10, 57, Math.toRadians(180));
-    private final Pose scorePose1 = new Pose(37.75, 74, Math.toRadians(178.5));
+    private final Pose scorePose1 = new Pose(38, 74, Math.toRadians(178.5));
     private final Pose transitionPose = new Pose(25, 39, Math.toRadians(180));
     private final Pose push1StartControlPose = new Pose(70, 37.5, Math.toRadians(180));
     // hi jackie ;-;
@@ -76,7 +78,7 @@ public class FourSpec extends OpMode {
 
     private final Pose grabPrepPose2 = new Pose(30, 18, Math.toRadians(180));
     private final Pose push2EndPose = new Pose(16.5, 18, Math.toRadians(180));
-    private final Pose scoreControlPose2 = new Pose(10, 67.5, Math.toRadians(180));
+    private final Pose scoreControlPose2 = new Pose(16.5, 18, Math.toRadians(180));
     private final Pose scorePose2 = new Pose(38, 82, Math.toRadians(180));
     private final Pose grabPrepPose3 = new Pose(22, 35, Math.toRadians(180));
     private final Pose grabPose3 = new Pose(15.25, 35, Math.toRadians(180));
@@ -91,8 +93,8 @@ public class FourSpec extends OpMode {
     private final Pose parkControlPose = new Pose(60, 98, Math.toRadians(0));
 
     /* These are our Paths and PathChains that we will define in buildPaths() */
-    private Path scorePreload, park;
-    private PathChain transitionMove, push1Start, push1End, push2Start, push2End, push3Start, push3End;
+    private Path park;
+    private PathChain scorePreload, transitionMove, push1Start, push1End, push2Start, push2End, push3Start, push3End;
     private PathChain score2, grab3, score3, grab4, score4, grab5, score5;
 
     /** Build the paths for the auto (adds, for example, constant/linear headings while doing paths)
@@ -117,8 +119,10 @@ public class FourSpec extends OpMode {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
         //   //scorePreload = new Path(new BezierLine(new Point(startPose), new Point(scorePose)));
         //        park =
-        scorePreload = new Path(new BezierLine(new Point(startPose), new Point(scorePose1)));
-        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose1.getHeading());
+        scorePreload = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(startPose), new Point(scorePose1)))
+                .setLinearHeadingInterpolation(startPose.getHeading(), scorePose1.getHeading())
+                .build();
 
         /* Here is an example for Constant Interpolation
         scorePreload.setConstantInterpolation(startPose.getHeading()); */
@@ -127,9 +131,6 @@ public class FourSpec extends OpMode {
         transitionMove = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(scorePose1), new Point(transitionPose)))
                 .setLinearHeadingInterpolation(startPose.getHeading(), scorePose1.getHeading())
-                .build();
-
-        push1Start = follower.pathBuilder()
                 .addPath(new BezierCurve(new Point(transitionPose), new Point(push1StartControlPose), new Point(push1StartPose)))
                 .setLinearHeadingInterpolation(startPose.getHeading(), scorePose1.getHeading())
                 .addPath(new BezierLine(new Point(push1StartPose), new Point(push1EndPose)))
@@ -183,12 +184,14 @@ public class FourSpec extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                follower.followPath(scorePreload);
                 clawSubsystem.autoClawClosed();
                 armSubsystem.autoArmSpec();
                 wristSubsystem.autoWristSpec();
                 liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
-                setPathState(1);
+                if(timerImu.seconds() > 1) {
+                    follower.followPath(scorePreload, true);
+                    setPathState(1);
+                }
                 timer.reset();
                 break;
             case 1:
@@ -210,7 +213,7 @@ public class FourSpec extends OpMode {
                     }
                     /* Score Preload */
                     if(timer.seconds() > .5) {
-                        liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight + 100);
+                        liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight);
                     }
                     if(timer.seconds() > 1) {
                         clawSubsystem.autoClawOpen();
@@ -230,33 +233,14 @@ public class FourSpec extends OpMode {
                     armSubsystem.autoArmWall();
                     wristSubsystem.autoWristWall();
                 }
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
-                if(!follower.isBusy()) {
+                if(timer.seconds() > 2) {
 
                     armSubsystem.autoArmWall();
                     wristSubsystem.autoWristWall();
                     liftSubsystem.setTargetPos(50);
                     clawSubsystem.autoClawOpen();
-
-                    if(first) {
-                        timer.reset();
-                        first = false;
-                    }
-                    if(timer.seconds() > 0.1) {
-                        clawSubsystem.autoClawOpen();
-                    }
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    if(timer.seconds() > 0.2) {
-                        liftSubsystem.setTargetPos(50);
-                        follower.followPath(push1Start,false);
-                        timer.reset();
-                        first = true;
-                        setPathState(3);
-                    }
                 }
-                break;
-            case 3:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy()) {
                     /* Score Sample */
                     if(first) {
@@ -277,6 +261,8 @@ public class FourSpec extends OpMode {
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                 }
                 break;
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+
             case 4:
 
                 if (timer.seconds() > 1) {
@@ -358,7 +344,7 @@ public class FourSpec extends OpMode {
                         first = true;
                         setPathState(7);
                         timer.reset();
-                   }
+                    }
                 }
                 break;
             case 7:
@@ -410,7 +396,7 @@ public class FourSpec extends OpMode {
                     liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight);
                     if(timer.seconds() > .4) {
                         clawSubsystem.autoClawOpen();
-                   }
+                    }
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     if(timer.seconds() > .6) {
                         follower.followPath(park, true);
@@ -444,6 +430,24 @@ public class FourSpec extends OpMode {
     @Override
     public void loop() {
 
+
+        if(firstimu) {
+            if(timerImu.seconds() > 0.005) {
+
+                telemetry.addData("before offet,", 1);
+                follower.setHeadingOffset(0 - (Math.toRadians(follower.getPose().getHeading() * 180 / Math.PI - 180)));
+
+                telemetry.addData("grrr.", 2);
+
+                firstimu = false;
+            }
+        }
+
+        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
+            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 13);
+        }
+        telemetry.addData("pffset: ", follower.getHeadingOffset() * 180 / Math.PI);
+        telemetry.addData("xset: ", follower.getXOffset());
         liftSubsystem.update();
         // These loop the movements of the robot
         follower.update();
@@ -453,10 +457,11 @@ public class FourSpec extends OpMode {
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("heading", follower.getPose().getHeading() * 180 / Math.PI);
         telemetry.addData("lift tarhet ", liftSubsystem.getTargetPos());
         telemetry.addData("lift power: ", leftSlideDC.getPower());
         telemetry.update();
+
     }
 
     /** This method is called once at the init of the OpMode. **/
@@ -464,7 +469,7 @@ public class FourSpec extends OpMode {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
-       // actionTimer = new Timer();
+        // actionTimer = new Timer();
         opmodeTimer.resetTimer();
 
         leftSlide = new MotorEx(hardwareMap, "leftSlide");
@@ -492,18 +497,21 @@ public class FourSpec extends OpMode {
         follower.setStartingPose(startPose);
         clawSubsystem.autoClawClosed();
         buildPaths();
+        firstimu = true;
     }
 
     /** This method is called continuously after Init while waiting for "play". **/
     @Override
-    public void init_loop() {}
+    public void init_loop() {
+        timerImu.reset();
+    }
 
     /** This method is called once at the start of the OpMode.
      * It runs all the setup actions, including building paths and starting the path system **/
     @Override
     public void start() {
         liftSubsystem.setTargetPos(0);
-       // actionTimer.resetTimer();
+        // actionTimer.resetTimer();
         opmodeTimer.resetTimer();
         setPathState(0);
     }
