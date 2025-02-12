@@ -39,7 +39,7 @@ public class FourSpec extends OpMode {
 
     public static boolean firstimu = true;
     ElapsedTime timerImu = new ElapsedTime();
-    public static double recordedMaxPower = 0;
+    public static double recordedMaxPower = 0; 
     protected MotorEx leftSlide, rightSlide, intakeMotor;
     protected DcMotor leftSlideDC;
     protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo;
@@ -68,7 +68,7 @@ public class FourSpec extends OpMode {
      * Lets assume our robot is 18 by 18 inches
      * Lets assume the Robot is facing the human player and we want to score in the bucket */
 
-    /** Start Pose of our robot */
+    /** Start Pose of our robot */ 
     private final Pose startPose = new Pose(56, 134, Math.toRadians(90));
     private final Pose scorePose1 = new Pose(70, 105, Math.toRadians(90));
     private final Pose transitionPose = new Pose(39, 110, Math.toRadians(90));
@@ -78,7 +78,7 @@ public class FourSpec extends OpMode {
     private final Pose push1EndPose = new Pose(24, 113, Math.toRadians(90));
     private final Pose push2StartPose = new Pose(14, 90, Math.toRadians(90));
     private final Pose push2StartControlPose = new Pose(30, 80, Math.toRadians(90));
-
+ 
     private final Pose grabPrepPose2 = new Pose(14, 117, Math.toRadians(90));
     private final Pose push2EndPose = new Pose(14, 120.5, Math.toRadians(90));
     private final Pose scoreControlPose2 = new Pose(72, 130, Math.toRadians(90));
@@ -89,7 +89,7 @@ public class FourSpec extends OpMode {
     private final Pose grabPrepPose4 = new Pose(32, 110, Math.toRadians(90));
     private final Pose grabPose4 = new Pose(30, 124, Math.toRadians(90));
     private final Pose scorePose4 = new Pose(74, 10, Math.toRadians(90));
-    private final Pose parkPose = new Pose(36, 130, Math.toRadians(90));
+    private final Pose parkPose = new Pose(36, 130, Math.toRadians(90)); 
 
     /** Park Control Pose for our robot, this is used to manipulate the bezier curve that we will create for the parking.
      * The Robot will not go to this pose, it is used a control point for our bezier curve. */
@@ -219,10 +219,13 @@ public class FourSpec extends OpMode {
                     if(timer.seconds() > .2) {
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight);
 
-                        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
+                        if (opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
+                            follower.setMaxPower(hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
                             recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
                         }
+                    }
+                    if(timer.seconds() > .5) {
+                        liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight);
                     }
                     if(timer.seconds() > .8) {
                         if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
@@ -538,6 +541,9 @@ public class FourSpec extends OpMode {
 
          */
 
+        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
+            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 13);
+        }
         telemetry.addData("pffset: ", follower.getHeadingOffset() * 180 / Math.PI);
         telemetry.addData("xset: ", follower.getXOffset());
         liftSubsystem.update();

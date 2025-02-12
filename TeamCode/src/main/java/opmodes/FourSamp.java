@@ -103,15 +103,12 @@ public class FourSamp extends OpMode {
     /** Highest (Third) Sample from the Spike Mark */
     private final Pose pickup3Pose = new Pose(120, 100, Math.toRadians(180));
     private final Pose scorePose4 = new Pose(125, 126, Math.toRadians(45));
-    private final Pose pickup4Pose = new Pose(104, 86, Math.toRadians(0));
-
     /** Park Pose for our robot, after we do all of the scoring. */
     private final Pose parkPose = new Pose(80, 86, Math.toRadians(180));
 
     /** Park Control Pose for our robot, this is used to manipulate the bezier curve that we will create for the parking.
      * The Robot will not go to this pose, it is used a control point for our bezier curve. */
     private final Pose parkControlPose = new Pose(130, 60, Math.toRadians(180));
-
     /* These are our Paths and PathChains that we will define in buildPaths() */
     private Path scorePreload, park;
     private PathChain grabPickup1, grabPickup2, grabPickup3, scorePickup1, scorePickup2, scorePickup3;
@@ -286,8 +283,8 @@ public class FourSamp extends OpMode {
                     wristSubsystem.autoWristSamp();
                 }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if((!follower.isBusy() || follower.isRobotStuck() )) {
 
+                if((!follower.isBusy() || follower.isRobotStuck() )) {
                     armSubsystem.autoArmSamp();
                     wristSubsystem.autoWristSamp();
                     if(first) {
@@ -326,7 +323,6 @@ public class FourSamp extends OpMode {
                         timer.reset();
                         first = false;
                     }
-
                     if(timer.seconds() > .3) {
 
                         intakeSubsystem.autoFlipDown();
@@ -340,7 +336,6 @@ public class FourSamp extends OpMode {
                         intakeSubsystem.autoIdle();
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                         follower.followPath(scorePickup2,true);
-                        setPathState(5);
                         first = true;
                     }
                 }
@@ -357,7 +352,6 @@ public class FourSamp extends OpMode {
                     armSubsystem.autoArmSamp();
                     wristSubsystem.autoWristSamp();
                 }
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if((!follower.isBusy() || follower.isRobotStuck())) {
 
                     if(first) {
@@ -365,7 +359,7 @@ public class FourSamp extends OpMode {
                         first = false;
                     }
                     /* Score Preload */
-                    if(timer.seconds() > 0.2) {
+                    if(timer.seconds() > 2.5) {
                         clawSubsystem.autoClawOpen();
                     }
                     if(timer.seconds() > 0.5) {
@@ -391,7 +385,6 @@ public class FourSamp extends OpMode {
                     armSubsystem.autoArmIn();
                 }
 
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy() || follower.isRobotStuck() || timer.seconds() > 5) {
                     liftSubsystem.setTargetPos(0);
                     /* Grab Sample */
@@ -426,7 +419,6 @@ public class FourSamp extends OpMode {
                     armSubsystem.autoArmSamp();
                     wristSubsystem.autoWristSamp();
                 }
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if((!follower.isBusy() || follower.isRobotStuck() )&& timer.seconds() > 1.85) {
 
                     if(first) {
@@ -502,7 +494,6 @@ public class FourSamp extends OpMode {
 
         telemetry.addData("pffset: ", follower.getHeadingOffset() * 180 / Math.PI);
         telemetry.addData("xset: ", follower.getXOffset());
-
 
         if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
             follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11);
