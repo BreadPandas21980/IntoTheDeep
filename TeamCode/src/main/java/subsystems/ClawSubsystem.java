@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Config
 public class ClawSubsystem extends SubsystemBase {
 
+    public static boolean autoDisabled = false;
     private final Servo clawServo;
     public static  double FULLY_OPEN = 0.65;
 
@@ -28,6 +29,9 @@ public class ClawSubsystem extends SubsystemBase {
         this.clawServo = clawServo;
     }
 
+    public void setAutoDisabled(boolean disabled) {
+        autoDisabled = disabled;
+    }
 
     public Command fullyOpen() {
         return new InstantCommand(() -> {
@@ -44,10 +48,16 @@ public class ClawSubsystem extends SubsystemBase {
 
 
     public void autoClawOpen() {
-        clawServo.setPosition(FULLY_OPEN);
+        if(!autoDisabled) {
+
+            clawServo.setPosition(FULLY_OPEN);
+        }
     }
     public void autoClawClosed() {
-        clawServo.setPosition(0.2);
+        if(!autoDisabled) {
+
+            clawServo.setPosition(0.2);
+        }
     }
     public Command clawSwitch() {
         return new InstantCommand(() ->  {

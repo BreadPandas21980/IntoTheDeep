@@ -20,6 +20,7 @@ import java.util.ArrayList;
  */
 @Config
 public class IntakeSubsystemBlue extends SubsystemBase {
+    public static boolean autoDisabled = false;
 
     ElapsedTime time = new ElapsedTime();
     public static long flipUpTime = 0;
@@ -30,6 +31,7 @@ public class IntakeSubsystemBlue extends SubsystemBase {
 
     public static double targetPower = 0;
     public static double IN_POWER = 1;
+    public static double AUTO_IDLE_POWER = 0.8;
     public static double FULL_POWER = 1;
     public static double OUT_POWER = -1;
     public static double MINI_OUT_POWER = -0.1;
@@ -51,6 +53,9 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     }
 
 
+    public void setAutoDisabled(boolean disabled) {
+        autoDisabled = disabled;
+    }
     public Command inIntake() {
         return new InstantCommand(() -> {
             IN_POWER = FULL_POWER; /*
@@ -88,16 +93,28 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     }
 
     public void autoIntake() {
-        intakeMotor.set(FULL_POWER);
+        if(!autoDisabled) {
+
+            intakeMotor.set(FULL_POWER);
+        }
     }
     public void autoIdle() {
-        intakeMotor.set(0.8);
+        if(!autoDisabled) {
+
+            intakeMotor.set(AUTO_IDLE_POWER);
+        }
     }
     public void autoFlipDown() {
-        dropdownServo.setPosition(DROPDOWN_DOWN);
+        if(!autoDisabled) {
+
+            dropdownServo.setPosition(DROPDOWN_DOWN);
+        }
     }
     public void autoFlipUp() {
-        dropdownServo.setPosition(DROPDOWN_UP);
+        if(!autoDisabled) {
+
+            dropdownServo.setPosition(DROPDOWN_UP);
+        }
     }
     public Command runIdle() {
         return new RunCommand(() -> {

@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 @Config
 public class WristSubsystem extends SubsystemBase {
+    public static boolean autoDisabled = false;
 
     //other flipServo is the one inside the arm
     private final Servo  flipServo;
@@ -38,6 +39,9 @@ public class WristSubsystem extends SubsystemBase {
         this.flipServo = flipServo;
     }
 
+    public void setAutoDisabled(boolean disabled) {
+        autoDisabled = disabled;
+    }
 
     public Command wristFlipSpec() {
         return new InstantCommand(() -> flipServo.setPosition(WRIST_OUT_SPEC_POS), this);
@@ -47,16 +51,28 @@ public class WristSubsystem extends SubsystemBase {
     }
 
     public void autoWristWall() {
-        flipServo.setPosition(WRIST_WALL_POS);
+        if(!autoDisabled) {
+
+            flipServo.setPosition(WRIST_WALL_POS);
+        }
     }
     public void autoWristSpec() {
-        flipServo.setPosition(WRIST_OUT_SPEC_POS );
+        if(!autoDisabled) {
+
+            flipServo.setPosition(WRIST_OUT_SPEC_POS );
+        }
     }
     public void autoWristSamp() {
-        flipServo.setPosition(WRIST_OUT_SAMP_POS);
+        if(!autoDisabled) {
+
+            flipServo.setPosition(WRIST_OUT_SAMP_POS);
+        }
     }
     public void autoWristIn() {
-        flipServo.setPosition(WRIST_INTAKE_POS);
+        if(!autoDisabled) {
+
+            flipServo.setPosition(WRIST_INTAKE_POS);
+        }
     }
 
     public Command wristDownIntake() {

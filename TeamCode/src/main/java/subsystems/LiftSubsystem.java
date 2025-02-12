@@ -17,6 +17,7 @@ import java.util.function.DoubleSupplier;
 
 @Config
 public class LiftSubsystem extends SubsystemBase {
+    public static boolean autoDisabled = false;
 
     public static double output = 0;
     private final MotorEx leftSlide, rightSlide;
@@ -31,9 +32,9 @@ public class LiftSubsystem extends SubsystemBase {
 
  */
 
-    public static int specimenPrepareHeight = 500;
-    public static int sampPrepHeight = 1150;
-    public static int specimenScoreHeight = 1400;
+    public static int specimenPrepareHeight = 240;
+    public static int sampPrepHeight = 1350;
+    public static int specimenScoreHeight = 900;
     public static int groundHeight = 0;
     public static int highBucketHeight = 800;
 
@@ -60,6 +61,9 @@ public class LiftSubsystem extends SubsystemBase {
         lifttimer1.reset();
     }
 
+    public void setAutoDisabled(boolean disabled) {
+        autoDisabled = disabled;
+    }
     public Command heighting() {
         return new InstantCommand(() -> heighting = true, this);
     }
@@ -189,13 +193,16 @@ public class LiftSubsystem extends SubsystemBase {
 
 
     public void update() {
-        controller.setPID(kP, kI, kD);
-        int slidePosL = getLeftEncoderVal();
-        double pid = controller.calculate(slidePosL, targetPos);
+        if(!autoDisabled) {
+
+            controller.setPID(kP, kI, kD);
+            int slidePosL = getLeftEncoderVal();
+            double pid = controller.calculate(slidePosL, targetPos);
 
 
-        leftSlide.set(pid + 0.08);
-        rightSlide.set(pid + 0.08);
+            leftSlide.set(pid + 0.08);
+            rightSlide.set(pid + 0.08);
+        }
     }
 
 

@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 @Config
 public class ArmSubsystem extends SubsystemBase {
+    public static boolean autoDisabled = false;
 
     private final Servo leftArm;
     private Servo rightArm;
@@ -25,6 +26,7 @@ public class ArmSubsystem extends SubsystemBase {
     public static boolean sampSame = false;
     public static boolean sampIntake = false;
     public static double SAMP_POS = .57;
+    public static double PARK_POS = .6;
     public static double MID_POS = 0.1;
     //if Mid_POS doesn't go to a high enough value change to .3
     public static double SPEC_POS_INTAKE = 0.24;
@@ -35,6 +37,9 @@ public class ArmSubsystem extends SubsystemBase {
     public ArmSubsystem(Servo leftArm, Servo rightArm ) {
         this.leftArm = leftArm;
         this.rightArm = rightArm;
+    }
+    public void setAutoDisabled(boolean disabled) {
+        autoDisabled = disabled;
     }
     public Command armSamp() {
         return new InstantCommand(() -> {
@@ -68,25 +73,46 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void autoArmSpec() {
-        leftArm.setPosition(SPEC_POS_INTAKE);
-        rightArm.setPosition(SPEC_POS_INTAKE);
+        if(!autoDisabled) {
+            leftArm.setPosition(SPEC_POS_INTAKE);
+            rightArm.setPosition(SPEC_POS_INTAKE);
+        }
     }
     public void autoArmMid() {
-        leftArm.setPosition(MID_POS);
-        rightArm.setPosition(MID_POS);
+        if(!autoDisabled) {
+
+            leftArm.setPosition(MID_POS);
+            rightArm.setPosition(MID_POS);
+        }
     }
     public void autoArmWall() {
+        if(!autoDisabled) {
             leftArm.setPosition(WALL_POS);
             rightArm.setPosition(WALL_POS);
+
+        }
     }
     public void autoArmSamp() {
-        leftArm.setPosition(SAMP_POS);
-        rightArm.setPosition(SAMP_POS);
+        if(!autoDisabled) {
+            leftArm.setPosition(SAMP_POS);
+            rightArm.setPosition(SAMP_POS);
+
+        }
+    }
+    public void autoArmPark() {
+        if(!autoDisabled) {
+            leftArm.setPosition(PARK_POS);
+            rightArm.setPosition(PARK_POS);
+
+        }
     }
 
     public void autoArmIn() {
-        leftArm.setPosition(IN_POS);
-        rightArm.setPosition(IN_POS);
+        if(!autoDisabled) {
+
+            leftArm.setPosition(IN_POS);
+            rightArm.setPosition(IN_POS);
+        }
     }
 
     @Override

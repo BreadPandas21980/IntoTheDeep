@@ -25,6 +25,7 @@ import java.util.Map;
  */
 @Config
 public class ColorSubsystemBlue extends SubsystemBase {
+    public static boolean autoDisabled = false;
 
     private final ColorSensor colorSensor;
     public static float gain = 2;
@@ -116,6 +117,33 @@ public class ColorSubsystemBlue extends SubsystemBase {
         return new InstantCommand(() -> {
             pooping = false;
         });
+    }
+    public void update() {
+            ((NormalizedColorSensor) colorSensor).setGain(gain);
+
+            NormalizedRGBA normalizedColors = ((NormalizedColorSensor) colorSensor).getNormalizedColors();
+            int color = normalizedColors.toColor();
+            float hue = JavaUtil.colorToHue(color);
+            float saturation = JavaUtil.colorToSaturation(color);
+            float value = JavaUtil.colorToValue(color);
+            if(saturation < 0.1 || value < 0.01) {
+                stupidstpid = nothingVal;
+            } else if (hue < 30) {
+                stupidstpid = redVal;
+                timer.reset();
+            } else if (hue < 90) {
+                stupidstpid = yellowVal;
+                timer.reset();
+            }  else if (hue < 225) {
+                stupidstpid = blueVal;
+                timer.reset();
+            } else if (hue < 350) {
+                stupidstpid = blueVal;
+                timer.reset();
+            } else {
+                stupidstpid = redVal;
+                timer.reset();
+            }
     }
     public Command senseColor() {
         return new RunCommand(() -> {

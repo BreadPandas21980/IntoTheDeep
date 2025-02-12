@@ -16,6 +16,7 @@ import java.util.function.DoubleSupplier;
 
 @Config
 public class ExtendoSubsystem extends SubsystemBase {
+    public static boolean autoDisabled = false;
 
     private final MotorEx extendoMotor;
 
@@ -33,7 +34,7 @@ public class ExtendoSubsystem extends SubsystemBase {
     public static double kP = 0.00009;
     public static double kI = 0;
     public static double kD = 0;
-    public static double kF = 0.6;
+    public static double kF = 0.8;
     public static double tolerance = 10;
     public static int targetPos = 0;
 
@@ -46,6 +47,9 @@ public class ExtendoSubsystem extends SubsystemBase {
         controller.setTolerance(tolerance);
     }
 
+    public void setAutoDisabled(boolean disabled) {
+        autoDisabled = disabled;
+    }
 
     public Command setPower(DoubleSupplier power) {
         return new RunCommand(() -> {
@@ -103,12 +107,15 @@ public class ExtendoSubsystem extends SubsystemBase {
 
 
     public void update() {
-        controller.setPID(kP, kI, kD);
-        int slidePosL = getEncoderVal();
-        double pid = controller.calculate(slidePosL, targetPos);
+        if(!autoDisabled) {
+
+            controller.setPID(kP, kI, kD);
+            int slidePosL = getEncoderVal();
+            double pid = controller.calculate(slidePosL, targetPos);
 
 
-        extendoMotor.set(-pid + kF);
+            extendoMotor.set(-pid + kF);
+        }
     }
 
     @Override
