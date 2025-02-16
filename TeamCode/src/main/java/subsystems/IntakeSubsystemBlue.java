@@ -1,12 +1,10 @@
 package subsystems;
 
-import androidx.annotation.NonNull;
-
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -25,7 +23,8 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     ElapsedTime time = new ElapsedTime();
     public static long flipUpTime = 0;
     public static boolean flippyUp;
-    private final MotorEx intakeMotor;
+    private final CRServo intakeServo;
+    private final Servo intakeArmServo;
     private final Servo dropdownServo;
     public static double timeytime = 1;
 
@@ -37,16 +36,20 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public static double MINI_OUT_POWER = -0.1;
     public static double IN_POWER_SAMP = .8;
     public static double IN_POWER_SPEC = 0.75;
-    public static double DROPDOWN_DOWN = .7;
-    public static double DROPDOWN_UP = 0.05;
+    public static double DROPDOWN_INTAKE = .7;
+    public static double DROPDOWN_EJECT = 0.05;
+    public static double ARM_INTAKE = .7;
+    public static double ARM_STOW = 0.05;
+    public static double ARM_EJECTION = 0.05;
     public static boolean colorSeen = false;
 
 
     public static boolean uhohTwo = false;
     ArrayList<Integer> data = new ArrayList<Integer>(); //1 is red, 2 is yellow, 3 is blue, -1 is nothing
 
-    public IntakeSubsystemBlue(MotorEx intakeMotor, Servo dropdownServo ) {
-        this.intakeMotor = intakeMotor;
+    public IntakeSubsystemBlue(CRServo intakeServo, Servo dropdownServo, Servo intakeArmServo ) {
+        this.intakeServo = intakeServo;
+        this.intakeArmServo = intakeArmServo;
         this.dropdownServo = dropdownServo;
         data.add(-1);
 
@@ -55,6 +58,22 @@ public class IntakeSubsystemBlue extends SubsystemBase {
 
     public void setAutoDisabled(boolean disabled) {
         autoDisabled = disabled;
+    }
+
+    public Command intakeArmStow() {
+        return new RunCommand(() -> {
+            intakeArmServo.setPosition(ARM_STOW);
+        }, this);
+    }
+    public Command intakeArmIntake() {
+        return new RunCommand(() -> {
+            intakeArmServo.setPosition(ARM_INTAKE);
+        }, this);
+    }
+    public Command intakeArmEject() {
+        return new RunCommand(() -> {
+            intakeArmServo.setPosition(ARM_EJECTION);
+        }, this);
     }
     public Command inIntake() {
         return new InstantCommand(() -> {
@@ -70,24 +89,24 @@ public class IntakeSubsystemBlue extends SubsystemBase {
             if(ColorSubsystemBlue.pooping == true && ColorSubsystemBlue.grrr == true) {
                 IN_POWER = 0;
             }
-            intakeMotor.set(IN_POWER);
+            intakeServo.setPower(IN_POWER);
 
         }, this);
     }
     public Command outIntake() {
         return new InstantCommand(() -> {
-            intakeMotor.set(OUT_POWER);
+            intakeServo.setPower(OUT_POWER);
         }, this);
     }
 
     public Command outIntakeMini() {
         return new InstantCommand(() -> {
-            intakeMotor.set(MINI_OUT_POWER);
+            intakeServo.setPower(MINI_OUT_POWER);
         }, this);
     }
     public Command idle() {
         return new InstantCommand(() -> {
-            intakeMotor.set(0);
+            intakeServo.setPower(0);
             IN_POWER = 0;
         }, this);
     }
@@ -95,73 +114,60 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public void autoIntake() {
         if(!autoDisabled) {
 
-            intakeMotor.set(FULL_POWER);
+            intakeServo.setPower(FULL_POWER);
         }
     }
     public void autoIdle() {
         if(!autoDisabled) {
 
-            intakeMotor.set(AUTO_IDLE_POWER);
+            intakeServo.setPower(AUTO_IDLE_POWER);
         }
     }
-    public void autoFlipDown() {
+    public void autoDropdownIntake() {
         if(!autoDisabled) {
 
-            dropdownServo.setPosition(DROPDOWN_DOWN);
+            dropdownServo.setPosition(DROPDOWN_INTAKE);
         }
     }
-    public void autoFlipUp() {
+    public void autoDropdownEject() {
         if(!autoDisabled) {
 
-            dropdownServo.setPosition(DROPDOWN_UP);
+            dropdownServo.setPosition(DROPDOWN_EJECT);
+        }
+    }
+    public void autoIntakeArmIntake() {
+        if(!autoDisabled) {
+
+            intakeArmServo.setPosition(ARM_INTAKE);
+        }
+    }
+    public void autoIntakeArmStow() {
+        if (!autoDisabled) {
+
+            intakeArmServo.setPosition(ARM_STOW);
         }
     }
     public Command runIdle() {
         return new RunCommand(() -> {
-            intakeMotor.set(0);
+            intakeServo.setPower(0);
         }, this);
     }
-    public Command flipDown() {
+    public Command dropdownIntake() {
         return new InstantCommand(() -> {
             flippyUp = false;
-            dropdownServo.setPosition(DROPDOWN_DOWN);
+            dropdownServo.setPosition(DROPDOWN_INTAKE);
         }, this);
     }
-    public Command flipUp() {
+    public Command dropdownEject() {
         return new InstantCommand(() -> {
             flippyUp = true;
-            dropdownServo.setPosition(DROPDOWN_UP);
+            dropdownServo.setPosition(DROPDOWN_EJECT);
         }, this);
     }
 
 
     @Override
     public void periodic() {
-
-
-
-        if (ColorSubsystemBlue.smthIn &&  flippyUp == true) {
-            time.reset();
-            uhohTwo = true;
-         //   intakeMotor.set(-1);
-        } else {
-
-            if(time.seconds() > timeytime) {
-                uhohTwo = false;
-            }
-        }
-
-        if(ColorSubsystemBlue.grrr) {
-            flippyUp = true;
-            time.reset();
-            dropdownServo.setPosition(DROPDOWN_UP);
-            intakeMotor.set(MINI_OUT_POWER);
-            if(time.seconds() > timeytime) {
-                intakeMotor.set(0);
-            }
-
-        }
-
 
     }
 

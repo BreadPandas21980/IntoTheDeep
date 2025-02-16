@@ -5,6 +5,7 @@ import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.B;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_DOWN;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_LEFT;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_RIGHT;
+import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_UP;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.LEFT_BUMPER;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.RIGHT_BUMPER;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.X;
@@ -15,6 +16,7 @@ import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.RIGHT_TRIGGER;
 import static subsystems.IntakeSubsystemBlue.flipUpTime;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -22,6 +24,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+import subsystems.LiftSubsystem;
 
 
 @Config
@@ -36,21 +40,7 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
                 driveSubsystem.dslowMode(driverGamepad::getRightX, driverGamepad::getLeftY, driverGamepad::getLeftX)
         );
 
- /*
-
-        gb1(LEFT_BUMPER).toggleWhenPressed(
-                drive.dslowMode(driverGamepad::getRightX, driverGamepad::getLeftY, driverGamepad::getLeftX),
-                drive.drobotCentric(driverGamepad::getRightX, driverGamepad::getLeftY, driverGamepad::getLeftX)
-        );
-
-  */
-/*
-        gb1(START).toggleWhenPressed(
-                drive.dfieldCentric(driverGamepad::getRightX, driverGamepad::getLeftY, driverGamepad::getLeftX, imu::getHeading),
-                drive.drobotCentric(driverGamepad::getRightX, driverGamepad::getLeftY, driverGamepad::getLeftX)
-        );
-
- */
+        /*
         if(colorSubsystem.grrr) {
             intakeSubsystemBlue.flipUp();
         }
@@ -95,11 +85,8 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
           colorSubsystem.poopingOn(),
           colorSubsystem.poopingOff()
         );
+         */
 
-        gb1(DPAD_DOWN).toggleWhenPressed(
-                colorSubsystem.poopingOn(),
-                colorSubsystem.poopingOff()
-        );
 
         gb1(LEFT_TRIGGER).whenInactive(
                 intakeSubsystemBlue.idle()
@@ -118,10 +105,6 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
         );
 
 
-
-        //transfer seq 1
-        //goes to samp score pos
-        //do it when detect color?
         gb2(Y).whenActive(
 
                 new SequentialCommandGroup(
@@ -152,17 +135,15 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
                         wristSubsystem.wristFlipSpec()
                 )
         );
-/*
-        gb2(B).toggleWhenPressed(
+
+        gb2(B).whenPressed(
+                /*
                 clawSubsystem.fullyOpen(),
                 clawSubsystem.notOpen()
-        );
 
- */
+                 */
 
-        gb2(B).toggleWhenPressed(
-                clawSubsystem.fullyOpen(),
-                clawSubsystem.notOpen()
+                clawSubsystem.clawSwitch()
         );
 
 
@@ -170,32 +151,50 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
 
         //climb automation
         //uh oh
-        /*
-        gb2(DPAD_UP).whenActive(
+        gb1(DPAD_UP).whenActive(
                 new SequentialCommandGroup(
+                        stiltSubsystem.stiltsDown(),
+                        new WaitCommand(200),
                         liftSubsystem.heighting(),
-                        liftSubsystem.climbHeightOne()
-                )
-        );
-        gb2(DPAD_DOWN).whenActive(
-                new SequentialCommandGroup(
+                        liftSubsystem.climbHeightOne(),
+                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
                         liftSubsystem.climbHeightTwo(),
                         new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                        //stiltSubsystem.stiltsDown(),
+                        ptoSubsystem.ptoEngage(),
+                        liftSubsystem.ptoClimbing(),
                         liftSubsystem.climbHeightThree(),
                         new WaitUntilCommand(() -> liftSubsystem.atTarget()),
                         liftSubsystem.climbHeightFour(),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget())
-                        //stiltSubsystem.stiltsUp()
+                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
+                        ptoSubsystem.ptoDisengage(),
+                        liftSubsystem.ptoUnclimbing(),
+                        liftSubsystem.climbHeightFive(),
+                        new ParallelCommandGroup(
+                                new SequentialCommandGroup(
+                                        new WaitCommand(1000),
+                                        armSubsystem.armSpecIntake()
+                                ),
+                                new SequentialCommandGroup(
+                                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
+                                        liftSubsystem.climbHeightSix(),
+                                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
+                                        ptoSubsystem.ptoEngage(),
+                                        liftSubsystem.ptoClimbing(),
+                                        liftSubsystem.climbHeightSeven(),
+                                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
+                                        liftSubsystem.climbHeightEight()
+                                )
+                        )
+
+
 
                 )
         );
 
-         */
         gb2(X).whenActive(
+
                 new SequentialCommandGroup(
                         armSubsystem.armIn(),
-                        clawSubsystem.fullyOpen(),
                         wristSubsystem.wristFlipIn()
 
                 )
@@ -204,41 +203,43 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
 
 
         gb2(RIGHT_TRIGGER).whenActive(
-                intakeSubsystemBlue.flipUp()
+                new SequentialCommandGroup(
+                        intakeSubsystemBlue.dropdownIntake(),
+                        intakeSubsystemBlue.intakeArmStow()
+                )
         );
         gb2(LEFT_TRIGGER).whenActive(
-                intakeSubsystemBlue.flipDown()
-        );
-
-        gb1(DPAD_LEFT).whenActive(
-                intakeSubsystemBlue.flipDown()
-        );
-        gb1(DPAD_RIGHT).whenActive(
-                intakeSubsystemBlue.flipUp()
-        );
-
-/*
-        gb2(LEFT_STICK_BUTTON).whenActive(
                 new SequentialCommandGroup(
-                        extendoSubsystem.extending(),
-                        extendoSubsystem.extendoOut()
+                        intakeSubsystemBlue.dropdownIntake(),
+                        intakeSubsystemBlue.intakeArmIntake()
                 )
         );
 
- */
+        gb1(DPAD_LEFT).whenActive(
+                new SequentialCommandGroup(
+                        intakeSubsystemBlue.dropdownIntake(),
+                        intakeSubsystemBlue.intakeArmIntake()
+                )
+        );
+        gb1(DPAD_RIGHT).whenActive(
+                new SequentialCommandGroup(
+                        intakeSubsystemBlue.dropdownIntake(),
+                        intakeSubsystemBlue.intakeArmStow()
+                )
+        );
+        gb1(DPAD_DOWN).whenActive(
+                new SequentialCommandGroup(
+                        intakeSubsystemBlue.intakeArmEject(),
+                        intakeSubsystemBlue.dropdownEject()
+                )
+        );
 
-
-
-        //gb2(START).and(gb2(BACK)).whenActive(drive.drivetrainBrake().alongWith(lift.idle()).alongWith(intake.idle()));
 
         register(driveSubsystem, clawSubsystem, wristSubsystem, intakeSubsystemBlue, extendoSubsystem, liftSubsystem, armSubsystem, colorSubsystem);
         driveSubsystem.setDefaultCommand(driveSubsystem.drobotCentric(driverGamepad::getRightX, driverGamepad::getLeftY, driverGamepad::getLeftX));
         liftSubsystem.setDefaultCommand(liftSubsystem.setPower(operatorGamepad::getLeftY));
         extendoSubsystem.setDefaultCommand(extendoSubsystem.setPower(operatorGamepad::getRightY));
         colorSubsystem.setDefaultCommand(colorSubsystem.senseColor());
-        intakeSubsystemBlue.setDefaultCommand(intakeSubsystemBlue.runIdle());
-        //led.setDefaultCommand(led.checkDist());
-        //dropbox.setDefaultCommand(dropbox.setPower(operatorGamepad::getRightY));
     }
 
     @Override
@@ -250,13 +251,10 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
         telemetry.addData("extendo motor", extendoMotor.getCurrentPosition());
         telemetry.addData("extendo target: ", extendoSubsystem.getTargetPos());
         telemetry.addData("extendo pwr: ", operatorGamepad.getLeftY());
-        telemetry.addData("clor: ", colorSubsystem.getColor());
+        telemetry.addData("color: ", colorSubsystem.getColor());
         telemetry.addData("cpsdfk color: ", colorSubsystem.grrr);
-        telemetry.addData("uhOhTwo: ", intakeSubsystemBlue.uhohTwo);
-        telemetry.addData("poop: ", colorSubsystem.pooping);
-        telemetry.addData("inp: ", intakeSubsystemBlue.IN_POWER);
-        telemetry.addData("flippy: ", intakeSubsystemBlue.flippyUp);
-        telemetry.addData("smthIny: ", colorSubsystem.smthIn);
+
+        telemetry.addData("lift climbing: ", liftSubsystem.ptoClimb);
         telemetry.addData("claw: ", clawServo.getPosition());
         telemetry.addData("FL: ", fLDC.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("FR: ", fRDC.getCurrent(CurrentUnit.AMPS));
@@ -264,7 +262,6 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
         telemetry.addData("BR: ", bRDC.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("LS: ", leftSlideDC.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("RS: ", rightSlideDC.getCurrent(CurrentUnit.AMPS));
-        telemetry.addData("INTAKE: ", intakeMotorDC.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("EXT: ", extendoMotorDC.getCurrent(CurrentUnit.AMPS));
         //telemetry.addData("left slide pwr: ", lift.getLeftMotorPower());
         //telemetry.addData("right slide pwr: ", lift.getRightMotorPower());

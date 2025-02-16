@@ -18,6 +18,7 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -61,7 +62,8 @@ public class FourSamp extends OpMode {
     protected ColorSensor colorSensor;
     protected MotorEx leftSlide, rightSlide, extendoMotor, intakeMotor;
     protected DcMotor leftSlideDC;
-    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo;
+    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo, intakeArmServo;
+    protected CRServo intakeServo;
     protected LiftSubsystem liftSubsystem;
     protected ArmSubsystem armSubsystem;
     protected WristSubsystem wristSubsystem;
@@ -237,7 +239,7 @@ public class FourSamp extends OpMode {
                         extendoSubsystem.setTargetPos(32000);
 
                         intakeSubsystem.autoIntake();
-                        intakeSubsystem.autoFlipDown();
+                        intakeSubsystem.autoIntakeArmIntake();
                         setPathState(2);
                         first = true;
                     }
@@ -257,7 +259,7 @@ public class FourSamp extends OpMode {
                     }
 
                     if(timer.seconds() > .6 || colorSubsystem.stupidstpid != -1) {
-                        intakeSubsystem.autoFlipUp();
+                        intakeSubsystem.autoIntakeArmStow();
                         extendoSubsystem.setTargetPos(-2000);
                     }
                     if(timer.seconds() > .7) {
@@ -325,10 +327,10 @@ public class FourSamp extends OpMode {
                     }
                     if(timer.seconds() > .3) {
 
-                        intakeSubsystem.autoFlipDown();
+                        intakeSubsystem.autoIntakeArmIntake();
                     }
                     if(timer.seconds() > 1 || colorSubsystem.stupidstpid != -1) {
-                        intakeSubsystem.autoFlipUp();
+                        intakeSubsystem.autoIntakeArmStow();
                         extendoSubsystem.setTargetPos(-2000);
                     }
                     if(timer.seconds() > 1.5) {
@@ -378,7 +380,7 @@ public class FourSamp extends OpMode {
 
 
                 if(timer.seconds() > 1) {
-                    intakeSubsystem.autoFlipDown();
+                    intakeSubsystem.autoIntakeArmIntake();
 
                     clawSubsystem.autoClawOpen();
                     wristSubsystem.autoWristIn();
@@ -394,7 +396,7 @@ public class FourSamp extends OpMode {
                     }
 
                     if(timer.seconds() > 0.3 || colorSubsystem.stupidstpid != -1) {
-                        intakeSubsystem.autoFlipUp();
+                        intakeSubsystem.autoIntakeArmStow();
                         extendoSubsystem.setTargetPos(-2000);
                     }
                     if(timer.seconds() > 0.4) {
@@ -543,7 +545,7 @@ public class FourSamp extends OpMode {
         firstimu = true;
         rightArm.setDirection(Servo.Direction.REVERSE);
         intakeMotor.setInverted(true);
-        intakeSubsystem = new IntakeSubsystemBlue(intakeMotor, dropdownServo);
+        intakeSubsystem = new IntakeSubsystemBlue(intakeServo, dropdownServo, intakeArmServo);
         leftSlide.resetEncoder();
         extendoMotor =new MotorEx(hardwareMap, "extendoMotor");
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);

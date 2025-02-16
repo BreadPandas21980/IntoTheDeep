@@ -12,6 +12,7 @@ import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -42,7 +43,8 @@ public class FourSpec extends OpMode {
     public static double recordedMaxPower = 0; 
     protected MotorEx leftSlide, rightSlide, intakeMotor;
     protected DcMotor leftSlideDC;
-    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo;
+    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo, intakeArmServo;
+    protected CRServo intakeServo;
     protected LiftSubsystem liftSubsystem;
     protected ArmSubsystem armSubsystem;
     protected WristSubsystem wristSubsystem;
@@ -589,8 +591,8 @@ public class FourSpec extends OpMode {
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
 
-        intakeSubsystemBlue = new IntakeSubsystemBlue(intakeMotor, dropdownServo);
-        intakeSubsystemBlue.autoFlipUp();
+        intakeSubsystemBlue = new IntakeSubsystemBlue(intakeServo, dropdownServo, intakeArmServo);
+        intakeSubsystemBlue.autoIntakeArmStow();
         follower.setMaxPower(1);
         follower.setStartingPose(startPose);
         clawSubsystem.autoClawClosed();

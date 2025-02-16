@@ -9,8 +9,10 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -24,6 +26,7 @@ import subsystems.DriveSubsystem;
 import subsystems.ExtendoSubsystem;
 import subsystems.IntakeSubsystemBlue;
 import subsystems.LiftSubsystem;
+import subsystems.PtoSubsystem;
 import subsystems.StiltSubsystem;
 import subsystems.WristSubsystem;
 import util.GamepadTrigger;
@@ -47,16 +50,18 @@ import org.firstinspires.ftc.teamcode.util.TriggerGamepadEx;
 
 
 public class BaseOpModeBlue extends CommandOpMode {
+    public static boolean climbing;
 
-    protected MotorEx fL, fR, bL, bR, intakeMotor, extendoMotor, leftSlide, rightSlide;
-    protected DcMotorEx fLDC, fRDC, bLDC, bRDC, intakeMotorDC, extendoMotorDC, leftSlideDC, rightSlideDC;
-    protected Servo clawServo, flipServo, dropdownServo, leftStilt, rightStilt;
+    protected MotorEx fL, fR, bL, bR,  extendoMotor, leftSlide, rightSlide;
+    protected DcMotorEx fLDC, fRDC, bLDC, bRDC,   extendoMotorDC, leftSlideDC, rightSlideDC;
+    protected Servo clawServo, flipServo, dropdownServo, leftStilt, rightStilt, leftPTO, rightPTO, intakeArmServo;
     protected Servo leftArm, rightArm;
+    protected CRServo intakeServo;
     protected ColorSensor colorSensor;
-    protected ControlHubApChannelManager chub;
 
     //protected OpenCvCamera camera;
     protected DriveSubsystem driveSubsystem;
+    protected PtoSubsystem ptoSubsystem;
     protected LiftSubsystem liftSubsystem;
     protected ArmSubsystem armSubsystem;
     protected IntakeSubsystemBlue intakeSubsystemBlue;
@@ -96,8 +101,9 @@ public class BaseOpModeBlue extends CommandOpMode {
 
         liftSubsystem = new LiftSubsystem(leftSlide, rightSlide);
         armSubsystem = new ArmSubsystem(leftArm, rightArm);
-        intakeSubsystemBlue = new IntakeSubsystemBlue(intakeMotor, dropdownServo);
-        //stiltSubsystem = new StiltSubsystem(leftStilt, rightStilt);
+        intakeSubsystemBlue = new IntakeSubsystemBlue(intakeServo, dropdownServo, intakeArmServo);
+        stiltSubsystem = new StiltSubsystem(leftStilt, rightStilt);
+        ptoSubsystem = new PtoSubsystem(leftPTO, rightPTO);
         wristSubsystem = new WristSubsystem( flipServo);
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);
         clawSubsystem = new ClawSubsystem(clawServo);
@@ -117,7 +123,7 @@ public class BaseOpModeBlue extends CommandOpMode {
             fR = new MotorEx(hardwareMap, "back_left"); //back_left
             bL = new MotorEx(hardwareMap, "front_right");
             bR = new MotorEx(hardwareMap, "front_left"); //front_left
-            intakeMotor = new MotorEx(hardwareMap, "intakeMotor");
+            intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
             extendoMotor = new MotorEx(hardwareMap, "extendoMotor");
             leftSlide = new MotorEx(hardwareMap, "leftSlide");
             rightSlide = new MotorEx(hardwareMap, "rightSlide");
@@ -125,7 +131,6 @@ public class BaseOpModeBlue extends CommandOpMode {
             fRDC = hardwareMap.get(DcMotorEx.class, "front_right");
             bLDC = hardwareMap.get(DcMotorEx.class, "back_left");
             bRDC = hardwareMap.get(DcMotorEx.class, "back_right");
-            intakeMotorDC = hardwareMap.get(DcMotorEx.class, "intakeMotor");
             extendoMotorDC = hardwareMap.get(DcMotorEx.class, "extendoMotor");
             leftSlideDC = hardwareMap.get(DcMotorEx.class, "leftSlide");
             rightSlideDC = hardwareMap.get(DcMotorEx.class, "rightSlide");
@@ -133,11 +138,13 @@ public class BaseOpModeBlue extends CommandOpMode {
             flipServo = hardwareMap.get(Servo.class, "flipServo");
             dropdownServo = hardwareMap.get(Servo.class, "dropdownServo");
             colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
-            //leftStilt = hardwareMap.get(Servo.class, "leftStilt");
-            //rightStilt = hardwareMap.get(Servo.class, "rightStilt");
+            leftStilt = hardwareMap.get(Servo.class, "leftStilt");
+            rightStilt = hardwareMap.get(Servo.class, "rightStilt");
+            leftPTO = hardwareMap.get(Servo.class, "leftPTO");
+            rightPTO = hardwareMap.get(Servo.class, "rightPTO");
+            intakeArmServo = hardwareMap.get(Servo.class, "intakeArmServo");
             leftArm = hardwareMap.get(Servo.class, "leftArm");
             rightArm = hardwareMap.get(Servo.class, "rightArm");
-            colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
 
         }
@@ -165,14 +172,17 @@ public class BaseOpModeBlue extends CommandOpMode {
         flipServo.setDirection(Servo.Direction.REVERSE);
         fL.setInverted(true);
         fL.resetEncoder();
-        fR.setInverted(true);
+        fR.setInverted(false);
         bL.setInverted(true);
-        bR.setInverted(true);
-        intakeMotor.setInverted(true);
+        bR.setInverted(false);
+        intakeServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        flipServo.setDirection(Servo.Direction.REVERSE);
        // clawServo.setDirection(Servo.Direction.REVERSE);
         rightSlide.setInverted(true);
-        rightArm.setDirection(Servo.Direction.REVERSE);
+        leftArm.setDirection(Servo.Direction.REVERSE);
         extendoMotor.resetEncoder();
+        leftStilt.setDirection(Servo.Direction.REVERSE);
+        leftPTO.setDirection(Servo.Direction.REVERSE);
     }
 
     public GamepadButton gb1(GamepadKeys.Button button) {

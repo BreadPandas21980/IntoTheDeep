@@ -1,10 +1,12 @@
 package subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.function.DoubleSupplier;
 
@@ -17,12 +19,13 @@ public class DriveSubsystem extends SubsystemBase {
     private final MecanumDrive drive;
 
     public static double rotateFactor = 0.75;
+    public static double rotateFactorSlow = 0.4;
     public MotorEx fL, fR, bL, bR;
     public static double slowFactor = 2.2;
     public static double strafeFactor = 1;
-    public static double strafeFactorB = 0.8;
+    public static double strafeFactorB = 1;
     public static double strafeFactorS = 1;
-    public static double strafeFactorBS = 0.8;
+    public static double strafeFactorBS = 1;
 
     public DriveSubsystem(MotorEx fL, MotorEx fR, MotorEx bL, MotorEx bR ) {
         this.fL = fL;
@@ -47,12 +50,12 @@ public class DriveSubsystem extends SubsystemBase {
                 () -> {
 
 
-                    double forward = turnSpeed.getAsDouble();
+                    double forward = forwardSpeed.getAsDouble();
                     double strafe = strafeSpeed.getAsDouble() ;
-                    double rotate = forwardSpeed.getAsDouble();
+                    double rotate = turnSpeed.getAsDouble();
 
                     if(Math.abs(forward) > 0.1) {
-                        forward = forward * rotateFactor;
+                        forward = forward;
                     } else {
                         forward = 0;
                     }
@@ -62,7 +65,7 @@ public class DriveSubsystem extends SubsystemBase {
                         strafe = 0;
                     }
                     if(Math.abs(rotate) > 0.1) {
-                        rotate = rotate;
+                        rotate = rotate * rotateFactor;
                     } else {
                         rotate = 0;
                     }
@@ -94,6 +97,19 @@ public class DriveSubsystem extends SubsystemBase {
                     bR.set(bRPower* strafeFactorB);
                     fL.set(fLPower* strafeFactor);
                     fR.set(fRPower* strafeFactor);
+                }
+                ,
+                this
+        );
+    }
+    public Command driveBackward() {
+        return new InstantCommand(
+                () -> {
+
+                    bL.set(-1);
+                    bR.set(-1);
+                    fL.set(-1);
+                    fR.set(-1);
                 }
                 ,
                 this
@@ -141,9 +157,9 @@ public class DriveSubsystem extends SubsystemBase {
         return new RunCommand(
                 () -> {
 
-                    double forward = turnSpeed.getAsDouble() / slowFactor;
+                    double forward = forwardSpeed.getAsDouble() / slowFactor;
                     double strafe = strafeSpeed.getAsDouble() / slowFactor;
-                    double rotate = forwardSpeed.getAsDouble() * .3 / slowFactor;
+                    double rotate = turnSpeed.getAsDouble() * rotateFactorSlow / slowFactor;
                     double bLPower = forward - strafe + rotate; //
                     double bRPower = forward - strafe - rotate; //
                     double fLPower = forward + strafe + rotate; //
@@ -169,4 +185,19 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
 
+    @Override
+    public void periodic() {
+
+        if(LiftSubsystem.ptoClimb) {
+
+
+            bL.set(-1);
+            bR.set(-1);
+            fL.set(-1);
+            fR.set(-1);
+        }
+
+
+
+    }
 }

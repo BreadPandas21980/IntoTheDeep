@@ -23,6 +23,7 @@ public class LiftSubsystem extends SubsystemBase {
     private final MotorEx leftSlide, rightSlide;
     private PIDController controller;
     public boolean heighting = false;
+    public static boolean ptoClimb = false;
     public boolean transfer = false;
     public static double slackTime = 0.01;
 /*
@@ -46,11 +47,22 @@ public class LiftSubsystem extends SubsystemBase {
     ElapsedTime lifttimer1 = new ElapsedTime();
 
     public static int GROUND_HEIGHT = 0;
+    //hit first rung and get on 1st set
     public static int CLIMB_HEIGHT_ONE_UP = 1000;
-    public static int CLIMB_HEIGHT_TWO_DOWN = 500;
-    public static int CLIMB_HEIGHT_THREE_UP = 2000;
-    public static int CLIMB_HEIGHT_FOUR_DOWN = 1500;
-    public static int TRANSFER_HEIGHT_ONE_UP = 360;
+    //lock on to first rung with first set of hooks
+    public static int CLIMB_HEIGHT_TWO_DOWN = 800;
+    //hit first rung and get on 2nd set
+    public static int CLIMB_HEIGHT_THREE_DOWN = 200;
+    //lock on to first rung with 2nd set of hooks
+    public static int CLIMB_HEIGHT_FOUR_UP = 500;
+    //hit 2nd rung and get on 1st set
+    public static int CLIMB_HEIGHT_FIVE_UP = 2000;
+    //lock on 1st set
+    public static int CLIMB_HEIGHT_SIX_DOWN = 1500;
+    //hit 2nd run and get on 2nd set
+    public static int CLIMB_HEIGHT_SEVEN_DOWN = 200;
+    //lock on 2nd set
+    public static int CLIMB_HEIGHT_EIGHT_UP = 500;
 
     public LiftSubsystem(MotorEx leftSlide, MotorEx rightSlide) {
         this.leftSlide = leftSlide;
@@ -67,8 +79,11 @@ public class LiftSubsystem extends SubsystemBase {
     public Command heighting() {
         return new InstantCommand(() -> heighting = true, this);
     }
-    public Command unheighting() {
-        return new InstantCommand(() -> heighting = false, this);
+    public Command ptoClimbing() {
+        return new InstantCommand(() -> ptoClimb = true, this);
+    }
+    public Command ptoUnclimbing() {
+        return new InstantCommand(() -> ptoClimb = false, this);
     }
 
 
@@ -146,13 +161,22 @@ public class LiftSubsystem extends SubsystemBase {
         return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_TWO_DOWN), this);
     }
     public Command climbHeightThree() {
-        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_THREE_UP), this);
+        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_THREE_DOWN), this);
     }
     public Command climbHeightFour() {
-        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_FOUR_DOWN), this);
+        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_FOUR_UP), this);
     }
-    public Command transferHeightOne() {
-        return new InstantCommand(() -> setTargetPos(TRANSFER_HEIGHT_ONE_UP), this);
+    public Command climbHeightFive() {
+        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_FIVE_UP), this);
+    }
+    public Command climbHeightSix() {
+        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_SIX_DOWN), this);
+    }
+    public Command climbHeightSeven() {
+        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_SEVEN_DOWN), this);
+    }
+    public Command climbHeightEight() {
+        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_EIGHT_UP), this);
     }
     public Command setPower(DoubleSupplier power) {
         return new RunCommand(() -> {
@@ -169,26 +193,6 @@ public class LiftSubsystem extends SubsystemBase {
             }
         }, this);
 
-    }
-
-    public void resetLiftTimer(){
-        lifttimer1.reset();
-    }
-    public boolean liftTimer() {
-        if(lifttimer1.seconds() > slackTime) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    public Command goToActual(int tick) {
-        return new InstantCommand(() -> setTargetPos(tick), this)
-                .andThen(new WaitUntilCommand(this::atTarget))
-                .andThen(new InstantCommand(()-> resetLiftTimer(), this))
-                .andThen(new WaitUntilCommand(this::liftTimer))
-                .andThen(untransferring());
     }
 
 
@@ -219,15 +223,6 @@ public class LiftSubsystem extends SubsystemBase {
             rightSlide.set(output);
 
             super.periodic();
-        } else if (transfer) {
-                ElapsedTime timer = new ElapsedTime();
-                timer.reset();
-                controller.setPID(kP, kI, kD);
-                output = controller.calculate(getLeftEncoderVal(), getTargetPos());
-                leftSlide.set(output);
-                rightSlide.set(output);
-
-                super.periodic();
         } else {
             controller.setPID(0, 0, 0);
         }
