@@ -16,7 +16,6 @@ public class PtoSubsystem extends SubsystemBase {
 
     private final Servo leftPTO;
     private final Servo rightPTO;
-    public static  double PTO_UP = 0;
     public static  double PTO_DOWN = 1;
     public static  double PTO_HALF = 0.7;
 
@@ -26,13 +25,6 @@ public class PtoSubsystem extends SubsystemBase {
         //leftStilt.setDirection(Servo.Direction.REVERSE);
     }
 
-
-    public Command ptoUp() {
-        return new RunCommand(() -> {
-            leftPTO.setPosition(PTO_UP);
-            rightPTO.setPosition(PTO_UP);
-        }, this);
-    }
     public Command ptoEngage() {
         return new RunCommand(() -> {
             leftPTO.setPosition(PTO_DOWN);

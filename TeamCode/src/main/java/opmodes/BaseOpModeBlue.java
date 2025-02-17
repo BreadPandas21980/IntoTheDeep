@@ -183,6 +183,8 @@ public class BaseOpModeBlue extends CommandOpMode {
         extendoMotor.resetEncoder();
         leftStilt.setDirection(Servo.Direction.REVERSE);
         leftPTO.setDirection(Servo.Direction.REVERSE);
+        leftPTO.setPosition(PtoSubsystem.PTO_HALF);
+        rightPTO.setPosition(PtoSubsystem.PTO_HALF);
     }
 
     public GamepadButton gb1(GamepadKeys.Button button) {
