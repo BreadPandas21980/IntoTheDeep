@@ -95,11 +95,11 @@ public class FourSamp extends OpMode {
     private final Pose pickup1ControlPose = new Pose(120, 125, Math.toRadians(115));
 
     /** Lowest (First) Sample from the Spike Mark */
-    private final Pose pickup1Pose = new Pose(110, 117, Math.toRadians(115));
+    private final Pose pickup1Pose = new Pose(120, 126, Math.toRadians(90));
     private final Pose scorePose2 = new Pose(126, 125, Math.toRadians(45));
 
     /** Middle (Second) Sample from the Spike Mark */
-    private final Pose pickup2Pose = new Pose(120, 111.5, Math.toRadians(115));
+    private final Pose pickup2Pose = new Pose(126, 126, Math.toRadians(90));
     private final Pose scorePose3 = new Pose(127, 124, Math.toRadians(45));
 
     /** Highest (Third) Sample from the Spike Mark */
@@ -203,7 +203,6 @@ public class FourSamp extends OpMode {
                 break;
             case 1:
                 timerImu.reset();
-                telemetry.addData("moved to 1: ", 1);
                 clawSubsystem.autoClawClosed();
                 armSubsystem.autoArmSamp();
                 wristSubsystem.autoWristSamp();
