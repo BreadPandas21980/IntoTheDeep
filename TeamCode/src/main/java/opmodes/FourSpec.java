@@ -544,7 +544,7 @@ public class FourSpec extends OpMode {
          */
 
         if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 13);
+            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11);
         }
         telemetry.addData("pffset: ", follower.getHeadingOffset() * 180 / Math.PI);
         telemetry.addData("xset: ", follower.getXOffset());
