@@ -227,15 +227,13 @@ public class FourSamp extends OpMode {
                         clawSubsystem.autoClawOpen();
                         clawSubsystem.autoClawOpen();
                         clawSubsystem.autoClawOpen();
-                        extendoSubsystem.setTargetPos(32000);
                     }
-                    if(timer.seconds() > .6) {
+                    if(timer.seconds() > .4) {
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
 
                         clawSubsystem.autoClawOpen();
                         //
                         follower.followPath(grabPickup1,true);
-                        extendoSubsystem.setTargetPos(32000);
 
                         intakeSubsystem.autoIntake();
                         intakeSubsystem.autoIntakeArmIntake();
@@ -251,6 +249,8 @@ public class FourSamp extends OpMode {
                 liftSubsystem.setTargetPos(0);
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()) {
+
+                    extendoSubsystem.setTargetPos(32000);
                     /* Grab Sample */
                     if(first) {
                         timer.reset();
@@ -265,7 +265,7 @@ public class FourSamp extends OpMode {
 
                         intakeSubsystem.autoIdle();
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                        follower.followPath(scorePickup1,true);
+                        follower.followPath(scorePickup1,false);
                         setPathState(3);
                         first = true;
                     }
@@ -366,7 +366,6 @@ public class FourSamp extends OpMode {
                     if(timer.seconds() > 0.5) {
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
 
-                        extendoSubsystem.setTargetPos(32000);
                         intakeSubsystem.autoIntake();
                         follower.followPath(grabPickup3,true);
                         setPathState(6);
@@ -387,6 +386,7 @@ public class FourSamp extends OpMode {
                 }
 
                 if(!follower.isBusy() || follower.isRobotStuck() || timer.seconds() > 5) {
+                    extendoSubsystem.setTargetPos(32000);
                     liftSubsystem.setTargetPos(0);
                     /* Grab Sample */
                     if(first) {
@@ -569,6 +569,8 @@ public class FourSamp extends OpMode {
         clawSubsystem.autoClawClosed();
 
 
+        intakeSubsystem.autoDropdownIntake();
+        intakeSubsystem.autoIntakeArmStow();
 
     }
 
