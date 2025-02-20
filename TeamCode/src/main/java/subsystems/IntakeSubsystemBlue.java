@@ -24,8 +24,8 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public static long flipUpTime = 0;
     public static boolean flippyUp;
     private final CRServo intakeServo;
-    private final Servo intakeArmServo;
     private final Servo dropdownServo;
+    private final Servo pitchServo;
     public static double timeytime = 1;
 
     public static double targetPower = 0;
@@ -47,10 +47,10 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public static boolean uhohTwo = false;
     ArrayList<Integer> data = new ArrayList<Integer>(); //1 is red, 2 is yellow, 3 is blue, -1 is nothing
 
-    public IntakeSubsystemBlue(CRServo intakeServo, Servo dropdownServo, Servo intakeArmServo ) {
+    public IntakeSubsystemBlue(CRServo intakeServo, Servo pitchServo, Servo dropdownServo ) {
         this.intakeServo = intakeServo;
-        this.intakeArmServo = intakeArmServo;
         this.dropdownServo = dropdownServo;
+        this.pitchServo = pitchServo;
         data.add(-1);
 
     }
@@ -62,17 +62,17 @@ public class IntakeSubsystemBlue extends SubsystemBase {
 
     public Command intakeArmStow() {
         return new RunCommand(() -> {
-            intakeArmServo.setPosition(ARM_STOW);
+            dropdownServo.setPosition(ARM_STOW);
         }, this);
     }
     public Command intakeArmIntake() {
         return new RunCommand(() -> {
-            intakeArmServo.setPosition(ARM_INTAKE);
+            dropdownServo.setPosition(ARM_INTAKE);
         }, this);
     }
     public Command intakeArmEject() {
         return new RunCommand(() -> {
-            intakeArmServo.setPosition(ARM_EJECTION);
+            dropdownServo.setPosition(ARM_EJECTION);
         }, this);
     }
     public Command inIntake() {
@@ -126,25 +126,25 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public void autoDropdownIntake() {
         if(!autoDisabled) {
 
-            dropdownServo.setPosition(DROPDOWN_INTAKE);
+            pitchServo.setPosition(DROPDOWN_INTAKE);
         }
     }
     public void autoDropdownEject() {
         if(!autoDisabled) {
 
-            dropdownServo.setPosition(DROPDOWN_EJECT);
+            pitchServo.setPosition(DROPDOWN_EJECT);
         }
     }
     public void autoIntakeArmIntake() {
         if(!autoDisabled) {
 
-            intakeArmServo.setPosition(ARM_INTAKE);
+            dropdownServo.setPosition(ARM_INTAKE);
         }
     }
     public void autoIntakeArmStow() {
         if (!autoDisabled) {
 
-            intakeArmServo.setPosition(ARM_STOW);
+            dropdownServo.setPosition(ARM_STOW);
         }
     }
     public Command runIdle() {
@@ -155,13 +155,13 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public Command dropdownIntake() {
         return new InstantCommand(() -> {
             flippyUp = false;
-            dropdownServo.setPosition(DROPDOWN_INTAKE);
+            pitchServo.setPosition(DROPDOWN_INTAKE);
         }, this);
     }
     public Command dropdownEject() {
         return new InstantCommand(() -> {
             flippyUp = true;
-            dropdownServo.setPosition(DROPDOWN_EJECT);
+            pitchServo.setPosition(DROPDOWN_EJECT);
         }, this);
     }
 

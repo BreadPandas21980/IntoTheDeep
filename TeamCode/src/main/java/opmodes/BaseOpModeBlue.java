@@ -136,13 +136,13 @@ public class BaseOpModeBlue extends CommandOpMode {
             rightSlideDC = hardwareMap.get(DcMotorEx.class, "rightSlide");
             clawServo = hardwareMap.get(Servo.class, "clawServo");
             flipServo = hardwareMap.get(Servo.class, "flipServo");
-            dropdownServo = hardwareMap.get(Servo.class, "dropdownServo");
+            dropdownServo = hardwareMap.get(Servo.class, "pitchServo");
             colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
             leftStilt = hardwareMap.get(Servo.class, "leftStilt");
             rightStilt = hardwareMap.get(Servo.class, "rightStilt");
             leftPTO = hardwareMap.get(Servo.class, "leftPTO");
             rightPTO = hardwareMap.get(Servo.class, "rightPTO");
-            intakeArmServo = hardwareMap.get(Servo.class, "intakeArmServo");
+            intakeArmServo = hardwareMap.get(Servo.class, "dropdownServo");
             leftArm = hardwareMap.get(Servo.class, "leftArm");
             rightArm = hardwareMap.get(Servo.class, "rightArm");
 
