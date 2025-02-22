@@ -36,11 +36,13 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public static double MINI_OUT_POWER = -0.1;
     public static double IN_POWER_SAMP = .8;
     public static double IN_POWER_SPEC = 0.75;
-    public static double DROPDOWN_INTAKE = .7;
-    public static double DROPDOWN_EJECT = 0.05;
-    public static double ARM_INTAKE = .7;
-    public static double ARM_STOW = 0.05;
-    public static double ARM_EJECTION = 0.05;
+    public static double DROPDOWN_INTAKE = .53;
+    public static double DROPDOWN_EJECT = .75;
+    public static double DROPDOWN_WALL = 1;
+    public static double ARM_INTAKE = 1;
+    public static double ARM_STOW = 0;
+    public static double ARM_WALL = 0.3;
+    public static double ARM_EJECTION = .5;
     public static boolean colorSeen = false;
 
 
@@ -73,6 +75,11 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public Command intakeArmEject() {
         return new RunCommand(() -> {
             dropdownServo.setPosition(ARM_EJECTION);
+        }, this);
+    }
+    public Command intakeArmWall() {
+        return new RunCommand(() -> {
+            dropdownServo.setPosition(ARM_WALL);
         }, this);
     }
     public Command inIntake() {
@@ -156,6 +163,12 @@ public class IntakeSubsystemBlue extends SubsystemBase {
         return new InstantCommand(() -> {
             flippyUp = false;
             pitchServo.setPosition(DROPDOWN_INTAKE);
+        }, this);
+    }
+    public Command dropdownWall() {
+        return new InstantCommand(() -> {
+            flippyUp = false;
+            pitchServo.setPosition(DROPDOWN_WALL);
         }, this);
     }
     public Command dropdownEject() {
