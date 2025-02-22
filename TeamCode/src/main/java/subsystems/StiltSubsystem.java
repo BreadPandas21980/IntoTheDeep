@@ -16,7 +16,7 @@ public class StiltSubsystem extends SubsystemBase {
 
     private final Servo leftStilt;
     private final Servo rightStilt;
-    public static  double STILTS_UP = 0;
+    public static  double STILTS_UP = 0.4;
     public static  double STILTS_DOWN = 1;
 
     public StiltSubsystem(Servo leftStilt, Servo rightStilt) {
