@@ -118,13 +118,21 @@ public class BaseOpModeBlue extends CommandOpMode {
     }
 
     protected void initHardware() {
-        try {
-            fL = new MotorEx(hardwareMap, "back_right");
-            fR = new MotorEx(hardwareMap, "back_left"); //back_left
-            bL = new MotorEx(hardwareMap, "front_right");
-            bR = new MotorEx(hardwareMap, "front_left"); //front_left
+   //     try {
+            fL = new MotorEx(hardwareMap, "front_left");
+            fR = new MotorEx(hardwareMap, "front_right"); //back_left
+            bL = new MotorEx(hardwareMap, "back_left");
+            bR = new MotorEx(hardwareMap, "back_right"); //front_left
             intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
             extendoMotor = new MotorEx(hardwareMap, "extendoMotor");
+            leftSlide = new MotorEx(hardwareMap, "leftSlide");
+            leftSlide = new MotorEx(hardwareMap, "leftSlide");
+            leftSlide = new MotorEx(hardwareMap, "leftSlide");
+            leftSlide = new MotorEx(hardwareMap, "leftSlide");
+            leftSlide = new MotorEx(hardwareMap, "leftSlide");
+            leftSlide = new MotorEx(hardwareMap, "leftSlide");
+            leftSlide = new MotorEx(hardwareMap, "leftSlide");
+            leftSlide = new MotorEx(hardwareMap, "leftSlide");
             leftSlide = new MotorEx(hardwareMap, "leftSlide");
             rightSlide = new MotorEx(hardwareMap, "rightSlide");
             fLDC = hardwareMap.get(DcMotorEx.class, "front_left");
@@ -147,16 +155,15 @@ public class BaseOpModeBlue extends CommandOpMode {
             rightArm = hardwareMap.get(Servo.class, "rightArm");
 
 
-        }
-        catch(Exception e) {
-            telemetry.addData("ERROR", "Motor init failed");
-        }
+     //   }
+     //   catch(Exception e) {
+        //    telemetry.addData("ERROR", "Motor init failed");
+      //  }
     }
 
     protected void setupHardware() {
 
 
-        leftSlide.resetEncoder();
         leftSlide.setRunMode(Motor.RunMode.RawPower);
         rightSlide.setRunMode(Motor.RunMode.RawPower);
         leftSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -169,7 +176,7 @@ public class BaseOpModeBlue extends CommandOpMode {
         extendoMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         //
-        flipServo.setDirection(Servo.Direction.REVERSE);
+        flipServo.setDirection(Servo.Direction.FORWARD);
         fL.setInverted(true);
         fL.resetEncoder();
         fR.setInverted(false);
@@ -178,13 +185,14 @@ public class BaseOpModeBlue extends CommandOpMode {
         intakeServo.setDirection(DcMotorSimple.Direction.REVERSE);
         flipServo.setDirection(Servo.Direction.REVERSE);
        // clawServo.setDirection(Servo.Direction.REVERSE);
-        rightSlide.setInverted(true);
-        leftArm.setDirection(Servo.Direction.REVERSE);
+        leftSlide.setInverted(true);
+        rightArm.setDirection(Servo.Direction.REVERSE);
         extendoMotor.resetEncoder();
+        dropdownServo.setDirection(Servo.Direction.REVERSE);
         leftStilt.setDirection(Servo.Direction.REVERSE);
-        leftPTO.setDirection(Servo.Direction.REVERSE);
-        leftPTO.setPosition(PtoSubsystem.PTO_HALF);
-        rightPTO.setPosition(PtoSubsystem.PTO_HALF);
+        leftPTO.setDirection(Servo.Direction.FORWARD);
+        leftPTO.setPosition(PtoSubsystem.PTO_HALF_LEFT);
+        rightPTO.setPosition(PtoSubsystem.PTO_HALF_RIGHT);
     }
 
     public GamepadButton gb1(GamepadKeys.Button button) {
