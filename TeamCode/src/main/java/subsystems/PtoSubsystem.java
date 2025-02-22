@@ -16,9 +16,11 @@ public class PtoSubsystem extends SubsystemBase {
 
     private final Servo leftPTO;
     private final Servo rightPTO;
-    public static  double PTO_DOWN = 1;
-    public static  double PTO_HALF = 0.7;
-
+    public static  double PTO_DOWN_RIGHT = 1;
+    public static  double PTO_HALF_RIGHT = 0.76;
+    public static  double PTO_DOWN_LEFT = 0;
+    public static  double PTO_HALF_LEFT = .44;
+//left up .44, left down 0
     public PtoSubsystem(Servo leftPTO, Servo rightPTO) {
         this.leftPTO = leftPTO;
         this.rightPTO = rightPTO;
@@ -27,14 +29,14 @@ public class PtoSubsystem extends SubsystemBase {
 
     public Command ptoEngage() {
         return new RunCommand(() -> {
-            leftPTO.setPosition(PTO_DOWN);
-            rightPTO.setPosition(PTO_DOWN);
+            leftPTO.setPosition(PTO_DOWN_LEFT);
+            rightPTO.setPosition(PTO_DOWN_RIGHT);
         }, this);
     }
     public Command ptoDisengage() {
         return new RunCommand(() -> {
-            leftPTO.setPosition(PTO_HALF);
-            rightPTO.setPosition(PTO_HALF);
+            leftPTO.setPosition(PTO_HALF_LEFT);
+            rightPTO.setPosition(PTO_HALF_RIGHT);
         }, this);
     }
 /*
