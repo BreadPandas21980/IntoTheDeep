@@ -20,7 +20,7 @@
             <goBILDA5202SeriesMotor name="front_right" port="1" />
             <goBILDA5202SeriesMotor name="back_right" port="0" />
             <Servo name="rightPTO" port="0" />
-            <Servo name="intakeServo" port="1" />
+            <ContinuousRotationServo name="intakeServo" port="1" />
             <Servo name="rightStilt" port="2" />
             <Servo name="pitchServo" port="3" />
             <Servo name="dropdownServo" port="5" />

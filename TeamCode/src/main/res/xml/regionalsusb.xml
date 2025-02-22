@@ -12,7 +12,6 @@
             <Servo name="leftStilt" port="3" />
             <Servo name="rightArm" port="4" />
             <Servo name="leftPTO" port="5" />
-            <RevColorSensorV3 name="colorSensor" port="0" bus="2" />
         </LynxModule>
     </LynxUsbDevice>
     <EthernetDevice name="Ethernet Device" serialNumber="EthernetOverUsb:eth0:172.29.0.22" port="0" ipAddress="172.29.0.1" />
@@ -23,10 +22,11 @@
             <goBILDA5202SeriesMotor name="front_right" port="1" />
             <goBILDA5202SeriesMotor name="back_right" port="0" />
             <Servo name="rightPTO" port="0" />
-            <Servo name="intakeServo" port="1" />
+            <ContinuousRotationServo name="intakeServo" port="1" />
             <Servo name="rightStilt" port="2" />
             <Servo name="pitchServo" port="3" />
             <Servo name="dropdownServo" port="5" />
+            <RevColorSensorV3 name="colorSensor" port="0" bus="2" />
             <ControlHubImuBHI260AP name="imu" port="0" bus="0" />
             <SparkFunOTOS2 name="sensor_otos" port="0" bus="1" />
         </LynxModule>
