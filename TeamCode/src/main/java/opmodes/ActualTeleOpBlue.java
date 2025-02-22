@@ -147,7 +147,7 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
         );
 
 
-
+/*
 
         //climb automation
         //uh oh
@@ -191,6 +191,8 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
                 )
         );
 
+ */
+
         gb2(X).whenActive(
 
                 new SequentialCommandGroup(
@@ -227,10 +229,22 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
                         intakeSubsystemBlue.intakeArmStow()
                 )
         );
-        gb1(DPAD_DOWN).whenActive(
+        gb1(DPAD_UP).whenActive(
                 new SequentialCommandGroup(
                         intakeSubsystemBlue.intakeArmEject(),
                         intakeSubsystemBlue.dropdownEject()
+                )
+        );
+        gb2(DPAD_UP).whenActive(
+                new SequentialCommandGroup(
+                        intakeSubsystemBlue.intakeArmEject(),
+                        intakeSubsystemBlue.dropdownEject()
+                )
+        );
+        gb2(DPAD_DOWN).whenActive(
+                new SequentialCommandGroup(
+                        intakeSubsystemBlue.intakeArmWall(),
+                        intakeSubsystemBlue.dropdownWall()
                 )
         );
 
