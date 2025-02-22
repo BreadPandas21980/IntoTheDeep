@@ -72,9 +72,9 @@ public class DriveSubsystem extends SubsystemBase {
 
 
                     double bLPower = forward - strafe + rotate; //
-                    double bRPower = forward - strafe - rotate; //
+                    double bRPower = forward + strafe - rotate; //
                     double fLPower = forward + strafe + rotate; //
-                    double fRPower = forward + strafe - rotate; // - strafe
+                    double fRPower = forward - strafe - rotate; // - strafe
                     double maxSpeed = 1.0;
                     maxSpeed = Math.max(maxSpeed, Math.abs(bLPower));
                     maxSpeed = Math.max(maxSpeed, Math.abs(bRPower));
@@ -161,9 +161,9 @@ public class DriveSubsystem extends SubsystemBase {
                     double strafe = strafeSpeed.getAsDouble() / slowFactor;
                     double rotate = turnSpeed.getAsDouble() * rotateFactorSlow / slowFactor;
                     double bLPower = forward - strafe + rotate; //
-                    double bRPower = forward - strafe - rotate; //
+                    double bRPower = forward + strafe - rotate; //
                     double fLPower = forward + strafe + rotate; //
-                    double fRPower = forward + strafe - rotate; // - strafe
+                    double fRPower = forward - strafe - rotate; // - strafe
                     double maxSpeed = 1.0;
                     maxSpeed = Math.max(maxSpeed, Math.abs(bLPower));
                     maxSpeed = Math.max(maxSpeed, Math.abs(bRPower));
