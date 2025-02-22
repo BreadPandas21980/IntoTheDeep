@@ -25,15 +25,15 @@ public class ArmSubsystem extends SubsystemBase {
 
     public static boolean sampSame = false;
     public static boolean sampIntake = false;
-    public static double SAMP_POS = .57;
     public static double PARK_POS = .6;
-    public static double MID_POS = 0.1;
-    //if Mid_POS doesn't go to a high enough value change to .3
-    public static double SPEC_POS_INTAKE = 0.24;
     public static double SPEC_POS_SAME = 0.6;
+    public static double MID_POS = 0.1;
     public static double FIRST_POS = 0.06;
-    public static double IN_POS = 0.068;
-    public static double WALL_POS = 0.95;
+    //if Mid_POS doesn't go to a high enough value change to .3
+    public static double SPEC_POS_INTAKE = 0; //tele = 0 auto =
+    public static double SAMP_POS = .7;
+    public static double IN_POS = 0;
+    public static double WALL_POS = 1;
     public ArmSubsystem(Servo leftArm, Servo rightArm ) {
         this.leftArm = leftArm;
         this.rightArm = rightArm;
