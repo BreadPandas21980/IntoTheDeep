@@ -36,13 +36,14 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public static double MINI_OUT_POWER = -0.1;
     public static double IN_POWER_SAMP = .8;
     public static double IN_POWER_SPEC = 0.75;
-    public static double DROPDOWN_INTAKE = .53;
-    public static double DROPDOWN_EJECT = .75;
-    public static double DROPDOWN_WALL = 1;
-    public static double ARM_INTAKE = 1;
-    public static double ARM_STOW = 0;
-    public static double ARM_WALL = 0.3;
-    public static double ARM_EJECTION = .5;
+    public static double PITCH_INTAKE = .4;
+    public static double PITCH_STOW = 0.38;
+    public static double PITCH_EJECT = .6;
+    public static double PITCH_WALL = .8;
+    public static double DROPDOWN_INTAKE = 0.32;
+    public static double DROPDOWN_STOW = .9;
+    public static double DROPDOWN_WALL = .4;
+    public static double DROPDOWN_EJECT = .5;
     public static boolean colorSeen = false;
 
 
@@ -62,24 +63,24 @@ public class IntakeSubsystemBlue extends SubsystemBase {
         autoDisabled = disabled;
     }
 
-    public Command intakeArmStow() {
+    public Command dropdownStow() {
         return new RunCommand(() -> {
-            dropdownServo.setPosition(ARM_STOW);
+            dropdownServo.setPosition(DROPDOWN_STOW);
         }, this);
     }
-    public Command intakeArmIntake() {
+    public Command dropdownIntake() {
         return new RunCommand(() -> {
-            dropdownServo.setPosition(ARM_INTAKE);
+            dropdownServo.setPosition(DROPDOWN_INTAKE);
         }, this);
     }
-    public Command intakeArmEject() {
+    public Command dropdownEject() {
         return new RunCommand(() -> {
-            dropdownServo.setPosition(ARM_EJECTION);
+            dropdownServo.setPosition(DROPDOWN_EJECT);
         }, this);
     }
-    public Command intakeArmWall() {
+    public Command dropdownWall() {
         return new RunCommand(() -> {
-            dropdownServo.setPosition(ARM_WALL);
+            dropdownServo.setPosition(DROPDOWN_WALL);
         }, this);
     }
     public Command inIntake() {
@@ -130,28 +131,40 @@ public class IntakeSubsystemBlue extends SubsystemBase {
             intakeServo.setPower(AUTO_IDLE_POWER);
         }
     }
+    public void autoPitchIntake() {
+        if(!autoDisabled) {
+
+            pitchServo.setPosition(PITCH_INTAKE);
+        }
+    }
+    public void autoPitchEject() {
+        if(!autoDisabled) {
+
+            pitchServo.setPosition(PITCH_EJECT);
+        }
+    }
+    public void autoPitchStow() {
+        if(!autoDisabled) {
+
+            pitchServo.setPosition(PITCH_STOW);
+        }
+    }
     public void autoDropdownIntake() {
         if(!autoDisabled) {
 
-            pitchServo.setPosition(DROPDOWN_INTAKE);
+            dropdownServo.setPosition(DROPDOWN_INTAKE);
         }
     }
     public void autoDropdownEject() {
         if(!autoDisabled) {
 
-            pitchServo.setPosition(DROPDOWN_EJECT);
+            dropdownServo.setPosition(DROPDOWN_EJECT);
         }
     }
-    public void autoIntakeArmIntake() {
-        if(!autoDisabled) {
-
-            dropdownServo.setPosition(ARM_INTAKE);
-        }
-    }
-    public void autoIntakeArmStow() {
+    public void autoDropdownStow() {
         if (!autoDisabled) {
 
-            dropdownServo.setPosition(ARM_STOW);
+            dropdownServo.setPosition(DROPDOWN_STOW);
         }
     }
     public Command runIdle() {
@@ -159,22 +172,28 @@ public class IntakeSubsystemBlue extends SubsystemBase {
             intakeServo.setPower(0);
         }, this);
     }
-    public Command dropdownIntake() {
+    public Command pitchIntake() {
         return new InstantCommand(() -> {
             flippyUp = false;
-            pitchServo.setPosition(DROPDOWN_INTAKE);
+            pitchServo.setPosition(PITCH_INTAKE);
         }, this);
     }
-    public Command dropdownWall() {
+    public Command pitchStow() {
         return new InstantCommand(() -> {
             flippyUp = false;
-            pitchServo.setPosition(DROPDOWN_WALL);
+            pitchServo.setPosition(PITCH_STOW);
         }, this);
     }
-    public Command dropdownEject() {
+    public Command pitchWall() {
+        return new InstantCommand(() -> {
+            flippyUp = false;
+            pitchServo.setPosition(PITCH_WALL);
+        }, this);
+    }
+    public Command pitchEject() {
         return new InstantCommand(() -> {
             flippyUp = true;
-            pitchServo.setPosition(DROPDOWN_EJECT);
+            pitchServo.setPosition(PITCH_EJECT);
         }, this);
     }
 
