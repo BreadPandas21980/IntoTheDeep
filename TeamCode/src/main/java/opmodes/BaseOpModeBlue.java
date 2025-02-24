@@ -188,7 +188,6 @@ public class BaseOpModeBlue extends CommandOpMode {
         leftSlide.setInverted(true);
         rightArm.setDirection(Servo.Direction.REVERSE);
         extendoMotor.resetEncoder();
-        dropdownServo.setDirection(Servo.Direction.REVERSE);
         leftStilt.setDirection(Servo.Direction.REVERSE);
         leftPTO.setDirection(Servo.Direction.FORWARD);
         leftPTO.setPosition(PtoSubsystem.PTO_HALF_LEFT);

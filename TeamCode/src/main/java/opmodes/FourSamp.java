@@ -236,7 +236,8 @@ public class FourSamp extends OpMode {
                         follower.followPath(grabPickup1,true);
 
                         intakeSubsystem.autoIntake();
-                        intakeSubsystem.autoIntakeArmIntake();
+                        intakeSubsystem.autoDropdownIntake();
+                        intakeSubsystem.autoPitchIntake();
                         setPathState(2);
                         first = true;
                     }
@@ -258,7 +259,8 @@ public class FourSamp extends OpMode {
                     }
 
                     if(timer.seconds() > .6 || colorSubsystem.stupidstpid != -1) {
-                        intakeSubsystem.autoIntakeArmStow();
+                        intakeSubsystem.autoDropdownStow();
+                        intakeSubsystem.autoPitchStow();
                         extendoSubsystem.setTargetPos(-2000);
                     }
                     if(timer.seconds() > .7) {
@@ -326,10 +328,12 @@ public class FourSamp extends OpMode {
                     }
                     if(timer.seconds() > .3) {
 
-                        intakeSubsystem.autoIntakeArmIntake();
+                        intakeSubsystem.autoDropdownIntake();
+                        intakeSubsystem.autoPitchIntake();
                     }
                     if(timer.seconds() > 1 || colorSubsystem.stupidstpid != -1) {
-                        intakeSubsystem.autoIntakeArmStow();
+                        intakeSubsystem.autoDropdownStow();
+                        intakeSubsystem.autoPitchStow();
                         extendoSubsystem.setTargetPos(-2000);
                     }
                     if(timer.seconds() > 1.5) {
@@ -378,7 +382,8 @@ public class FourSamp extends OpMode {
 
 
                 if(timer.seconds() > 1) {
-                    intakeSubsystem.autoIntakeArmIntake();
+                    intakeSubsystem.autoDropdownIntake();
+                    intakeSubsystem.autoPitchIntake();
 
                     clawSubsystem.autoClawOpen();
                     wristSubsystem.autoWristIn();
@@ -395,7 +400,8 @@ public class FourSamp extends OpMode {
                     }
 
                     if(timer.seconds() > 0.3 || colorSubsystem.stupidstpid != -1) {
-                        intakeSubsystem.autoIntakeArmStow();
+                        intakeSubsystem.autoDropdownStow();
+                        intakeSubsystem.autoPitchStow();
                         extendoSubsystem.setTargetPos(-2000);
                     }
                     if(timer.seconds() > 0.4) {
@@ -570,7 +576,7 @@ public class FourSamp extends OpMode {
 
 
         intakeSubsystem.autoDropdownIntake();
-        intakeSubsystem.autoIntakeArmStow();
+        intakeSubsystem.autoPitchIntake();
 
     }
 

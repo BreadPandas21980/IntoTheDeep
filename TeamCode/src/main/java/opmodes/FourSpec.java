@@ -592,7 +592,8 @@ public class FourSpec extends OpMode {
         follower = new Follower(hardwareMap);
 
         intakeSubsystemBlue = new IntakeSubsystemBlue(intakeServo, dropdownServo, intakeArmServo);
-        intakeSubsystemBlue.autoIntakeArmStow();
+        intakeSubsystemBlue.autoDropdownStow();
+        intakeSubsystemBlue.autoPitchIntake();
         follower.setMaxPower(1);
         follower.setStartingPose(startPose);
         clawSubsystem.autoClawClosed();
