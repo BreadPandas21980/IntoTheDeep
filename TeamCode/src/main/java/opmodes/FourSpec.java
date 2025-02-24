@@ -23,6 +23,7 @@ import subsystems.ArmSubsystem;
 import subsystems.ClawSubsystem;
 import subsystems.IntakeSubsystemBlue;
 import subsystems.LiftSubsystem;
+import subsystems.PitchSubsystem;
 import subsystems.WristSubsystem;
 
 /**
@@ -43,9 +44,10 @@ public class FourSpec extends OpMode {
     public static double recordedMaxPower = 0; 
     protected MotorEx leftSlide, rightSlide, intakeMotor;
     protected DcMotor leftSlideDC;
-    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo, intakeArmServo;
+    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo, pitchServo;
     protected CRServo intakeServo;
     protected LiftSubsystem liftSubsystem;
+    protected PitchSubsystem pitchSubsystem;
     protected ArmSubsystem armSubsystem;
     protected WristSubsystem wristSubsystem;
     protected IntakeSubsystemBlue intakeSubsystemBlue;
@@ -585,15 +587,17 @@ public class FourSpec extends OpMode {
         flipServo.setDirection(Servo.Direction.REVERSE);
         liftSubsystem = new LiftSubsystem(leftSlide, rightSlide);
         armSubsystem = new ArmSubsystem(leftArm, rightArm);
+        pitchServo = hardwareMap.get(Servo.class, "pitchServo");
         wristSubsystem = new WristSubsystem(flipServo);
         clawSubsystem = new ClawSubsystem(clawServo);
         rightArm.setDirection(Servo.Direction.REVERSE);
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
 
-        intakeSubsystemBlue = new IntakeSubsystemBlue(intakeServo, dropdownServo, intakeArmServo);
+        intakeSubsystemBlue = new IntakeSubsystemBlue(intakeServo, dropdownServo);
+        pitchSubsystem = new PitchSubsystem(pitchServo);
         intakeSubsystemBlue.autoDropdownStow();
-        intakeSubsystemBlue.autoPitchIntake();
+        pitchSubsystem.autoPitchStow();
         follower.setMaxPower(1);
         follower.setStartingPose(startPose);
         clawSubsystem.autoClawClosed();

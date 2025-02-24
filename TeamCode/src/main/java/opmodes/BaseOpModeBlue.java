@@ -26,6 +26,7 @@ import subsystems.DriveSubsystem;
 import subsystems.ExtendoSubsystem;
 import subsystems.IntakeSubsystemBlue;
 import subsystems.LiftSubsystem;
+import subsystems.PitchSubsystem;
 import subsystems.PtoSubsystem;
 import subsystems.StiltSubsystem;
 import subsystems.WristSubsystem;
@@ -54,7 +55,7 @@ public class BaseOpModeBlue extends CommandOpMode {
 
     protected MotorEx fL, fR, bL, bR,  extendoMotor, leftSlide, rightSlide;
     protected DcMotorEx fLDC, fRDC, bLDC, bRDC,   extendoMotorDC, leftSlideDC, rightSlideDC;
-    protected Servo clawServo, flipServo, dropdownServo, leftStilt, rightStilt, leftPTO, rightPTO, intakeArmServo;
+    protected Servo clawServo, flipServo, pitchServo, leftStilt, rightStilt, leftPTO, rightPTO, dropdownServo;
     protected Servo leftArm, rightArm;
     protected CRServo intakeServo;
     protected ColorSensor colorSensor;
@@ -70,6 +71,7 @@ public class BaseOpModeBlue extends CommandOpMode {
     protected ExtendoSubsystem extendoSubsystem;
     protected ClawSubsystem clawSubsystem;
     protected ColorSubsystemBlue colorSubsystem;
+    protected PitchSubsystem pitchSubsystem;
 
     protected GamepadEx driverGamepad;
     protected GamepadEx operatorGamepad;
@@ -101,7 +103,8 @@ public class BaseOpModeBlue extends CommandOpMode {
 
         liftSubsystem = new LiftSubsystem(leftSlide, rightSlide);
         armSubsystem = new ArmSubsystem(leftArm, rightArm);
-        intakeSubsystemBlue = new IntakeSubsystemBlue(intakeServo, dropdownServo, intakeArmServo);
+        intakeSubsystemBlue = new IntakeSubsystemBlue(intakeServo, dropdownServo);
+        pitchSubsystem = new PitchSubsystem(pitchServo);
         stiltSubsystem = new StiltSubsystem(leftStilt, rightStilt);
         ptoSubsystem = new PtoSubsystem(leftPTO, rightPTO);
         wristSubsystem = new WristSubsystem( flipServo);
@@ -144,13 +147,13 @@ public class BaseOpModeBlue extends CommandOpMode {
             rightSlideDC = hardwareMap.get(DcMotorEx.class, "rightSlide");
             clawServo = hardwareMap.get(Servo.class, "clawServo");
             flipServo = hardwareMap.get(Servo.class, "flipServo");
-            dropdownServo = hardwareMap.get(Servo.class, "pitchServo");
+            pitchServo = hardwareMap.get(Servo.class, "pitchServo");
             colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
             leftStilt = hardwareMap.get(Servo.class, "leftStilt");
             rightStilt = hardwareMap.get(Servo.class, "rightStilt");
             leftPTO = hardwareMap.get(Servo.class, "leftPTO");
             rightPTO = hardwareMap.get(Servo.class, "rightPTO");
-            intakeArmServo = hardwareMap.get(Servo.class, "dropdownServo");
+            dropdownServo = hardwareMap.get(Servo.class, "dropdownServo");
             leftArm = hardwareMap.get(Servo.class, "leftArm");
             rightArm = hardwareMap.get(Servo.class, "rightArm");
 

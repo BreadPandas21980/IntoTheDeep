@@ -184,48 +184,44 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
         gb2(RIGHT_TRIGGER).whenActive(
                 new SequentialCommandGroup(
                         intakeSubsystemBlue.dropdownStow(),
-                        intakeSubsystemBlue.pitchStow(),
-                        intakeSubsystemBlue.pitchStow(),
-                        intakeSubsystemBlue.pitchStow()
+                        pitchSubsystem.pitchStow()
                 )
         );
         gb2(LEFT_TRIGGER).whenActive(
                 new SequentialCommandGroup(
                         intakeSubsystemBlue.dropdownIntake(),
-                        intakeSubsystemBlue.pitchIntake(),
-                        intakeSubsystemBlue.pitchIntake(),
-                        intakeSubsystemBlue.pitchIntake()
+                        pitchSubsystem.pitchIntake()
                 )
         );
 
         gb1(DPAD_LEFT).whenActive(
                 new SequentialCommandGroup(
-                        intakeSubsystemBlue.pitchIntake(),
+                        pitchSubsystem.pitchIntake(),
                         intakeSubsystemBlue.dropdownIntake()
                 )
         );
         gb1(DPAD_RIGHT).whenActive(
                 new SequentialCommandGroup(
                         intakeSubsystemBlue.dropdownStow(),
-                        intakeSubsystemBlue.pitchStow()
+                        pitchSubsystem.pitchStow()
                 )
         );
         gb1(DPAD_UP).whenActive(
                 new SequentialCommandGroup(
                         intakeSubsystemBlue.dropdownEject(),
-                        intakeSubsystemBlue.pitchEject()
+                        pitchSubsystem.pitchEject()
                 )
         );
         gb2(DPAD_UP).whenActive(
                 new SequentialCommandGroup(
                         intakeSubsystemBlue.dropdownEject(),
-                        intakeSubsystemBlue.pitchEject()
+                        pitchSubsystem.pitchEject()
                 )
         );
         gb2(DPAD_DOWN).whenActive(
                 new SequentialCommandGroup(
                         intakeSubsystemBlue.dropdownWall(),
-                        intakeSubsystemBlue.pitchWall()
+                        pitchSubsystem.pitchWall()
                 )
         );
 

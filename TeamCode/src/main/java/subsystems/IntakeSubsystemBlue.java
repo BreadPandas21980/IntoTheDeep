@@ -25,7 +25,6 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public static boolean flippyUp;
     private final CRServo intakeServo;
     private final Servo dropdownServo;
-    private final Servo pitchServo;
     public static double timeytime = 1;
 
     public static double targetPower = 0;
@@ -36,10 +35,6 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public static double MINI_OUT_POWER = -0.1;
     public static double IN_POWER_SAMP = .8;
     public static double IN_POWER_SPEC = 0.75;
-    public static double PITCH_INTAKE = .4;
-    public static double PITCH_STOW = 0.38;
-    public static double PITCH_EJECT = .6;
-    public static double PITCH_WALL = .8;
     public static double DROPDOWN_INTAKE = 0.32;
     public static double DROPDOWN_STOW = .9;
     public static double DROPDOWN_WALL = .4;
@@ -50,10 +45,9 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public static boolean uhohTwo = false;
     ArrayList<Integer> data = new ArrayList<Integer>(); //1 is red, 2 is yellow, 3 is blue, -1 is nothing
 
-    public IntakeSubsystemBlue(CRServo intakeServo, Servo pitchServo, Servo dropdownServo ) {
+    public IntakeSubsystemBlue(CRServo intakeServo, Servo dropdownServo ) {
         this.intakeServo = intakeServo;
         this.dropdownServo = dropdownServo;
-        this.pitchServo = pitchServo;
         data.add(-1);
 
     }
@@ -131,24 +125,6 @@ public class IntakeSubsystemBlue extends SubsystemBase {
             intakeServo.setPower(AUTO_IDLE_POWER);
         }
     }
-    public void autoPitchIntake() {
-        if(!autoDisabled) {
-
-            pitchServo.setPosition(PITCH_INTAKE);
-        }
-    }
-    public void autoPitchEject() {
-        if(!autoDisabled) {
-
-            pitchServo.setPosition(PITCH_EJECT);
-        }
-    }
-    public void autoPitchStow() {
-        if(!autoDisabled) {
-
-            pitchServo.setPosition(PITCH_STOW);
-        }
-    }
     public void autoDropdownIntake() {
         if(!autoDisabled) {
 
@@ -172,31 +148,6 @@ public class IntakeSubsystemBlue extends SubsystemBase {
             intakeServo.setPower(0);
         }, this);
     }
-    public Command pitchIntake() {
-        return new InstantCommand(() -> {
-            flippyUp = false;
-            pitchServo.setPosition(PITCH_INTAKE);
-        }, this);
-    }
-    public Command pitchStow() {
-        return new InstantCommand(() -> {
-            flippyUp = false;
-            pitchServo.setPosition(PITCH_STOW);
-        }, this);
-    }
-    public Command pitchWall() {
-        return new InstantCommand(() -> {
-            flippyUp = false;
-            pitchServo.setPosition(PITCH_WALL);
-        }, this);
-    }
-    public Command pitchEject() {
-        return new InstantCommand(() -> {
-            flippyUp = true;
-            pitchServo.setPosition(PITCH_EJECT);
-        }, this);
-    }
-
 
     @Override
     public void periodic() {

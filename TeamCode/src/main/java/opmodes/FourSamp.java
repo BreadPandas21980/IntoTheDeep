@@ -33,6 +33,7 @@ import subsystems.ColorSubsystemBlue;
 import subsystems.ExtendoSubsystem;
 import subsystems.IntakeSubsystemBlue;
 import subsystems.LiftSubsystem;
+import subsystems.PitchSubsystem;
 import subsystems.WristSubsystem;
 
 /**
@@ -62,11 +63,12 @@ public class FourSamp extends OpMode {
     protected ColorSensor colorSensor;
     protected MotorEx leftSlide, rightSlide, extendoMotor, intakeMotor;
     protected DcMotor leftSlideDC;
-    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo, intakeArmServo;
+    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo, pitchServo;
     protected CRServo intakeServo;
     protected LiftSubsystem liftSubsystem;
     protected ArmSubsystem armSubsystem;
     protected WristSubsystem wristSubsystem;
+    protected PitchSubsystem pitchSubsystem;
     protected ClawSubsystem clawSubsystem;
     protected ExtendoSubsystem extendoSubsystem;
     private Follower follower;
@@ -237,7 +239,7 @@ public class FourSamp extends OpMode {
 
                         intakeSubsystem.autoIntake();
                         intakeSubsystem.autoDropdownIntake();
-                        intakeSubsystem.autoPitchIntake();
+                        pitchSubsystem.autoPitchIntake();
                         setPathState(2);
                         first = true;
                     }
@@ -260,7 +262,7 @@ public class FourSamp extends OpMode {
 
                     if(timer.seconds() > .6 || colorSubsystem.stupidstpid != -1) {
                         intakeSubsystem.autoDropdownStow();
-                        intakeSubsystem.autoPitchStow();
+                        pitchSubsystem.autoPitchStow();
                         extendoSubsystem.setTargetPos(-2000);
                     }
                     if(timer.seconds() > .7) {
@@ -329,11 +331,11 @@ public class FourSamp extends OpMode {
                     if(timer.seconds() > .3) {
 
                         intakeSubsystem.autoDropdownIntake();
-                        intakeSubsystem.autoPitchIntake();
+                        pitchSubsystem.autoPitchIntake();
                     }
                     if(timer.seconds() > 1 || colorSubsystem.stupidstpid != -1) {
                         intakeSubsystem.autoDropdownStow();
-                        intakeSubsystem.autoPitchStow();
+                        pitchSubsystem.autoPitchStow();
                         extendoSubsystem.setTargetPos(-2000);
                     }
                     if(timer.seconds() > 1.5) {
@@ -383,7 +385,7 @@ public class FourSamp extends OpMode {
 
                 if(timer.seconds() > 1) {
                     intakeSubsystem.autoDropdownIntake();
-                    intakeSubsystem.autoPitchIntake();
+                    pitchSubsystem.autoPitchIntake();
 
                     clawSubsystem.autoClawOpen();
                     wristSubsystem.autoWristIn();
@@ -401,7 +403,7 @@ public class FourSamp extends OpMode {
 
                     if(timer.seconds() > 0.3 || colorSubsystem.stupidstpid != -1) {
                         intakeSubsystem.autoDropdownStow();
-                        intakeSubsystem.autoPitchStow();
+                        pitchSubsystem.autoPitchStow();
                         extendoSubsystem.setTargetPos(-2000);
                     }
                     if(timer.seconds() > 0.4) {
@@ -550,7 +552,9 @@ public class FourSamp extends OpMode {
         firstimu = true;
         rightArm.setDirection(Servo.Direction.REVERSE);
         intakeMotor.setInverted(true);
-        intakeSubsystem = new IntakeSubsystemBlue(intakeServo, dropdownServo, intakeArmServo);
+        pitchServo = hardwareMap.get(Servo.class, "pitchServo");
+        intakeSubsystem = new IntakeSubsystemBlue(intakeServo, dropdownServo);
+        pitchSubsystem = new PitchSubsystem(pitchServo);
         leftSlide.resetEncoder();
         extendoMotor =new MotorEx(hardwareMap, "extendoMotor");
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);
@@ -575,8 +579,8 @@ public class FourSamp extends OpMode {
         clawSubsystem.autoClawClosed();
 
 
-        intakeSubsystem.autoDropdownIntake();
-        intakeSubsystem.autoPitchIntake();
+        intakeSubsystem.autoDropdownStow();
+        pitchSubsystem.autoPitchStow();
 
     }
 
