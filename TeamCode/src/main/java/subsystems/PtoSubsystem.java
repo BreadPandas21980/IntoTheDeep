@@ -16,10 +16,13 @@ public class PtoSubsystem extends SubsystemBase {
 
     private final Servo leftPTO;
     private final Servo rightPTO;
-    public static  double PTO_DOWN_RIGHT = 1;
-    public static  double PTO_HALF_RIGHT = 0.76;
-    public static  double PTO_DOWN_LEFT = 0;
-    public static  double PTO_HALF_LEFT = .44;
+    public static  double PTO_DOWN_RIGHT = .8;
+    public static  double PTO_HALF_RIGHT = 0.75;
+    public static  double PTO_DOWN_LEFT = .2; //on right y is up, half right .75 down right .785
+    //on both a down y up
+    //left 0 is closer to down
+    //right 1 is closer down
+    public static  double PTO_HALF_LEFT = .28;
 //left up .44, left down 0
     public PtoSubsystem(Servo leftPTO, Servo rightPTO) {
         this.leftPTO = leftPTO;
