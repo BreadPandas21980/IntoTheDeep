@@ -13,7 +13,6 @@ import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.LEFT_TRIGGER;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.RIGHT_TRIGGER;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -24,47 +23,33 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 @Config
 //@Disabled
-@TeleOp(name = "TestSlidesTeleop", group = "!!!super cool!")
-public class TestSlidesTeleop extends BaseOpModeBlue {
+@TeleOp(name = "ClimbTele", group = "!!!super cool!")
+public class ClimbTele extends BaseOpModeBlue {
     @Override
     public void initialize() {
         super.initialize();
 
+        gb1(RIGHT_BUMPER).whileHeld(
+                driveSubsystem.dslowMode(driverGamepad::getRightX, driverGamepad::getLeftY, driverGamepad::getLeftX)
+        );
 
-        //climb automation
-        //uh oh
+        gb1(Y).whenActive(
+                ptoSubsystem.ptoDisengage()
+        );
+        gb1(A).whenActive(
+                ptoSubsystem.ptoEngage()
+        );
+
         gb1(DPAD_UP).whenActive(
-                new SequentialCommandGroup(
-                        stiltSubsystem.stiltsDown(),
-                        new WaitCommand(200),
-                        liftSubsystem.heighting(),
-                        liftSubsystem.climbHeightOne(),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                        liftSubsystem.climbHeightTwo(),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                        ptoSubsystem.ptoEngage(),
-                        liftSubsystem.ptoClimbing(),
-                        liftSubsystem.climbHeightThree(),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                        liftSubsystem.climbHeightFour(),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                        ptoSubsystem.ptoDisengage(),
-                        liftSubsystem.ptoUnclimbing()
-                )
+                stiltSubsystem.stiltsUp()
         );
         gb1(DPAD_DOWN).whenActive(
-                new SequentialCommandGroup(
-                        liftSubsystem.heighting(),
-                        liftSubsystem.climbHeightOne(),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                        liftSubsystem.climbHeightTwo(),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget()) 
-                )
+                stiltSubsystem.stiltsDown()
         );
 
         register(driveSubsystem, clawSubsystem, wristSubsystem, intakeSubsystemBlue, extendoSubsystem, liftSubsystem, armSubsystem, colorSubsystem);
         driveSubsystem.setDefaultCommand(driveSubsystem.drobotCentric(driverGamepad::getRightX, driverGamepad::getLeftY, driverGamepad::getLeftX));
-        liftSubsystem.setDefaultCommand(liftSubsystem.setPower(operatorGamepad::getLeftY));
+        liftSubsystem.setDefaultCommand(liftSubsystem.setPower(driverGamepad::getRightY));
         extendoSubsystem.setDefaultCommand(extendoSubsystem.setPower(operatorGamepad::getRightY));
         colorSubsystem.setDefaultCommand(colorSubsystem.senseColor());
     }

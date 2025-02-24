@@ -147,7 +147,7 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
         );
 
 
-/*
+
 
         //climb automation
         //uh oh
@@ -158,40 +158,17 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
                         liftSubsystem.heighting(),
                         liftSubsystem.climbHeightOne(),
                         new WaitUntilCommand(() -> liftSubsystem.atTarget()),
+                        ptoSubsystem.ptoEngage(),
+                        liftSubsystem.unheighting(),
+                        liftSubsystem.ptoClimbing(),
                         liftSubsystem.climbHeightTwo(),
                         new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                        ptoSubsystem.ptoEngage(),
-                        liftSubsystem.ptoClimbing(),
-                        liftSubsystem.climbHeightThree(),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                        liftSubsystem.climbHeightFour(),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
                         ptoSubsystem.ptoDisengage(),
-                        liftSubsystem.ptoUnclimbing(),
-                        liftSubsystem.climbHeightFive(),
-                        new ParallelCommandGroup(
-                                new SequentialCommandGroup(
-                                        new WaitCommand(1000),
-                                        armSubsystem.armSpecIntake()
-                                ),
-                                new SequentialCommandGroup(
-                                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                                        liftSubsystem.climbHeightSix(),
-                                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                                        ptoSubsystem.ptoEngage(),
-                                        liftSubsystem.ptoClimbing(),
-                                        liftSubsystem.climbHeightSeven(),
-                                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                                        liftSubsystem.climbHeightEight()
-                                )
-                        )
-
-
-
+                        liftSubsystem.ptoUnclimbing()
                 )
         );
 
- */
+
 
         gb2(X).whenActive(
 
@@ -206,45 +183,49 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
 
         gb2(RIGHT_TRIGGER).whenActive(
                 new SequentialCommandGroup(
-                        intakeSubsystemBlue.dropdownIntake(),
-                        intakeSubsystemBlue.intakeArmStow()
+                        intakeSubsystemBlue.dropdownStow(),
+                        intakeSubsystemBlue.pitchStow(),
+                        intakeSubsystemBlue.pitchStow(),
+                        intakeSubsystemBlue.pitchStow()
                 )
         );
         gb2(LEFT_TRIGGER).whenActive(
                 new SequentialCommandGroup(
                         intakeSubsystemBlue.dropdownIntake(),
-                        intakeSubsystemBlue.intakeArmIntake()
+                        intakeSubsystemBlue.pitchIntake(),
+                        intakeSubsystemBlue.pitchIntake(),
+                        intakeSubsystemBlue.pitchIntake()
                 )
         );
 
         gb1(DPAD_LEFT).whenActive(
                 new SequentialCommandGroup(
-                        intakeSubsystemBlue.dropdownIntake(),
-                        intakeSubsystemBlue.intakeArmIntake()
+                        intakeSubsystemBlue.pitchIntake(),
+                        intakeSubsystemBlue.dropdownIntake()
                 )
         );
         gb1(DPAD_RIGHT).whenActive(
                 new SequentialCommandGroup(
-                        intakeSubsystemBlue.dropdownIntake(),
-                        intakeSubsystemBlue.intakeArmStow()
+                        intakeSubsystemBlue.dropdownStow(),
+                        intakeSubsystemBlue.pitchStow()
                 )
         );
         gb1(DPAD_UP).whenActive(
                 new SequentialCommandGroup(
-                        intakeSubsystemBlue.intakeArmEject(),
-                        intakeSubsystemBlue.dropdownEject()
+                        intakeSubsystemBlue.dropdownEject(),
+                        intakeSubsystemBlue.pitchEject()
                 )
         );
         gb2(DPAD_UP).whenActive(
                 new SequentialCommandGroup(
-                        intakeSubsystemBlue.intakeArmEject(),
-                        intakeSubsystemBlue.dropdownEject()
+                        intakeSubsystemBlue.dropdownEject(),
+                        intakeSubsystemBlue.pitchEject()
                 )
         );
         gb2(DPAD_DOWN).whenActive(
                 new SequentialCommandGroup(
-                        intakeSubsystemBlue.intakeArmWall(),
-                        intakeSubsystemBlue.dropdownWall()
+                        intakeSubsystemBlue.dropdownWall(),
+                        intakeSubsystemBlue.pitchWall()
                 )
         );
 

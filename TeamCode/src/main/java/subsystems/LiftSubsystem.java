@@ -50,20 +50,7 @@ public class LiftSubsystem extends SubsystemBase {
     //hit first rung and get on 1st set
     public static int CLIMB_HEIGHT_ONE_UP = 1000;
     //lock on to first rung with first set of hooks
-    public static int CLIMB_HEIGHT_TWO_DOWN = 800;
-    //hit first rung and get on 2nd set
-    public static int CLIMB_HEIGHT_THREE_DOWN = 200;
-    //lock on to first rung with 2nd set of hooks
-    public static int CLIMB_HEIGHT_FOUR_UP = 500;
-    //hit 2nd rung and get on 1st set
-    public static int CLIMB_HEIGHT_FIVE_UP = 2000;
-    //lock on 1st set
-    public static int CLIMB_HEIGHT_SIX_DOWN = 1500;
-    //hit 2nd run and get on 2nd set
-    public static int CLIMB_HEIGHT_SEVEN_DOWN = 200;
-    //lock on 2nd set
-    public static int CLIMB_HEIGHT_EIGHT_UP = 500;
-
+    public static int CLIMB_HEIGHT_TWO_DOWN = 200;
     public LiftSubsystem(MotorEx leftSlide, MotorEx rightSlide) {
         this.leftSlide = leftSlide;
         this.rightSlide = rightSlide;
@@ -78,6 +65,9 @@ public class LiftSubsystem extends SubsystemBase {
     }
     public Command heighting() {
         return new InstantCommand(() -> heighting = true, this);
+    }
+    public Command unheighting() {
+        return new InstantCommand(() -> heighting = false, this);
     }
     public Command ptoClimbing() {
         return new InstantCommand(() -> ptoClimb = true, this);
@@ -160,24 +150,7 @@ public class LiftSubsystem extends SubsystemBase {
     public Command climbHeightTwo() {
         return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_TWO_DOWN), this);
     }
-    public Command climbHeightThree() {
-        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_THREE_DOWN), this);
-    }
-    public Command climbHeightFour() {
-        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_FOUR_UP), this);
-    }
-    public Command climbHeightFive() {
-        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_FIVE_UP), this);
-    }
-    public Command climbHeightSix() {
-        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_SIX_DOWN), this);
-    }
-    public Command climbHeightSeven() {
-        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_SEVEN_DOWN), this);
-    }
-    public Command climbHeightEight() {
-        return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_EIGHT_UP), this);
-    }
+
     public Command setPower(DoubleSupplier power) {
         return new RunCommand(() -> {
 
