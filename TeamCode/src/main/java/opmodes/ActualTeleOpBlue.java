@@ -212,6 +212,14 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
                         pitchSubsystem.pitchEject()
                 )
         );
+        gb1(B).toggleWhenActive(
+                pitchSubsystem.pitchIntake(),
+                pitchSubsystem.pitchStow()
+        );
+        gb1(X).toggleWhenActive(
+                intakeSubsystemBlue.dropdownIntake(),
+                intakeSubsystemBlue.dropdownStow()
+        );
         gb2(DPAD_UP).whenActive(
                 new SequentialCommandGroup(
                         intakeSubsystemBlue.dropdownEject(),
