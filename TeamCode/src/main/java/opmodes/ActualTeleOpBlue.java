@@ -151,7 +151,7 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
 
         //climb automation
         //uh oh
-        gb1(DPAD_UP).whenActive(
+        gb1(A).whenActive(
                 new SequentialCommandGroup(
                         stiltSubsystem.stiltsDown(),
                         new WaitCommand(200),
