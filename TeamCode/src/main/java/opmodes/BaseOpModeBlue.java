@@ -185,7 +185,7 @@ public class BaseOpModeBlue extends CommandOpMode {
         fR.setInverted(false);
         bL.setInverted(true);
         bR.setInverted(false);
-        intakeServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        intakeServo.setDirection(DcMotorSimple.Direction.FORWARD);
         flipServo.setDirection(Servo.Direction.REVERSE);
        // clawServo.setDirection(Servo.Direction.REVERSE);
         leftSlide.setInverted(true);
