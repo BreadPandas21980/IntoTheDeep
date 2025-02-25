@@ -195,6 +195,8 @@ public class BaseOpModeBlue extends CommandOpMode {
         leftPTO.setDirection(Servo.Direction.FORWARD);
         leftPTO.setPosition(PtoSubsystem.PTO_HALF_LEFT);
         rightPTO.setPosition(PtoSubsystem.PTO_HALF_RIGHT);
+        leftStilt.setPosition(StiltSubsystem.STILTS_UP);
+        rightStilt.setPosition(StiltSubsystem.STILTS_UP);
     }
 
     public GamepadButton gb1(GamepadKeys.Button button) {
