@@ -20,15 +20,15 @@ public class FConstants {
         FollowerConstants.rightFrontMotorDirection = DcMotorSimple.Direction.FORWARD;
         FollowerConstants.rightRearMotorDirection = DcMotorSimple.Direction.FORWARD;
 
-        FollowerConstants.mass = 14.6;
+        FollowerConstants.mass = 15.4;
 
-        FollowerConstants.xMovement = 53.8486;
-        FollowerConstants.yMovement = 34.2786;
+        FollowerConstants.xMovement = 71.0291;
+        FollowerConstants.yMovement = 43.4539;
 
-        FollowerConstants.forwardZeroPowerAcceleration = -26.4029;
-        FollowerConstants.lateralZeroPowerAcceleration = -61.4085;
+        FollowerConstants.forwardZeroPowerAcceleration = -30.8123;
+        FollowerConstants.lateralZeroPowerAcceleration = -71.1434;
 
-        FollowerConstants.translationalPIDFCoefficients.setCoefficients(0.1,0,0.05,0);
+        FollowerConstants.translationalPIDFCoefficients.setCoefficients(0.2,0,0.05,0);
         FollowerConstants.useSecondaryTranslationalPID = false;
         FollowerConstants.secondaryTranslationalPIDFCoefficients.setCoefficients(0.1,0,0.01,0); // Not being used, @see useSecondaryTranslationalPID
 
@@ -36,7 +36,7 @@ public class FConstants {
         FollowerConstants.useSecondaryHeadingPID = false;
         FollowerConstants.secondaryHeadingPIDFCoefficients.setCoefficients(2,0,0.1,0); // Not being used, @see useSecondaryHeadingPID
 
-        FollowerConstants.drivePIDFCoefficients.setCoefficients(0.01,0,0.000001,0,0);
+        FollowerConstants.drivePIDFCoefficients.setCoefficients(0.005,0,0.00001,0,0);
         FollowerConstants.useSecondaryDrivePID = false;
         FollowerConstants.secondaryDrivePIDFCoefficients.setCoefficients(0.1,0,0,0.6,0); // Not being used, @see useSecondaryDrivePID
 
@@ -57,7 +57,7 @@ public class FConstants {
 
  */
         FollowerConstants.zeroPowerAccelerationMultiplier = 6;
-        FollowerConstants.centripetalScaling = 0.00097;
+        FollowerConstants.centripetalScaling = 0.0008;
 
         FollowerConstants.pathEndTimeoutConstraint = 100;
         FollowerConstants.pathEndTValueConstraint = 0.995;
