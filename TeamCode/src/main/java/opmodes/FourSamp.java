@@ -21,6 +21,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -34,6 +35,8 @@ import subsystems.ExtendoSubsystem;
 import subsystems.IntakeSubsystemBlue;
 import subsystems.LiftSubsystem;
 import subsystems.PitchSubsystem;
+import subsystems.PtoSubsystem;
+import subsystems.StiltSubsystem;
 import subsystems.WristSubsystem;
 
 /**
@@ -52,6 +55,7 @@ public class FourSamp extends OpMode {
 
     ElapsedTime timerImu = new ElapsedTime();
     public static boolean offsettest = true;
+    public boolean iannnnn = true;
 
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime timer2 = new ElapsedTime();
@@ -61,12 +65,14 @@ public class FourSamp extends OpMode {
     protected IntakeSubsystemBlue intakeSubsystem;
     protected ColorSubsystemBlue colorSubsystem;
     protected ColorSensor colorSensor;
-    protected MotorEx leftSlide, rightSlide, extendoMotor, intakeMotor;
+    protected MotorEx leftSlide, rightSlide, extendoMotor;
     protected DcMotor leftSlideDC;
-    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo, pitchServo;
+    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo, pitchServo, leftStilt, rightStilt, leftPTO, rightPTO;
     protected CRServo intakeServo;
     protected LiftSubsystem liftSubsystem;
     protected ArmSubsystem armSubsystem;
+    protected PtoSubsystem ptoSubsystem;
+    protected StiltSubsystem stiltSubsystem;
     protected WristSubsystem wristSubsystem;
     protected PitchSubsystem pitchSubsystem;
     protected ClawSubsystem clawSubsystem;
@@ -249,11 +255,11 @@ public class FourSamp extends OpMode {
             case 2:
                 wristSubsystem.autoWristIn();
                 armSubsystem.autoArmIn();
-                liftSubsystem.setTargetPos(0);
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()) {
 
-                    extendoSubsystem.setTargetPos(32000);
+                    liftSubsystem.setTargetPos(0);
+                    extendoSubsystem.setTargetPos(-22000);
                     /* Grab Sample */
                     if(first) {
                         timer.reset();
@@ -263,7 +269,7 @@ public class FourSamp extends OpMode {
                     if(timer.seconds() > .6 || colorSubsystem.stupidstpid != -1) {
                         intakeSubsystem.autoDropdownStow();
                         pitchSubsystem.autoPitchStow();
-                        extendoSubsystem.setTargetPos(-2000);
+                        extendoSubsystem.setTargetPos(0);
                     }
                     if(timer.seconds() > .7) {
 
@@ -317,12 +323,12 @@ public class FourSamp extends OpMode {
 
                     wristSubsystem.autoWristIn();
                     armSubsystem.autoArmIn();
-                    liftSubsystem.setTargetPos(0);
                 }
 
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()) {
-                    extendoSubsystem.setTargetPos(40000);
+                    liftSubsystem.setTargetPos(0);
+                    extendoSubsystem.setTargetPos(-22000);
                     /* Grab Sample */
                     if(first) {
                         timer.reset();
@@ -336,7 +342,7 @@ public class FourSamp extends OpMode {
                     if(timer.seconds() > 1 || colorSubsystem.stupidstpid != -1) {
                         intakeSubsystem.autoDropdownStow();
                         pitchSubsystem.autoPitchStow();
-                        extendoSubsystem.setTargetPos(-2000);
+                        extendoSubsystem.setTargetPos(0);
                     }
                     if(timer.seconds() > 1.5) {
 
@@ -383,17 +389,18 @@ public class FourSamp extends OpMode {
             case 6:
 
 
-                if(timer.seconds() > 1) {
+                if(timer.seconds() > 1 && iannnnn) {
                     intakeSubsystem.autoDropdownIntake();
                     pitchSubsystem.autoPitchIntake();
 
                     clawSubsystem.autoClawOpen();
                     wristSubsystem.autoWristIn();
                     armSubsystem.autoArmIn();
+                    iannnnn = false;
                 }
 
                 if(!follower.isBusy() || follower.isRobotStuck() || timer.seconds() > 5) {
-                    extendoSubsystem.setTargetPos(32000);
+                    extendoSubsystem.setTargetPos(-22000);
                     liftSubsystem.setTargetPos(0);
                     /* Grab Sample */
                     if(first) {
@@ -404,7 +411,7 @@ public class FourSamp extends OpMode {
                     if(timer.seconds() > 0.3 || colorSubsystem.stupidstpid != -1) {
                         intakeSubsystem.autoDropdownStow();
                         pitchSubsystem.autoPitchStow();
-                        extendoSubsystem.setTargetPos(-2000);
+                        extendoSubsystem.setTargetPos(0);
                     }
                     if(timer.seconds() > 0.4) {
 
@@ -536,22 +543,25 @@ public class FourSamp extends OpMode {
 
         leftSlide = new MotorEx(hardwareMap, "leftSlide");
         rightSlide = new MotorEx(hardwareMap, "rightSlide");
-        rightSlide.setInverted(true);
-        intakeMotor = new MotorEx(hardwareMap, "intakeMotor");
+        leftSlide.setInverted(true);
+        intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
         dropdownServo = hardwareMap.get(Servo.class, "dropdownServo");
         leftArm = hardwareMap.get(Servo.class, "leftArm");
         rightArm = hardwareMap.get(Servo.class, "rightArm");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         flipServo = hardwareMap.get(Servo.class, "flipServo");
         leftSlideDC = hardwareMap.get(DcMotor.class, "leftSlide");
+        leftStilt = hardwareMap.get(Servo.class, "leftStilt");
+        rightStilt = hardwareMap.get(Servo.class, "rightStilt");
         flipServo.setDirection(Servo.Direction.REVERSE);
         liftSubsystem = new LiftSubsystem(leftSlide, rightSlide);
         armSubsystem = new ArmSubsystem(leftArm, rightArm);
         wristSubsystem = new WristSubsystem(flipServo);
         clawSubsystem = new ClawSubsystem(clawServo);
         firstimu = true;
+        leftPTO = hardwareMap.get(Servo.class, "leftPTO");
+        rightPTO = hardwareMap.get(Servo.class, "rightPTO");
         rightArm.setDirection(Servo.Direction.REVERSE);
-        intakeMotor.setInverted(true);
         pitchServo = hardwareMap.get(Servo.class, "pitchServo");
         intakeSubsystem = new IntakeSubsystemBlue(intakeServo, dropdownServo);
         pitchSubsystem = new PitchSubsystem(pitchServo);
@@ -566,6 +576,7 @@ public class FourSamp extends OpMode {
         follower.setStartingPose(startPose);
         follower.setStartingPose(startPose);
         follower.setStartingPose(startPose);
+        ptoSubsystem = new PtoSubsystem(leftPTO, rightPTO);
         follower.setMaxPower(1);
         buildPaths();
         telemetry.addData("getStarginPose, ", follower.getPose());
@@ -579,8 +590,15 @@ public class FourSamp extends OpMode {
         clawSubsystem.autoClawClosed();
 
 
+        leftStilt.setDirection(Servo.Direction.REVERSE);
+        rightArm.setDirection(Servo.Direction.REVERSE);
+        intakeServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        flipServo.setDirection(Servo.Direction.REVERSE);
         intakeSubsystem.autoDropdownStow();
         pitchSubsystem.autoPitchStow();
+        leftStilt.setPosition(StiltSubsystem.STILTS_UP);
+        rightStilt.setPosition(StiltSubsystem.STILTS_UP);
+        ptoSubsystem.ptoDisengage();
 
     }
 
