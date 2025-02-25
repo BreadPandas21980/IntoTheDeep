@@ -29,7 +29,7 @@ public class IntakeSubsystemBlue extends SubsystemBase {
 
     public static double targetPower = 0;
     public static double IN_POWER = 1;
-    public static double AUTO_IDLE_POWER = 0.8;
+    public static double AUTO_IDLE_POWER = 0.6;
     public static double FULL_POWER = 1;
     public static double OUT_POWER = -1;
     public static double MINI_OUT_POWER = -0.1;
