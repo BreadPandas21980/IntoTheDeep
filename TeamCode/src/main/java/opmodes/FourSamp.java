@@ -54,7 +54,6 @@ import subsystems.WristSubsystem;
 public class FourSamp extends OpMode {
 
     ElapsedTime timerImu = new ElapsedTime();
-    public static boolean offsettest = true;
     public boolean travis = false;
     public boolean iansigma = false;
 
@@ -62,7 +61,6 @@ public class FourSamp extends OpMode {
     ElapsedTime timer2 = new ElapsedTime();
     public static boolean whatthesigma = false;
     public static boolean firstimu = true;
-    public static boolean firstcool = true;
     protected IntakeSubsystemBlue intakeSubsystem;
     protected ColorSubsystemBlue colorSubsystem;
     protected ColorSensor colorSensor;
