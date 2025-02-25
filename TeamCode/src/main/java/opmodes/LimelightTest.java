@@ -97,7 +97,7 @@ public class LimelightTest extends OpMode {
 
     /** Start Pose of our robot */
     private final Pose startPose = new Pose(108, 135, Math.toRadians(90));
-    private final Pose viewPose = new Pose(95, 100, Math.toRadians(0));
+    private final Pose viewPose = new Pose(80, 100, Math.toRadians(0));
     private Pose pickupPose = new Pose(80, 100, Math.toRadians(0));
 
     private PathChain moveView, movePickup;
@@ -161,8 +161,9 @@ public class LimelightTest extends OpMode {
                             for (LLResultTypes.ColorResult cr : colorResults) {
                                 telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
                             }
-                            pickupPose = new Pose(viewPose.getX() - result.getTa() * 20, viewPose.getY() - result.getTx(), Math.toRadians(0));
+                            pickupPose = new Pose(viewPose.getX(), viewPose.getY() - result.getTx(), Math.toRadians(0));
 
+                            extendoSubsystem.setTargetPos((int)(-22000 * result.getTy() / 6));
                         }
                     } else {
                         telemetry.addData("Limelight", "No data available");
@@ -274,7 +275,7 @@ public class LimelightTest extends OpMode {
         firstimu = true;
         rightArm.setDirection(Servo.Direction.REVERSE);
         intakeMotor.setInverted(true);
-        intakeSubsystem = new IntakeSubsystemBlue(intakeServo, dropdownServo, intakeArmServo);
+        intakeSubsystem = new IntakeSubsystemBlue(intakeServo, dropdownServo);
         leftSlide.resetEncoder();
         extendoMotor =new MotorEx(hardwareMap, "extendoMotor");
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);
