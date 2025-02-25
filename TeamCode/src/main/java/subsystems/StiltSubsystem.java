@@ -2,6 +2,7 @@ package subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -27,13 +28,13 @@ public class StiltSubsystem extends SubsystemBase {
 
 
     public Command stiltsUp() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             leftStilt.setPosition(STILTS_UP);
             rightStilt.setPosition(STILTS_UP);
         }, this);
     }
     public Command stiltsDown() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             leftStilt.setPosition(STILTS_DOWN);
             rightStilt.setPosition(STILTS_DOWN);
         }, this);

@@ -36,8 +36,8 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public static double IN_POWER_SAMP = .8;
     public static double IN_POWER_SPEC = 0.75;
     public static double DROPDOWN_INTAKE = 0.32;
-    public static double DROPDOWN_STOW = .9;
-    public static double DROPDOWN_WALL = .4;
+    public static double DROPDOWN_STOW = .8;
+    public static double DROPDOWN_WALL = .5;
     public static double DROPDOWN_EJECT = .5;
     public static boolean colorSeen = false;
 
@@ -58,22 +58,22 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     }
 
     public Command dropdownStow() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             dropdownServo.setPosition(DROPDOWN_STOW);
         }, this);
     }
     public Command dropdownIntake() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             dropdownServo.setPosition(DROPDOWN_INTAKE);
         }, this);
     }
     public Command dropdownEject() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             dropdownServo.setPosition(DROPDOWN_EJECT);
         }, this);
     }
     public Command dropdownWall() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             dropdownServo.setPosition(DROPDOWN_WALL);
         }, this);
     }
