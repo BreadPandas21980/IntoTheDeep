@@ -11,6 +11,7 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -172,6 +173,11 @@ public class BaseOpModeBlue extends CommandOpMode {
         leftSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
+        leftSlide.resetEncoder();
+        leftSlide.resetEncoder();
+        leftSlide.resetEncoder();
+        leftSlideDC.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftSlideDC.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftSlide.resetEncoder();
         extendoMotor.resetEncoder();
         extendoMotor.setInverted(true);
