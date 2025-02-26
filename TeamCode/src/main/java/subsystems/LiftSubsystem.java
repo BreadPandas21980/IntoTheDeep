@@ -34,6 +34,7 @@ public class LiftSubsystem extends SubsystemBase {
  */
 
     public static int specimenPrepareHeight = 240;
+    public static int specimenPrepareHeightTele = 314;
     public static int sampPrepHeight = 1400;
     public static int specimenScoreHeight = 900;
     public static int groundHeight = 0;
@@ -146,6 +147,9 @@ public class LiftSubsystem extends SubsystemBase {
     }
     public Command climbHeightOne() {
         return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_ONE_UP), this);
+    }
+    public Command specPrepTele() {
+        return new InstantCommand(() -> setTargetPos(specimenPrepareHeightTele), this);
     }
     public Command climbHeightTwo() {
         return new InstantCommand(() -> setTargetPos(CLIMB_HEIGHT_TWO_DOWN), this);

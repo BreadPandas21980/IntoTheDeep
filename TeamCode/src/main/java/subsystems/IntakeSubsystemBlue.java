@@ -37,7 +37,7 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public static double IN_POWER_SPEC = 0.75;
     public static double DROPDOWN_INTAKE = 0.32;
     public static double DROPDOWN_STOW = .8;
-    public static double DROPDOWN_WALL = .5;
+    public static double DROPDOWN_WALL = .45;
     public static double DROPDOWN_EJECT = .5;
     public static boolean colorSeen = false;
 
