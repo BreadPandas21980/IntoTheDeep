@@ -19,11 +19,11 @@ public class DriveSubsystem extends SubsystemBase {
     private final MecanumDrive drive;
 
     public static double rotateFactor = 0.75;
-    public static double rotateFactorSlow = 0.4;
+    public static double rotateFactorSlow = .9;
     public MotorEx fL, fR, bL, bR;
-    public static double slowFactor = 2.2;
+    public static double slowFactor = 2;
     public static double strafeFactor = 1;
-    public static double strafeFactorB = 1;
+    public static double strafeFactorB = .85;
     public static double strafeFactorS = 1;
     public static double strafeFactorBS = 1;
 
@@ -153,13 +153,32 @@ public class DriveSubsystem extends SubsystemBase {
         );
     }
     public Command dslowMode(DoubleSupplier strafeSpeed, DoubleSupplier forwardSpeed,
-                             DoubleSupplier turnSpeed) {
+                                 DoubleSupplier turnSpeed) {
         return new RunCommand(
                 () -> {
 
+
                     double forward = forwardSpeed.getAsDouble() / slowFactor;
-                    double strafe = strafeSpeed.getAsDouble() / slowFactor;
-                    double rotate = turnSpeed.getAsDouble() * rotateFactorSlow / slowFactor;
+                    double strafe = strafeSpeed.getAsDouble() /slowFactor ;
+                    double rotate = turnSpeed.getAsDouble()  * rotateFactorSlow /slowFactor;
+
+                    if(Math.abs(forward) > 0.1) {
+                        forward = forward;
+                    } else {
+                        forward = 0;
+                    }
+                    if(Math.abs(strafe) > 0.1) {
+                        strafe = strafe;
+                    } else {
+                        strafe = 0;
+                    }
+                    if(Math.abs(rotate) > 0.1) {
+                        rotate = rotate * rotateFactor;
+                    } else {
+                        rotate = 0;
+                    }
+
+
                     double bLPower = forward - strafe + rotate; //
                     double bRPower = forward + strafe - rotate; //
                     double fLPower = forward + strafe + rotate; //
@@ -174,12 +193,20 @@ public class DriveSubsystem extends SubsystemBase {
                     bRPower /= maxSpeed;
                     fLPower /= maxSpeed;
                     fRPower /= maxSpeed;
+                    /*
+                    if(strafe > 0.15) {
 
-                    bL.set(bLPower * strafeFactorBS);
-                    bR.set(bRPower * strafeFactorBS);
-                    fL.set(fLPower * strafeFactorS);
-                    fR.set(fRPower * strafeFactorS);
-                },
+                        fLPower = -fLPower;
+                        bLPower = -bLPower;
+                    }
+
+                     */
+                    bL.set(bLPower* strafeFactorBS);
+                    bR.set(bRPower* strafeFactorBS);
+                    fL.set(fLPower* strafeFactorS);
+                    fR.set(fRPower* strafeFactorS);
+                }
+                ,
                 this
         );
     }
