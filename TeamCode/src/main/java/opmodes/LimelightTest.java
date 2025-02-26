@@ -97,8 +97,8 @@ public class LimelightTest extends OpMode {
 
     /** Start Pose of our robot */
     private final Pose startPose = new Pose(108, 135, Math.toRadians(90));
-    private final Pose viewPose = new Pose(80, 100, Math.toRadians(0));
-    private Pose pickupPose = new Pose(80, 100, Math.toRadians(0));
+    private final Pose viewPose = new Pose(85, 100, Math.toRadians(0));
+    private Pose pickupPose = new Pose(85, 100, Math.toRadians(0));
 
     private PathChain moveView, movePickup;
 
@@ -163,7 +163,7 @@ public class LimelightTest extends OpMode {
                             }
                             pickupPose = new Pose(viewPose.getX(), viewPose.getY() - result.getTx(), Math.toRadians(0));
 
-                            extendoSubsystem.setTargetPos((int)(-22000 * result.getTy() / 6));
+                            extendoSubsystem.setTargetPos((int)(-10000 * result.getTy()));
                         }
                     } else {
                         telemetry.addData("Limelight", "No data available");
