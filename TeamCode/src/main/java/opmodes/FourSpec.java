@@ -1,5 +1,7 @@
 package opmodes;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
@@ -10,10 +12,14 @@ import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -21,9 +27,13 @@ import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 import subsystems.ArmSubsystem;
 import subsystems.ClawSubsystem;
+import subsystems.ColorSubsystemBlue;
+import subsystems.ExtendoSubsystem;
 import subsystems.IntakeSubsystemBlue;
 import subsystems.LiftSubsystem;
 import subsystems.PitchSubsystem;
+import subsystems.PtoSubsystem;
+import subsystems.StiltSubsystem;
 import subsystems.WristSubsystem;
 
 /**
@@ -39,25 +49,34 @@ import subsystems.WristSubsystem;
 @Autonomous(name = "FOURSpec", group = "!!!!yay")
 public class FourSpec extends OpMode {
 
-    public static boolean firstimu = true;
     ElapsedTime timerImu = new ElapsedTime();
-    public static double recordedMaxPower = 0; 
-    protected MotorEx leftSlide, rightSlide, intakeMotor;
+    public boolean travis = false;
+    public boolean iansigma = false;
+    public boolean iansdecisiveness = true;
+
+    ElapsedTime timer = new ElapsedTime();
+    ElapsedTime timer2 = new ElapsedTime();
+    public static boolean whatthesigma = false;
+    public static boolean firstimu = true;
+    protected IntakeSubsystemBlue intakeSubsystem;
+    protected ColorSubsystemBlue colorSubsystem;
+    protected ColorSensor colorSensor;
+    protected MotorEx leftSlide, rightSlide, extendoMotor;
     protected DcMotor leftSlideDC;
-    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo, pitchServo;
+    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo, pitchServo, leftStilt, rightStilt, leftPTO, rightPTO;
     protected CRServo intakeServo;
     protected LiftSubsystem liftSubsystem;
-    protected PitchSubsystem pitchSubsystem;
     protected ArmSubsystem armSubsystem;
+    protected PtoSubsystem ptoSubsystem;
+    protected StiltSubsystem stiltSubsystem;
     protected WristSubsystem wristSubsystem;
-    protected IntakeSubsystemBlue intakeSubsystemBlue;
+    protected PitchSubsystem pitchSubsystem;
     protected ClawSubsystem clawSubsystem;
+    protected ExtendoSubsystem extendoSubsystem;
     private Follower follower;
-    private Timer pathTimer, actionTimer, opmodeTimer;
     public static boolean first = true;
-    public static boolean itsnotiansfault = false;
-    public static boolean itsnotnotiansfault = false;
-    ElapsedTime timer = new ElapsedTime();
+    private Timer pathTimer, actionTimer, opmodeTimer;
+    protected IMU imu;
 
     /** This is the variable where we store the state of our auto.
      * It is used by the pathUpdate method. */
@@ -73,7 +92,7 @@ public class FourSpec extends OpMode {
      * Lets assume the Robot is facing the human player and we want to score in the bucket */
 
     /** Start Pose of our robot */ 
-    private final Pose startPose = new Pose(56, 134, Math.toRadians(90));
+    private final Pose startPose = new Pose(56, 134, Math.toRadians(90)); //56
     private final Pose scorePose1 = new Pose(70, 105, Math.toRadians(90));
     private final Pose transitionPose = new Pose(39, 110, Math.toRadians(90));
     private final Pose push1StartControlPose = new Pose(39, 72, Math.toRadians(90));
@@ -211,7 +230,7 @@ public class FourSpec extends OpMode {
                 */
 
                 if(follower.getPose().getY() < 110) {
-                    follower.setMaxPower(0.62);
+               //     follower.setMaxPower(0.62);
                 }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()) {
@@ -222,29 +241,16 @@ public class FourSpec extends OpMode {
                     /* Score Preload */
                     if(timer.seconds() > .2) {
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight);
-
-                        if (opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower(hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                            recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-                        }
                     }
                     if(timer.seconds() > .5) {
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight);
                     }
                     if(timer.seconds() > .8) {
-                        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                            recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-                        }
                         clawSubsystem.autoClawOpen();
                     }
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     if(timer.seconds() > 1.) {
                         follower.followPath(transitionMove,false);
-                        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                            recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-                        }
                         timer.reset();
                         first = true;
                         setPathState(2);
@@ -265,7 +271,7 @@ public class FourSpec extends OpMode {
                     clawSubsystem.autoClawOpen();
                 }
                 if(follower.getPose().getY() > 110) {
-                    follower.setMaxPower(0.7);
+               //     follower.setMaxPower(0.7);
                 }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()) {
@@ -276,19 +282,9 @@ public class FourSpec extends OpMode {
                     }
                     if(timer.seconds() > 0.1) {
                         clawSubsystem.autoClawClosed();
-                        itsnotnotiansfault = false;
-                        itsnotnotiansfault = false;
-                        itsnotnotiansfault = false;
-                        itsnotnotiansfault = false;
-                        itsnotnotiansfault = false;
                     }
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     if(timer.seconds() > 0.2) {
-                        itsnotnotiansfault = false;
-                        itsnotnotiansfault = false;
-                        itsnotnotiansfault = false;
-                        itsnotnotiansfault = false;
-                        itsnotnotiansfault = false;
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
                         follower.followPath(score2,false);
                         timer.reset();
@@ -307,7 +303,7 @@ public class FourSpec extends OpMode {
                     wristSubsystem.autoWristSpec();
                 }
                 if(follower.getPose().getY() < 110) {
-                    follower.setMaxPower(0.6);
+                  //  follower.setMaxPower(0.6);
                 }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()) {
@@ -319,17 +315,9 @@ public class FourSpec extends OpMode {
                     liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight);
                     if(timer.seconds() > .4) {
                         clawSubsystem.autoClawOpen();
-                        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                            recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-                        }
                     }
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     if(timer.seconds() > .6) {
-                        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                            recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-                        }
                         follower.followPath(grab3,false);
                         first = true;
                         timer.reset();
@@ -358,17 +346,9 @@ public class FourSpec extends OpMode {
                     }
                     if(timer.seconds() > 0.1) {
                         clawSubsystem.autoClawClosed();
-                        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                            recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-                        }
                     }
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     if(timer.seconds() > 0.2) {
-                        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                            recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-                        }
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
                         follower.followPath(score3,false);
                         timer.reset();
@@ -384,7 +364,7 @@ public class FourSpec extends OpMode {
                     wristSubsystem.autoWristSpec();
                 }
                 if(follower.getPose().getY() < 110) {
-                    follower.setMaxPower(0.62);
+           //         follower.setMaxPower(0.62);
                 }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()) {
@@ -396,17 +376,9 @@ public class FourSpec extends OpMode {
                     liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight);
                     if(timer.seconds() > .4) {
                         clawSubsystem.autoClawOpen();
-                        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                            recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-                        }
                     }
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     if(timer.seconds() > .6) {
-                        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                            recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-                        }
                         follower.followPath(grab4, false);
                         first = true;
                         setPathState(7);
@@ -436,17 +408,9 @@ public class FourSpec extends OpMode {
                     }
                     if(timer.seconds() > 0.1) {
                         clawSubsystem.autoClawClosed();
-                        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                            recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-                        }
                     }
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     if(timer.seconds() > 0.2) {
-                        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                            recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-                        }
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
                         follower.followPath(score4, false);
                         first = true;
@@ -463,7 +427,7 @@ public class FourSpec extends OpMode {
                 }
 
                 if(follower.getPose().getY() < 110) {
-                    follower.setMaxPower(0.6);
+                  //  follower.setMaxPower(0.6);
                 }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()) {
@@ -475,17 +439,9 @@ public class FourSpec extends OpMode {
                     liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight);
                     if(timer.seconds() > .4) {
                         clawSubsystem.autoClawOpen();
-                        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                            recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-                        }
                     }
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     if(timer.seconds() > .6) {
-                        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                            recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-                        }
                         follower.followPath(park, false);
                         first = true;
                         setPathState(9);
@@ -518,111 +474,121 @@ public class FourSpec extends OpMode {
     public void loop() {
 
 
-        if(firstimu) {
-            if(timerImu.seconds() > 0.005) {
 
-                telemetry.addData("before offet,", 1);
-                follower.setHeadingOffset(0 - (Math.toRadians(follower.getPose().getHeading() * 180 / Math.PI - 90)));
 
-                telemetry.addData("grrr.", 2);
 
-                firstimu = false;
-            }
-        }
-        /*
-        if(itsnotiansfault) {
-            follower.setMaxPower(0.62);
-            recordedMaxPower = 0.62;
-        } else if (itsnotnotiansfault) {
-          follower.setMaxPower(0.7);
-            recordedMaxPower = 0.7;
-        } else {
-            if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-                follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5);
-                recordedMaxPower = hardwareMap.voltageSensor.iterator().next().getVoltage() / 11.5;
-            }
-        }
-
-         */
-
-        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11);
-        }
         telemetry.addData("pffset: ", follower.getHeadingOffset() * 180 / Math.PI);
         telemetry.addData("xset: ", follower.getXOffset());
-        liftSubsystem.update();
+
+        if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
+            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 12.5);
+        }
+
+
         // These loop the movements of the robot
         follower.update();
         autonomousPathUpdate();
 
+        liftSubsystem.update();
+        extendoSubsystem.update();
+        colorSubsystem.update();
         // Feedback to Driver Hub
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading() * 180 / Math.PI);
-        telemetry.addData("max power: ", recordedMaxPower);
+        telemetry.addData("whatthe: ", whatthesigma);
         telemetry.update();
-
     }
 
     /** This method is called once at the init of the OpMode. **/
     @Override
     public void init() {
+
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         pathTimer = new Timer();
         opmodeTimer = new Timer();
-        // actionTimer = new Timer();
         opmodeTimer.resetTimer();
 
-        itsnotiansfault = false;
         leftSlide = new MotorEx(hardwareMap, "leftSlide");
-        intakeMotor = new MotorEx(hardwareMap, "intakeMotor");
         rightSlide = new MotorEx(hardwareMap, "rightSlide");
-        rightSlide.setInverted(true);
+        leftSlide.setInverted(true);
+        intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
+        dropdownServo = hardwareMap.get(Servo.class, "dropdownServo");
         leftArm = hardwareMap.get(Servo.class, "leftArm");
         rightArm = hardwareMap.get(Servo.class, "rightArm");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
-        dropdownServo = hardwareMap.get(Servo.class, "dropdownServo");
         flipServo = hardwareMap.get(Servo.class, "flipServo");
         leftSlideDC = hardwareMap.get(DcMotor.class, "leftSlide");
+        leftStilt = hardwareMap.get(Servo.class, "leftStilt");
+        rightStilt = hardwareMap.get(Servo.class, "rightStilt");
         flipServo.setDirection(Servo.Direction.REVERSE);
         liftSubsystem = new LiftSubsystem(leftSlide, rightSlide);
         armSubsystem = new ArmSubsystem(leftArm, rightArm);
-        pitchServo = hardwareMap.get(Servo.class, "pitchServo");
         wristSubsystem = new WristSubsystem(flipServo);
         clawSubsystem = new ClawSubsystem(clawServo);
+        firstimu = true;
+        leftPTO = hardwareMap.get(Servo.class, "leftPTO");
+        rightPTO = hardwareMap.get(Servo.class, "rightPTO");
         rightArm.setDirection(Servo.Direction.REVERSE);
+        pitchServo = hardwareMap.get(Servo.class, "pitchServo");
+        intakeSubsystem = new IntakeSubsystemBlue(intakeServo, dropdownServo);
+        pitchSubsystem = new PitchSubsystem(pitchServo);
+        leftSlide.resetEncoder();
+        extendoMotor =new MotorEx(hardwareMap, "extendoMotor");
+        extendoSubsystem = new ExtendoSubsystem(extendoMotor);
+        extendoMotor.setInverted(true);
+        extendoMotor.resetEncoder();
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
-
-        intakeSubsystemBlue = new IntakeSubsystemBlue(intakeServo, dropdownServo);
-        pitchSubsystem = new PitchSubsystem(pitchServo);
-        intakeSubsystemBlue.autoDropdownStow();
-        pitchSubsystem.autoPitchStow();
-        follower.setMaxPower(1);
+        telemetry.addData("setStarginPose, ", 1);
         follower.setStartingPose(startPose);
+        follower.setStartingPose(startPose);
+        follower.setStartingPose(startPose);
+        ptoSubsystem = new PtoSubsystem(leftPTO, rightPTO);
+        follower.setMaxPower(1);
+        buildPaths();
+        telemetry.addData("getStarginPose, ", follower.getPose());
+
+        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
+        colorSubsystem = new ColorSubsystemBlue(colorSensor);
+        imu = hardwareMap.get(IMU.class, "imu");
+        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
+                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT)));
+        imu.resetYaw();
         clawSubsystem.autoClawClosed();
 
-        armSubsystem.setAutoDisabled(false);
-        clawSubsystem.setAutoDisabled(false);
-        liftSubsystem.setAutoDisabled(false);
-        wristSubsystem.setAutoDisabled(false);
-        buildPaths();
-        firstimu = true;
+        // colorSensor.enableLed(true);
+
+        leftStilt.setDirection(Servo.Direction.REVERSE);
+        rightArm.setDirection(Servo.Direction.REVERSE);
+        intakeServo.setDirection(DcMotorSimple.Direction.FORWARD);
+        flipServo.setDirection(Servo.Direction.REVERSE);
+        intakeSubsystem.autoDropdownStow();
+        pitchSubsystem.autoPitchStow();
+        leftStilt.setPosition(StiltSubsystem.STILTS_UP);
+        rightStilt.setPosition(StiltSubsystem.STILTS_UP);
+        ptoSubsystem.ptoDisengage();
+        leftPTO.setPosition(PtoSubsystem.PTO_HALF_LEFT);
+        rightPTO.setPosition(PtoSubsystem.PTO_HALF_RIGHT);
+
     }
 
     /** This method is called continuously after Init while waiting for "play". **/
     @Override
     public void init_loop() {
+        telemetry.addData("headloop: ", follower.getPose().getHeading());
         timerImu.reset();
+        timer2.reset();
     }
 
     /** This method is called once at the start of the OpMode.
      * It runs all the setup actions, including building paths and starting the path system **/
     @Override
     public void start() {
-        liftSubsystem.setTargetPos(0);
-        // actionTimer.resetTimer();
         opmodeTimer.resetTimer();
+        timerImu.reset();
+
         setPathState(0);
     }
 
