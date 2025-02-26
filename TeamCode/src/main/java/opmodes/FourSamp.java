@@ -56,6 +56,7 @@ public class FourSamp extends OpMode {
     ElapsedTime timerImu = new ElapsedTime();
     public boolean travis = false;
     public boolean iansigma = false;
+    public boolean iansdecisiveness = true;
 
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime timer2 = new ElapsedTime();
@@ -102,22 +103,22 @@ public class FourSamp extends OpMode {
     private final Pose pickup1ControlPose = new Pose(120, 125, Math.toRadians(115));
 
     /** Lowest (First) Sample from the Spike Mark */
-    private final Pose pickup1Pose = new Pose(118.25, 121, Math.toRadians(85));
+    private final Pose pickup1Pose = new Pose(118.25, 121, Math.toRadians(87));
     private final Pose scorePose2 = new Pose(126, 127, Math.toRadians(45));
 
     /** Middle (Second) Sample from the Spike Mark */
-    private final Pose pickup2Pose = new Pose(127, 125, Math.toRadians(85));
+    private final Pose pickup2Pose = new Pose(128.5, 125, Math.toRadians(85));
     private final Pose scorePose3 = new Pose(127, 127.5, Math.toRadians(45));
 
     /** Highest (Third) Sample from the Spike Mark */
-    private final Pose pickup3Pose = new Pose(123.5, 118.5, Math.toRadians(115));
+    private final Pose pickup3Pose = new Pose(123.5, 119.5, Math.toRadians(115));
     private final Pose scorePose4 = new Pose(125, 128, Math.toRadians(45));
     /** Park Pose for our robot, after we do all of the scoring. */
     private final Pose parkPose = new Pose(80, 86, Math.toRadians(180));
 
     /** Park Control Pose for our robot, this is used to manipulate the bezier curve that we will create for the parking.
      * The Robot will not go to this pose, it is used a control point for our bezier curve. */
-    private final Pose parkControlPose = new Pose(130, 60, Math.toRadians(180));
+    private final Pose parkControlPose = new Pose(130, 75, Math.toRadians(180));
     /* These are our Paths and PathChains that we will define in buildPaths() */
     private Path scorePreload, park;
     private PathChain grabPickup1, grabPickup2, grabPickup3, scorePickup1, scorePickup2, scorePickup3;
@@ -286,23 +287,24 @@ public class FourSamp extends OpMode {
                 if(extendoSubsystem.atTarget()) {
                     travis = true;
                 }
-                if(travis) {
+                if(travis && iansdecisiveness) {
                     timer2.reset();
                     iansigma = true;
+                    iansdecisiveness = false;
                 }
-                if(timer.seconds() > 0.5 && iansigma) {
+                if(timer2.seconds() > 0.5 && iansigma) {
                     clawSubsystem.autoClawClosed();
                 }
-                if(timer.seconds() > 0.8 && iansigma) {
+                if(timer2.seconds() > 0.8 && iansigma) {
                     liftSubsystem.setTargetPos(LiftSubsystem.sampPrepHeight);
                 }
-                if(timer.seconds() > 1 && iansigma) {
+                if(timer2.seconds() > 1.3 && iansigma) {
                     armSubsystem.autoArmSamp();
                     wristSubsystem.autoWristSamp();
                 }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
 
-                if((!follower.isBusy() || follower.isRobotStuck() )) {
+                if((!follower.isBusy() || follower.isRobotStuck() ) && timer2.seconds() > 1.2)  {
                     armSubsystem.autoArmSamp();
                     wristSubsystem.autoWristSamp();
                     if(first) {
@@ -326,6 +328,9 @@ public class FourSamp extends OpMode {
 
                 break;
             case 4:
+                travis = false;
+                iansdecisiveness = true;
+                iansigma = false;
                 if(timer.seconds() > 1.7) {
 
                     intakeSubsystem.autoIntake();
@@ -371,21 +376,22 @@ public class FourSamp extends OpMode {
                 if(extendoSubsystem.atTarget()) {
                     travis = true;
                 }
-                if(travis) {
+                if(travis && iansdecisiveness) {
                     timer2.reset();
                     iansigma = true;
+                    iansdecisiveness = false;
                 }
-                if(timer.seconds() > 0.5 && iansigma) {
+                if(timer2.seconds() > 0.5 && iansigma) {
                     clawSubsystem.autoClawClosed();
                 }
-                if(timer.seconds() > 0.8 && iansigma) {
+                if(timer2.seconds() > 0.8 && iansigma) {
                     liftSubsystem.setTargetPos(LiftSubsystem.sampPrepHeight);
                 }
-                if(timer.seconds() > 1 && iansigma) {
+                if(timer2.seconds() > 1.3 && iansigma) {
                     armSubsystem.autoArmSamp();
                     wristSubsystem.autoWristSamp();
                 }
-                if((!follower.isBusy() || follower.isRobotStuck()) && timer.seconds() > 1.2) {
+                if((!follower.isBusy() || follower.isRobotStuck()) && timer2.seconds() > 1.2) {
 
                     if(first) {
                         timer.reset();
@@ -410,6 +416,9 @@ public class FourSamp extends OpMode {
                 break;
             case 6:
 
+                travis = false;
+                iansdecisiveness = true;
+                iansigma = false;
 
                 if(timer.seconds() > 1) {
                     intakeSubsystem.autoDropdownIntake();
@@ -452,25 +461,25 @@ public class FourSamp extends OpMode {
                 }
                 break;
             case 7:
-
                 if(extendoSubsystem.atTarget()) {
                     travis = true;
                 }
-                if(travis) {
+                if(travis && iansdecisiveness) {
                     timer2.reset();
                     iansigma = true;
+                    iansdecisiveness = false;
                 }
-                if(timer.seconds() > 0.5 && iansigma) {
+                if(timer2.seconds() > 0.5 && iansigma) {
                     clawSubsystem.autoClawClosed();
                 }
-                if(timer.seconds() > 0.8 && iansigma) {
+                if(timer2.seconds() > 0.8 && iansigma) {
                     liftSubsystem.setTargetPos(LiftSubsystem.sampPrepHeight);
                 }
-                if(timer.seconds() > 1 && iansigma) {
+                if(timer2.seconds() > 1.3 && iansigma) {
                     armSubsystem.autoArmSamp();
                     wristSubsystem.autoWristSamp();
                 }
-                if((!follower.isBusy() || follower.isRobotStuck() )&& timer.seconds() > 1.5) {
+                if((!follower.isBusy() || follower.isRobotStuck() )&& timer2.seconds() > 1.5) {
 
                     if(first) {
                         timer.reset();
@@ -488,6 +497,9 @@ public class FourSamp extends OpMode {
                 }
             case 8:
 
+                travis = false;
+                iansdecisiveness = true;
+                iansigma = false;
 
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()) {
