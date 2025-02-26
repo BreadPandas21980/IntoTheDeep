@@ -130,7 +130,7 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
 
         //specimen score
         gb2(DPAD_LEFT).whenActive(
-                new SequentialCommandGroup(
+                new SequentialCommandGroup( 
                         armSubsystem.armSpecIntake(),
                         wristSubsystem.wristFlipSpec()
                 )
@@ -151,7 +151,7 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
 
         //climb automation
         //uh oh
-        gb1(A).whenActive(
+        gb1(DPAD_UP).whenActive(
                 new SequentialCommandGroup(
                         stiltSubsystem.stiltsDown(),
                         new WaitCommand(200),
@@ -164,6 +164,20 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
                         liftSubsystem.climbHeightTwo(),
                         new WaitUntilCommand(() -> liftSubsystem.atTarget()),
                         ptoSubsystem.ptoDisengage(),
+                        liftSubsystem.ptoUnclimbing()
+                )
+        );
+        gb1(DPAD_LEFT).whenActive(
+                stiltSubsystem.stiltsDown()
+        );
+        gb1(DPAD_RIGHT).whenActive(
+                ptoSubsystem.ptoEngage()
+        );
+        gb1(DPAD_DOWN).whenActive(
+                new SequentialCommandGroup(
+                        ptoSubsystem.ptoDisengage(),
+                        stiltSubsystem.stiltsUp(),
+                        liftSubsystem.unheighting(),
                         liftSubsystem.ptoUnclimbing()
                 )
         );
@@ -194,31 +208,23 @@ public class ActualTeleOpBlue extends BaseOpModeBlue {
                 )
         );
 
-        gb1(DPAD_LEFT).whenActive(
+        gb1(X).whenActive(
                 new SequentialCommandGroup(
                         pitchSubsystem.pitchIntake(),
                         intakeSubsystemBlue.dropdownIntake()
                 )
         );
-        gb1(DPAD_RIGHT).whenActive(
+        gb1(B).whenActive(
                 new SequentialCommandGroup(
                         intakeSubsystemBlue.dropdownStow(),
                         pitchSubsystem.pitchStow()
                 )
         );
-        gb1(DPAD_UP).whenActive(
+        gb1(Y).whenActive(
                 new SequentialCommandGroup(
                         intakeSubsystemBlue.dropdownEject(),
                         pitchSubsystem.pitchEject()
                 )
-        );
-        gb1(B).toggleWhenActive(
-                pitchSubsystem.pitchIntake(),
-                pitchSubsystem.pitchStow()
-        );
-        gb1(X).toggleWhenActive(
-                intakeSubsystemBlue.dropdownIntake(),
-                intakeSubsystemBlue.dropdownStow()
         );
         gb2(DPAD_UP).whenActive(
                 new SequentialCommandGroup(
