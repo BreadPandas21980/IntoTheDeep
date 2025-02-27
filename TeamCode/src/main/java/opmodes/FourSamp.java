@@ -1,6 +1,5 @@
 package opmodes;
 
-import static opmodes.FourSpec.first;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -59,6 +58,7 @@ public class FourSamp extends OpMode {
     public boolean iansdecisiveness = true;
 
     ElapsedTime timer = new ElapsedTime();
+    public static boolean first = true;
     ElapsedTime timer2 = new ElapsedTime();
     public static boolean whatthesigma = false;
     public static boolean firstimu = true;
@@ -103,7 +103,7 @@ public class FourSamp extends OpMode {
     private final Pose pickup1ControlPose = new Pose(120, 125, Math.toRadians(115));
 
     /** Lowest (First) Sample from the Spike Mark */
-    private final Pose pickup1Pose = new Pose(118, 120, Math.toRadians(85));
+    private final Pose pickup1Pose = new Pose(118, 120, Math.toRadians(95));
     private final Pose scorePose2 = new Pose(126, 127, Math.toRadians(45));
 
     /** Middle (Second) Sample from the Spike Mark */
