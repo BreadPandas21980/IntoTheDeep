@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * to 2020 season.
  */
 @Config
-public class IntakeSubsystemBlue extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase {
     public static boolean autoDisabled = false;
 
     ElapsedTime time = new ElapsedTime();
@@ -45,7 +45,7 @@ public class IntakeSubsystemBlue extends SubsystemBase {
     public static boolean uhohTwo = false;
     ArrayList<Integer> data = new ArrayList<Integer>(); //1 is red, 2 is yellow, 3 is blue, -1 is nothing
 
-    public IntakeSubsystemBlue(CRServo intakeServo, Servo dropdownServo ) {
+    public IntakeSubsystem(CRServo intakeServo, Servo dropdownServo ) {
         this.intakeServo = intakeServo;
         this.dropdownServo = dropdownServo;
         data.add(-1);

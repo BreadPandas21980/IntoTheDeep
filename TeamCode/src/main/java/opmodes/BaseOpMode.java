@@ -8,24 +8,20 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.internal.network.ControlHubApChannelManager;
 
 import subsystems.ArmSubsystem;
 import subsystems.ClawSubsystem;
 import subsystems.ColorSubsystemBlue;
 import subsystems.DriveSubsystem;
 import subsystems.ExtendoSubsystem;
-import subsystems.IntakeSubsystemBlue;
+import subsystems.IntakeSubsystem;
 import subsystems.LiftSubsystem;
 import subsystems.PitchSubsystem;
 import subsystems.PtoSubsystem;
@@ -51,7 +47,7 @@ import org.firstinspires.ftc.teamcode.util.TriggerGamepadEx;
  */
 
 
-public class BaseOpModeBlue extends CommandOpMode {
+public class BaseOpMode extends CommandOpMode {
     public static boolean climbing;
 
     protected MotorEx fL, fR, bL, bR,  extendoMotor, leftSlide, rightSlide;
@@ -66,7 +62,7 @@ public class BaseOpModeBlue extends CommandOpMode {
     protected PtoSubsystem ptoSubsystem;
     protected LiftSubsystem liftSubsystem;
     protected ArmSubsystem armSubsystem;
-    protected IntakeSubsystemBlue intakeSubsystemBlue;
+    protected IntakeSubsystem intakeSubsystemBlue;
     protected StiltSubsystem stiltSubsystem;
     protected WristSubsystem wristSubsystem;
     protected ExtendoSubsystem extendoSubsystem;
@@ -104,7 +100,7 @@ public class BaseOpModeBlue extends CommandOpMode {
 
         liftSubsystem = new LiftSubsystem(leftSlide, rightSlide);
         armSubsystem = new ArmSubsystem(leftArm, rightArm);
-        intakeSubsystemBlue = new IntakeSubsystemBlue(intakeServo, dropdownServo);
+        intakeSubsystemBlue = new IntakeSubsystem(intakeServo, dropdownServo);
         pitchSubsystem = new PitchSubsystem(pitchServo);
         stiltSubsystem = new StiltSubsystem(leftStilt, rightStilt);
         ptoSubsystem = new PtoSubsystem(leftPTO, rightPTO);

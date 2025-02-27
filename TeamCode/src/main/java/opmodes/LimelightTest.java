@@ -8,9 +8,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
-import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.BezierLine;
-import com.pedropathing.pathgen.Path;
 import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
@@ -28,8 +26,6 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-
 import java.util.List;
 
 import pedroPathing.constants.FConstants;
@@ -38,7 +34,7 @@ import subsystems.ArmSubsystem;
 import subsystems.ClawSubsystem;
 import subsystems.ColorSubsystemBlue;
 import subsystems.ExtendoSubsystem;
-import subsystems.IntakeSubsystemBlue;
+import subsystems.IntakeSubsystem;
 import subsystems.LiftSubsystem;
 import subsystems.WristSubsystem;
 
@@ -66,7 +62,7 @@ public class LimelightTest extends OpMode {
     public static boolean whatthesigma = false;
     public static boolean firstimu = true;
     public static boolean firstcool = true;
-    protected IntakeSubsystemBlue intakeSubsystem;
+    protected IntakeSubsystem intakeSubsystem;
     protected ColorSubsystemBlue colorSubsystem;
     protected ColorSensor colorSensor;
     protected MotorEx leftSlide, rightSlide, extendoMotor, intakeMotor;
@@ -275,7 +271,7 @@ public class LimelightTest extends OpMode {
         firstimu = true;
         rightArm.setDirection(Servo.Direction.REVERSE);
         intakeMotor.setInverted(true);
-        intakeSubsystem = new IntakeSubsystemBlue(intakeServo, dropdownServo);
+        intakeSubsystem = new IntakeSubsystem(intakeServo, dropdownServo);
         leftSlide.resetEncoder();
         extendoMotor =new MotorEx(hardwareMap, "extendoMotor");
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);

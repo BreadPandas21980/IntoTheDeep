@@ -31,7 +31,7 @@ import subsystems.ArmSubsystem;
 import subsystems.ClawSubsystem;
 import subsystems.ColorSubsystemBlue;
 import subsystems.ExtendoSubsystem;
-import subsystems.IntakeSubsystemBlue;
+import subsystems.IntakeSubsystem;
 import subsystems.LiftSubsystem;
 import subsystems.PitchSubsystem;
 import subsystems.PtoSubsystem;
@@ -62,7 +62,7 @@ public class FiveSpec extends OpMode {
     ElapsedTime timer2 = new ElapsedTime();
     public static boolean whatthesigma = false;
     public static boolean firstimu = true;
-    protected IntakeSubsystemBlue intakeSubsystem;
+    protected IntakeSubsystem intakeSubsystem;
     protected ColorSubsystemBlue colorSubsystem;
     protected ColorSensor colorSensor;
     protected MotorEx leftSlide, rightSlide, extendoMotor;
@@ -622,7 +622,7 @@ public class FiveSpec extends OpMode {
         rightPTO = hardwareMap.get(Servo.class, "rightPTO");
         rightArm.setDirection(Servo.Direction.REVERSE);
         pitchServo = hardwareMap.get(Servo.class, "pitchServo");
-        intakeSubsystem = new IntakeSubsystemBlue(intakeServo, dropdownServo);
+        intakeSubsystem = new IntakeSubsystem(intakeServo, dropdownServo);
         pitchSubsystem = new PitchSubsystem(pitchServo);
         leftSlide.resetEncoder();
         extendoMotor =new MotorEx(hardwareMap, "extendoMotor");
