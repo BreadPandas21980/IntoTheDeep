@@ -36,7 +36,7 @@ public class LiftSubsystem extends SubsystemBase {
     public static int specimenPrepareHeight = 240;
     public static int specimenPrepareHeightTele = 314;
     public static int sampPrepHeight = 1400;
-    public static int specimenScoreHeight = 900;
+    public static int specimenScoreHeight = 500;
     public static int groundHeight = 0;
     public static int highBucketHeight = 800;
 

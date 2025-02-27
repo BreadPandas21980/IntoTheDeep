@@ -35,7 +35,7 @@ public class ExtendoSubsystem extends SubsystemBase {
     public static double kI = 0;
     public static double kD = 0;
     public static double kF = 0.8;
-    public static double tolerance = 500;
+    public static double tolerance = 300;
     public static int targetPos = 0;
 
     public static int SOFTWARE_LIMIT = 22000;
