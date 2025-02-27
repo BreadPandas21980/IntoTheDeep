@@ -218,10 +218,10 @@ public class DriveSubsystem extends SubsystemBase {
         if(LiftSubsystem.ptoClimb) {
 
 
-            bL.set(-1);
-            bR.set(-1);
-            fL.set(-1);
-            fR.set(-1);
+            bL.set(1);
+            bR.set(1);
+            fL.set(1);
+            fR.set(1);
         }
 
 
