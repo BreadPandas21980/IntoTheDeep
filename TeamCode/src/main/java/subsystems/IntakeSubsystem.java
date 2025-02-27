@@ -36,9 +36,9 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double IN_POWER_SAMP = .8;
     public static double IN_POWER_SPEC = 0.75;
     public static double DROPDOWN_INTAKE = 0.32;
-    public static double DROPDOWN_STOW = .8;
+    public static double DROPDOWN_STOW = .83;
     public static double DROPDOWN_WALL = .45;
-    public static double DROPDOWN_EJECT = .5;
+    public static double DROPDOWN_EJECT = .7;
     public static boolean colorSeen = false;
 
 
@@ -123,6 +123,12 @@ public class IntakeSubsystem extends SubsystemBase {
         if(!autoDisabled) {
 
             intakeServo.setPower(AUTO_IDLE_POWER);
+        }
+    }
+    public void autoIdleReal() {
+        if(!autoDisabled) {
+
+            intakeServo.setPower(0);
         }
     }
     public void autoDropdownIntake() {

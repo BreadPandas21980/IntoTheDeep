@@ -18,7 +18,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     private final MecanumDrive drive;
 
-    public static double rotateFactor = 0.75;
+    public static double rotateFactor = 0.65;
     public static double rotateFactorSlow = .9;
     public MotorEx fL, fR, bL, bR;
     public static double slowFactor = 2;

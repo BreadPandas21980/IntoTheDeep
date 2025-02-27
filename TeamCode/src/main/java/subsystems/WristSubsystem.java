@@ -21,7 +21,7 @@ public class WristSubsystem extends SubsystemBase {
 
     private final Servo  flipServo;
 
-    public static double WRIST_INTAKE_POS = .3;
+    public static double WRIST_INTAKE_POS = .31;
     public static double WRIST_OUT_SPEC_POS = .4;
     //tele = .25
     // auto =
