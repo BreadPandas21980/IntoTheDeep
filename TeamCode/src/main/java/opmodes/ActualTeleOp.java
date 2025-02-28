@@ -81,20 +81,15 @@ public class ActualTeleOp extends BaseOpMode {
          */
 
 
-        gb1(LEFT_TRIGGER).whenInactive(
+
+        gb1(LEFT_TRIGGER).toggleWhenActive(
+                intakeSubsystemBlue.inIntake(),
                 intakeSubsystemBlue.idle()
         );
 
-        gb1(LEFT_TRIGGER).whileActiveContinuous(
-                intakeSubsystemBlue.inIntake()
-        );
-
-        gb1(RIGHT_TRIGGER).whenInactive(
+        gb1(RIGHT_TRIGGER).toggleWhenActive(
+                intakeSubsystemBlue.outIntake(),
                 intakeSubsystemBlue.idle()
-        );
-
-        gb1(RIGHT_TRIGGER).whileActiveContinuous(
-                intakeSubsystemBlue.outIntake()
         );
 
 
