@@ -92,7 +92,7 @@ public class LimelightTest extends OpMode {
      * Lets assume the Robot is facing the human player and we want to score in the bucket */
 
     /** Start Pose of our robot */
-    private final Pose startPose = new Pose(108, 135, Math.toRadians(90));
+    private final Pose startPose = new Pose(108, 135, Math.toRadians(0));
     private final Pose viewPose = new Pose(85, 100, Math.toRadians(0));
     private Pose pickupPose = new Pose(85, 100, Math.toRadians(0));
 
@@ -256,7 +256,6 @@ public class LimelightTest extends OpMode {
         leftSlide = new MotorEx(hardwareMap, "leftSlide");
         rightSlide = new MotorEx(hardwareMap, "rightSlide");
         rightSlide.setInverted(true);
-        intakeMotor = new MotorEx(hardwareMap, "intakeMotor");
         dropdownServo = hardwareMap.get(Servo.class, "dropdownServo");
         leftArm = hardwareMap.get(Servo.class, "leftArm");
         rightArm = hardwareMap.get(Servo.class, "rightArm");
@@ -270,7 +269,6 @@ public class LimelightTest extends OpMode {
         clawSubsystem = new ClawSubsystem(clawServo);
         firstimu = true;
         rightArm.setDirection(Servo.Direction.REVERSE);
-        intakeMotor.setInverted(true);
         intakeSubsystem = new IntakeSubsystem(intakeServo, dropdownServo);
         leftSlide.resetEncoder();
         extendoMotor =new MotorEx(hardwareMap, "extendoMotor");
