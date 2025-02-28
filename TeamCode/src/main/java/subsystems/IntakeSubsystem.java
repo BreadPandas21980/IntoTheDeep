@@ -119,6 +119,12 @@ public class IntakeSubsystem extends SubsystemBase {
             intakeServo.setPower(FULL_POWER);
         }
     }
+    public void autoOuttake() {
+        if(!autoDisabled) {
+
+            intakeServo.setPower(-1);
+        }
+    }
     public void autoIdle() {
         if(!autoDisabled) {
 
