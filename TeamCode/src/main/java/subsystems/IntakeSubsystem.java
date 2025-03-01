@@ -36,8 +36,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double IN_POWER_SAMP = .8;
     public static double IN_POWER_SPEC = 0.75;
     public static double DROPDOWN_INTAKE = 0.32;
-    public static double DROPDOWN_STOW = .83;
-    public static double DROPDOWN_WALL = .45;
+    public static double DROPDOWN_STOW = .95;
+    public static double DROPDOWN_WALL = .50;
     public static double DROPDOWN_EJECT = .7;
     public static boolean colorSeen = false;
 
