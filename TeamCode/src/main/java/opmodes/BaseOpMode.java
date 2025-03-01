@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import subsystems.ArmSubsystem;
 import subsystems.ClawSubsystem;
@@ -206,6 +207,10 @@ public class BaseOpMode extends CommandOpMode {
         rightPTO.setPosition(PtoSubsystem.PTO_HALF_RIGHT);
         leftStilt.setPosition(StiltSubsystem.STILTS_UP);
         rightStilt.setPosition(StiltSubsystem.STILTS_UP);
+
+        if (colorSensor instanceof SwitchableLight) {
+            ((SwitchableLight)colorSensor).enableLight(false);
+        }
     }
 
     public GamepadButton gb1(GamepadKeys.Button button) {
