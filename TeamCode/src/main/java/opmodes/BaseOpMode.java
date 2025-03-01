@@ -53,8 +53,10 @@ public class BaseOpMode extends CommandOpMode {
 
     protected MotorEx fL, fR, bL, bR,  extendoMotor, leftSlide, rightSlide;
     protected DcMotorEx fLDC, fRDC, bLDC, bRDC,   extendoMotorDC, leftSlideDC, rightSlideDC;
-    protected Servo clawServo, flipServo, pitchServo, leftStilt, rightStilt, leftPTO, rightPTO, dropdownServo;
+    protected Servo clawServo, flipServo, pitchServo, leftStilt, rightStilt, leftPTO, rightPTO,
+            dropdownServo, sweeperServo;
     protected Servo leftArm, rightArm;
+
     protected CRServo intakeServo;
     protected ColorSensor colorSensor;
 
@@ -110,6 +112,7 @@ public class BaseOpMode extends CommandOpMode {
         wristSubsystem = new WristSubsystem( flipServo);
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);
         clawSubsystem = new ClawSubsystem(clawServo);
+        sweeperSubsystem = new SweeperSubsystem(sweeperServo);
         colorSubsystem = new ColorSubsystemBlue(colorSensor);
 
 
@@ -156,6 +159,7 @@ public class BaseOpMode extends CommandOpMode {
             dropdownServo = hardwareMap.get(Servo.class, "dropdownServo");
             leftArm = hardwareMap.get(Servo.class, "leftArm");
             rightArm = hardwareMap.get(Servo.class, "rightArm");
+            sweeperServo = hardwareMap.get(Servo.class, "sweeperServo");
 
 
      //   }
