@@ -94,7 +94,8 @@ public class ActualTeleOp extends BaseOpMode {
         );
 
         gb1(DPAD_DOWN).toggleWhenActive(
-                sweeperSubsystem.notOpen()
+                sweeperSubsystem.notOpen(),
+                new WaitCommand(175)
         );
 
         gb1(LEFT_TRIGGER).toggleWhenActive(
