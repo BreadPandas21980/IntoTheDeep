@@ -36,6 +36,7 @@ import subsystems.LiftSubsystem;
 import subsystems.PitchSubsystem;
 import subsystems.PtoSubsystem;
 import subsystems.StiltSubsystem;
+import subsystems.SweeperSubsystem;
 import subsystems.WristSubsystem;
 
 /**
@@ -77,6 +78,9 @@ public class FiveSpecIntake extends OpMode {
     protected WristSubsystem wristSubsystem;
     protected PitchSubsystem pitchSubsystem;
     protected ClawSubsystem clawSubsystem;
+
+    protected SweeperSubsystem sweeperSubsystem;
+
     protected ExtendoSubsystem extendoSubsystem;
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;

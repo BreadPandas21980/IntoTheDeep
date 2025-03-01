@@ -83,7 +83,7 @@ public class ActualTeleOp extends BaseOpMode {
           colorSubsystem.poopingOff()
         );
          */
-        gb1(RIGHT_BUMPER).whileActiveContinuous(
+        gb2(RIGHT_BUMPER).whileActiveContinuous(
             new SequentialCommandGroup(
         //i will do half closed for this command
                     sweeperSubsystem.fullyOpen(),
@@ -95,18 +95,16 @@ public class ActualTeleOp extends BaseOpMode {
 
         );
 
-        gb1(LEFT_BUMPER).whenActive(
+        gb2(LEFT_BUMPER).whenActive(
                 sweeperSubsystem.notOpen()
         );
 
-        gb1(LEFT_TRIGGER).toggleWhenActive(
-                intakeSubsystemBlue.inIntake(),
-                intakeSubsystemBlue.idle()
+        gb1(LEFT_TRIGGER).whileActiveContinuous(
+                intakeSubsystemBlue.inIntake()
         );
 
-        gb1(RIGHT_TRIGGER).toggleWhenActive(
-                intakeSubsystemBlue.outIntake(),
-                intakeSubsystemBlue.idle()
+        gb1(RIGHT_TRIGGER).whileActiveContinuous(
+                intakeSubsystemBlue.outIntake()
         );
 
 
