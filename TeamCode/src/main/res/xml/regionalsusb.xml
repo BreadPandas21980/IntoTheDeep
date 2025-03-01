@@ -24,6 +24,7 @@
             <ContinuousRotationServo name="intakeServo" port="1" />
             <Servo name="rightStilt" port="2" />
             <Servo name="pitchServo" port="3" />
+            <Servo name="sweeperServo" port="4" />
             <Servo name="dropdownServo" port="5" />
             <RevColorSensorV3 name="colorSensor" port="0" bus="2" />
             <ControlHubImuBHI260AP name="imu" port="0" bus="0" />
