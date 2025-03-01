@@ -24,7 +24,7 @@ public class PitchSubsystem extends SubsystemBase {
     public static double PITCH_INTAKE = .4;
     public static double PITCH_STOW = .42;
     public static double PITCH_EJECT = .6;
-    public static double PITCH_WALL = .8;
+    public static double PITCH_WALL = .7;
 
 
     public PitchSubsystem(Servo pitchServo ) {
