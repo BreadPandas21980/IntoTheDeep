@@ -81,7 +81,6 @@ public class ActualTeleOp extends BaseOpMode {
          */
 
 
-
         gb1(LEFT_TRIGGER).toggleWhenActive(
                 intakeSubsystemBlue.inIntake(),
                 intakeSubsystemBlue.idle()
