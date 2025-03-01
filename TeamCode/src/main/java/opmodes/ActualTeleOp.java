@@ -20,6 +20,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
+import subsystems.ClawSubsystem;
+import subsystems.SweeperSubsystem;
+
 
 @Config
 //@Disabled
@@ -79,7 +82,20 @@ public class ActualTeleOp extends BaseOpMode {
           colorSubsystem.poopingOff()
         );
          */
+        gb1(DPAD_UP).whileActiveContinuous(
+            new SequentialCommandGroup(
+        //i will do half closed for this command
+                    sweeperSubsystem.fullyOpen(),
+                    new WaitCommand(175),
+                    sweeperSubsystem.halfClosed()
+                )
 
+
+        );
+
+        gb1(DPAD_DOWN).toggleWhenActive(
+                sweeperSubsystem.notOpen()
+        );
 
         gb1(LEFT_TRIGGER).toggleWhenActive(
                 intakeSubsystemBlue.inIntake(),
