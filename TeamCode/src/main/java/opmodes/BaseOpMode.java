@@ -26,6 +26,7 @@ import subsystems.LiftSubsystem;
 import subsystems.PitchSubsystem;
 import subsystems.PtoSubsystem;
 import subsystems.StiltSubsystem;
+import subsystems.SweeperSubsystem;
 import subsystems.WristSubsystem;
 import util.GamepadTrigger;
 import util.TriggerGamepadEx;
@@ -67,6 +68,8 @@ public class BaseOpMode extends CommandOpMode {
     protected WristSubsystem wristSubsystem;
     protected ExtendoSubsystem extendoSubsystem;
     protected ClawSubsystem clawSubsystem;
+
+    protected SweeperSubsystem sweeperSubsystem;
     protected ColorSubsystemBlue colorSubsystem;
     protected PitchSubsystem pitchSubsystem;
 

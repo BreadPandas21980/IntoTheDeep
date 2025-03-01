@@ -15,32 +15,18 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class SweeperSubsystem extends SubsystemBase {
 
     public static boolean autoDisabled = false;
-    private final Servo clawServo;
-    public static  double FULLY_OPEN = 0.23;
+    private final Servo sweeperServo;
+    public static double FULLY_OPEN = 0.23;
+    //change when find actual positions
+    boolean sweeperOpen;
+    public static double NOT_OPEN = 0.5;
 
-    boolean clawOpen;
-    public static  double NOT_OPEN = 0.5;\\
-
-
-
-
-
+    public static double HALF_CLOSED = 0.4;
+    //change when find actual positions
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    public SweeperSubsystem(Servo clawServo) {
-        this.clawServo = clawServo;
+    public SweeperSubsystem(Servo sweeperServo) {
+        this.sweeperServo = sweeperServo;
     }
 
     public void setAutoDisabled(boolean disabled) {
@@ -49,51 +35,48 @@ public class SweeperSubsystem extends SubsystemBase {
 
     public Command fullyOpen() {
         return new InstantCommand(() -> {
-            clawServo.setPosition(FULLY_OPEN);
-            clawOpen = true;
+            sweeperServo.setPosition(FULLY_OPEN);
+            sweeperOpen = true;
         }, this);
     }
+
+    public Command halfClosed() {
+        return new InstantCommand(() -> {
+            sweeperServo.setPosition(HALF_CLOSED);
+            sweeperOpen = true;
+        }, this);
+    }
+
     public Command notOpen() {
         return new InstantCommand(() -> {
-            clawServo.setPosition(NOT_OPEN);
-            clawOpen = false;
+            sweeperServo.setPosition(NOT_OPEN);
+            sweeperOpen = false;
         }, this);
     }
 
 
-    public void autoClawOpen() {
-        if(!autoDisabled) {
+    public void autoSweeperOpen() {
+        if (!autoDisabled) {
 
-            clawServo.setPosition(FULLY_OPEN);
+            sweeperServo.setPosition(FULLY_OPEN);
         }
     }
-    public void autoClawClosed() {
-        if(!autoDisabled) {
 
-            clawServo.setPosition(NOT_OPEN);
+    public void autoSweeperClosed() {
+        if (!autoDisabled) {
+
+            sweeperServo.setPosition(NOT_OPEN);
         }
-    }
-    public Command clawSwitch() {
-        return new InstantCommand(() ->  {
-                if(!clawOpen) {
-                    clawServo.setPosition(FULLY_OPEN);
-                } else {
-                    clawServo.setPosition(NOT_OPEN);
-                }
-        });
-    }
-    @Override
-    public void periodic() {
 
-        if(clawServo.getPosition() == NOT_OPEN) {
-            clawOpen = false;
-        } else {
-            clawOpen = true;
+    }
+
+    public void autoSweeperHalf_Closed() {
+        if (!autoDisabled) {
+
+            sweeperServo.setPosition(HALF_CLOSED);
         }
 
 
     }
-
-
 
 }
