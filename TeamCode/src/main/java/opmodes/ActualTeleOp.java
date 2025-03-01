@@ -6,6 +6,7 @@ import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_DOWN;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_LEFT;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_RIGHT;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.DPAD_UP;
+import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.LEFT_BUMPER;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.RIGHT_BUMPER;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.X;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.Y;
@@ -82,20 +83,20 @@ public class ActualTeleOp extends BaseOpMode {
           colorSubsystem.poopingOff()
         );
          */
-        gb1(DPAD_UP).whileActiveContinuous(
+        gb1(RIGHT_BUMPER).whileActiveContinuous(
             new SequentialCommandGroup(
         //i will do half closed for this command
                     sweeperSubsystem.fullyOpen(),
-                    new WaitCommand(175),
-                    sweeperSubsystem.halfClosed()
+                    new WaitCommand(250),
+                    sweeperSubsystem.halfClosed(),
+                    new WaitCommand(250)
                 )
 
 
         );
 
-        gb1(DPAD_DOWN).toggleWhenActive(
-                sweeperSubsystem.notOpen(),
-                new WaitCommand(175)
+        gb1(LEFT_BUMPER).whenActive(
+                sweeperSubsystem.notOpen()
         );
 
         gb1(LEFT_TRIGGER).toggleWhenActive(
