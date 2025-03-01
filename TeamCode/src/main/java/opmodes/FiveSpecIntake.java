@@ -51,7 +51,6 @@ import subsystems.WristSubsystem;
 @Config
 @Autonomous(name = "FiveSpecIntake", group = "!!!!yay")
 public class FiveSpecIntake extends OpMode {
-
     ElapsedTime timerImu = new ElapsedTime();
     public boolean travis = false;
     public boolean iansigma = true;
