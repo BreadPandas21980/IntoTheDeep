@@ -101,12 +101,12 @@ public class FiveSpecIntake extends OpMode {
 
     /** Start Pose of our robot */
     private final Pose startPose = new Pose(56, 134, Math.toRadians(90)); //56
-    private final Pose scorePose1 = new Pose(70, 107, Math.toRadians(90));
+    private final Pose scorePose1 = new Pose(70, 105, Math.toRadians(90));
     private final Pose controlIntakePose1 = new Pose(48, 132, Math.toRadians(90));
-    private final Pose intakePose1 = new Pose(44, 120, Math.toRadians(50));
+    private final Pose intakePose1 = new Pose(44, 120, Math.toRadians(45));
     private final Pose intakePose1b = new Pose(37, 120, Math.toRadians(0));
-    private final Pose intakePose2 = new Pose(35, 120, Math.toRadians(55));
-    private final Pose intakePose2b = new Pose(33, 120, Math.toRadians(-10));
+    private final Pose intakePose2 = new Pose(35, 122, Math.toRadians(65));
+    private final Pose intakePose2b = new Pose(33, 120, Math.toRadians(-20));
     private final Pose intakePose3 = new Pose(25, 120, Math.toRadians(53));
     private final Pose intakePose3b = new Pose(28, 115, Math.toRadians(-10));
     private final Pose grabPrepPose2 = new Pose(27, 115, Math.toRadians(90));
@@ -271,7 +271,7 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(liftSubsystem.getLeftEncoderVal() > 400) {
+                    if(liftSubsystem.getLeftEncoderVal() > 500) {
                         clawSubsystem.autoClawOpen();
                     }
                     /* Score Preload */
@@ -309,8 +309,9 @@ public class FiveSpecIntake extends OpMode {
                     }
 
                     if(timer.seconds() > .9 || colorSubsystem.stupidstpid != -1) {
-                     //   intakeSubsystem.autoDropdownEject();
-                      //  pitchSubsystem.autoPitchEject();
+                        //why was this commented out. Lowkey scared that it won't work
+                     intakeSubsystem.autoDropdownEject();
+                     pitchSubsystem.autoPitchEject();
                     }
                     if(timer.seconds() > 1|| colorSubsystem.stupidstpid != -1) {
 
