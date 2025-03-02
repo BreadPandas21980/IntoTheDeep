@@ -101,9 +101,9 @@ public class FiveSpecIntake extends OpMode {
 
     /** Start Pose of our robot */
     private final Pose startPose = new Pose(56, 134, Math.toRadians(90)); //56
-    private final Pose scorePose1 = new Pose(70, 105, Math.toRadians(90));
-    private final Pose controlIntakePose1 = new Pose(48, 132, Math.toRadians(90));
-    private final Pose intakePose1 = new Pose(44, 120, Math.toRadians(45));
+    private final Pose scorePose1 = new Pose(68, 106.5, Math.toRadians(90));
+    private final Pose controlIntakePose1 = new Pose(50, 135, Math.toRadians(90));
+    private final Pose intakePose1 = new Pose(46, 122, Math.toRadians(50));
     private final Pose intakePose1b = new Pose(37, 120, Math.toRadians(0));
     private final Pose intakePose2 = new Pose(35, 122, Math.toRadians(65));
     private final Pose intakePose2b = new Pose(33, 120, Math.toRadians(-20));
@@ -121,7 +121,6 @@ public class FiveSpecIntake extends OpMode {
     private final Pose grabPrepPose5 = new Pose(36, 115, Math.toRadians(90));
     private final Pose grabPose5 = new Pose(36, 127, Math.toRadians(90));
     private final Pose scorePose5 = new Pose(65, 107, Math.toRadians(90));
-
 
     /** Park Pose for our robot, after we do all of the scoring. */
     private final Pose parkPose = new Pose(36, 130, Math.toRadians(90));
@@ -249,14 +248,14 @@ public class FiveSpecIntake extends OpMode {
                     setPathState(1);
                 pathTimer.resetTimer();
                 clawSubsystem.autoClawClosed();
-                armSubsystem.autoArmSpec();
-                wristSubsystem.autoWristSpec();
+                armSubsystem.autoArmStraight();
+                wristSubsystem.autoWristScoreSpecPosAuto();
                 break;
             case 1:
                 timerImu.reset();
                 liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele);
-                armSubsystem.autoArmSpec();
-                wristSubsystem.autoWristSpec();
+                armSubsystem.autoArmStraight();
+                wristSubsystem.autoWristScoreSpecPosAuto();
                 /* You could check for
                 - Follower State: "if(!follower.isBusy() {}"
                 - Time: "if(pathTimer.getElapsedTimeSeconds() > 1) {}"
@@ -271,7 +270,8 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(liftSubsystem.getLeftEncoderVal() > 500) {
+                    
+                    /*if(liftSubsystem.getLeftEncoderVal() > 1000) {
                         clawSubsystem.autoClawOpen();
                     }
                     /* Score Preload */
