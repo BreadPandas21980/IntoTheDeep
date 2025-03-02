@@ -35,7 +35,7 @@ public class ArmSubsystem extends SubsystemBase {
     public static double IN_POS = 0.03;
     public static double WALL_POS = 1;
     //new ositon
-    public static double SAMP_STRAIHGTPOS = .2;
+    public static double SAMP_STRAIGHT = .2;
     public ArmSubsystem(Servo leftArm, Servo rightArm ) {
         this.leftArm = leftArm;
         this.rightArm = rightArm;
@@ -67,10 +67,10 @@ public class ArmSubsystem extends SubsystemBase {
             rightArm.setPosition(WALL_POS);
         }, this);
     }
-    public Command samp_straightPos() {
+    public Command sampStraight() {
         return new InstantCommand(() -> {
-            leftArm.setPosition(SAMP_STRAIHGTPOS);
-            rightArm.setPosition(SAMP_STRAIHGTPOS);
+            leftArm.setPosition(SAMP_STRAIGHT);
+            rightArm.setPosition(SAMP_STRAIGHT);
         }, this);
     }
     public Command armIn() {
@@ -122,11 +122,11 @@ public class ArmSubsystem extends SubsystemBase {
             rightArm.setPosition(IN_POS);
         }
     }
-    public void autoSAMP_PosIn() {
+    public void autoSAMP_STRAIGHT() {
         if(!autoDisabled) {
 
-            leftArm.setPosition(SAMP_STRAIHGTPOS);
-            rightArm.setPosition(SAMP_STRAIHGTPOS);
+            leftArm.setPosition(SAMP_STRAIGHT);
+            rightArm.setPosition(SAMP_STRAIGHT);
         }
     }
 
