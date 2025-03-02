@@ -83,26 +83,41 @@ public class ActualTeleOp extends BaseOpMode {
           colorSubsystem.poopingOff()
         );
          */
-        gb2(RIGHT_BUMPER).whileActiveContinuous(
+        /*gb1(LEFT_BUMPER).whenActive(
+                new SequentialCommandGroup(
+                        armSubsystem.samp_straightPos(),
+                        new WaitCommand(250),
+                        wristSubsystem.wristWorkNowPease()
+                )
+        );
+
+         */
+
+        gb1(LEFT_BUMPER).whenActive(
             new SequentialCommandGroup(
         //i will do half closed for this command
                     sweeperSubsystem.fullyOpen(),
                     new WaitCommand(250),
-                    sweeperSubsystem.halfClosed(),
-                    new WaitCommand(250)
+                    sweeperSubsystem.notOpen(),
+                    new WaitCommand(250),
+                    sweeperSubsystem.notOpen()
                 )
 
 
         );
 
-        gb2(LEFT_BUMPER).whenActive(
+        gb2(LEFT_BUMPER).whileActiveContinuous(
                 sweeperSubsystem.notOpen()
         );
-
         gb1(LEFT_TRIGGER).whileActiveContinuous(
                 intakeSubsystemBlue.inIntake()
         );
-
+        gb1(LEFT_TRIGGER).whenInactive(
+                intakeSubsystemBlue.idle()
+        );
+        gb1(RIGHT_TRIGGER).whenInactive(
+                intakeSubsystemBlue.idle()
+        );
         gb1(RIGHT_TRIGGER).whileActiveContinuous(
                 intakeSubsystemBlue.outIntake()
         );
