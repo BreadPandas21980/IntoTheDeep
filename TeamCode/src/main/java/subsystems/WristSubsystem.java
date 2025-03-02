@@ -29,6 +29,8 @@ public class WristSubsystem extends SubsystemBase {
 
     public static double WRIST_WALL_POS = .4;
 
+    public static double WRIST_SCORE_SPEC_POS_AUTO = .5;
+
 
     public WristSubsystem( Servo flipServo) {
         this.flipServo = flipServo;
@@ -44,7 +46,16 @@ public class WristSubsystem extends SubsystemBase {
     public Command wristFlipSamp() {
         return new InstantCommand(() -> flipServo.setPosition(WRIST_OUT_SAMP_POS), this);
     }
+    public Command wristWorkNowPease() {
+        return new InstantCommand(() -> flipServo.setPosition(WRIST_SCORE_SPEC_POS_AUTO), this);
+    }
 
+    public void autoWristScoreSpecPosAuto() {
+        if(!autoDisabled) {
+
+            flipServo.setPosition(WRIST_SCORE_SPEC_POS_AUTO);
+        }
+    }
     public void autoWristWall() {
         if(!autoDisabled) {
 
