@@ -19,7 +19,7 @@ public class SweeperSubsystem extends SubsystemBase {
     public static double FULLY_OPEN = 1;
     //change when find actual positions
     boolean sweeperOpen;
-    public static double NOT_OPEN = 0.1;
+    public static double NOT_OPEN = 0.2;
 
     public static double HALF_CLOSED = 0.5;
     //change when find actual positions
