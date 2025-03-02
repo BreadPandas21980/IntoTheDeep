@@ -93,7 +93,7 @@ public class FourSpec extends OpMode {
 
     /** Start Pose of our robot */ 
     private final Pose startPose = new Pose(56, 134, Math.toRadians(90)); //56
-    private final Pose scorePose1 = new Pose(70, 105, Math.toRadians(90));
+    private final Pose scorePose1 = new Pose(68, 106.5, Math.toRadians(90));
     private final Pose transitionPose = new Pose(39, 110, Math.toRadians(90));
     private final Pose push1StartControlPose = new Pose(39, 72, Math.toRadians(90));
     // hi jackie ;-;
@@ -211,9 +211,9 @@ public class FourSpec extends OpMode {
         switch (pathState) {
             case 0:
                 clawSubsystem.autoClawClosed();
-                armSubsystem.autoArmSpec();
-                wristSubsystem.autoWristSpec();
-                //liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
+                armSubsystem.autoArmStraight();
+                wristSubsystem.autoWristScoreSpecPosAuto();
+                liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele);
                     follower.followPath(scorePreload, false);
                     setPathState(1);
                 timer.reset();

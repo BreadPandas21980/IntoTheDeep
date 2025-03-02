@@ -103,23 +103,23 @@ public class FiveSpecIntake extends OpMode {
     private final Pose startPose = new Pose(56, 134, Math.toRadians(90)); //56
     private final Pose scorePose1 = new Pose(68, 106.5, Math.toRadians(90));
     private final Pose controlIntakePose1 = new Pose(50, 135, Math.toRadians(90));
-    private final Pose intakePose1 = new Pose(46, 122, Math.toRadians(50));
+    private final Pose intakePose1 = new Pose(41, 118, Math.toRadians(50));
     private final Pose intakePose1b = new Pose(37, 120, Math.toRadians(0));
-    private final Pose intakePose2 = new Pose(35, 122, Math.toRadians(65));
+    private final Pose intakePose2 = new Pose(32, 115, Math.toRadians(50));
     private final Pose intakePose2b = new Pose(33, 120, Math.toRadians(-20));
-    private final Pose intakePose3 = new Pose(25, 120, Math.toRadians(53));
-    private final Pose intakePose3b = new Pose(28, 115, Math.toRadians(-10));
+    private final Pose intakePose3 = new Pose(26, 115.5, Math.toRadians(45));
+    private final Pose intakePose3b = new Pose(28, 115, Math.toRadians(-17));
     private final Pose grabPrepPose2 = new Pose(27, 115, Math.toRadians(90));
-    private final Pose grabPose2 = new Pose(27, 127, Math.toRadians(90));
-    private final Pose scorePose2 = new Pose(65, 107, Math.toRadians(90));
+    private final Pose grabPose2 = new Pose(27, 128, Math.toRadians(90));
+    private final Pose scorePose2 = new Pose(65, 106.5, Math.toRadians(90));
     private final Pose grabPrepPose3 = new Pose(36, 115, Math.toRadians(90));
-    private final Pose grabPose3 = new Pose(36, 127, Math.toRadians(90));
-    private final Pose scorePose3 = new Pose(65, 107, Math.toRadians(90));
+    private final Pose grabPose3 = new Pose(36, 130, Math.toRadians(90));
+    private final Pose scorePose3 = new Pose(65, 106.5, Math.toRadians(90));
     private final Pose grabPrepPose4 = new Pose(36, 115, Math.toRadians(90));
-    private final Pose grabPose4 = new Pose(36, 127, Math.toRadians(90));
-    private final Pose scorePose4 = new Pose(65, 107, Math.toRadians(90));
+    private final Pose grabPose4 = new Pose(36, 131, Math.toRadians(90));
+    private final Pose scorePose4 = new Pose(65, 106.5, Math.toRadians(90));
     private final Pose grabPrepPose5 = new Pose(36, 115, Math.toRadians(90));
-    private final Pose grabPose5 = new Pose(36, 127, Math.toRadians(90));
+    private final Pose grabPose5 = new Pose(36, 130, Math.toRadians(90));
     private final Pose scorePose5 = new Pose(65, 107, Math.toRadians(90));
 
     /** Park Pose for our robot, after we do all of the scoring. */
@@ -271,7 +271,7 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
                     
-                    /*if(liftSubsystem.getLeftEncoderVal() > 1000) {
+                    if(liftSubsystem.getLeftEncoderVal() > 750) {
                         clawSubsystem.autoClawOpen();
                     }
                     /* Score Preload */
@@ -330,6 +330,7 @@ public class FiveSpecIntake extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()) {
 
+                    //Outtake 1?
                     intakeSubsystem.autoOuttake();
                     /* Grab Sample */
                     if(first) {
@@ -350,6 +351,7 @@ public class FiveSpecIntake extends OpMode {
                 break;
 
             case 4:
+                intakeSubsystem.autoIntake();
                 intakeSubsystem.autoDropdownIntake();
                 pitchSubsystem.autoPitchIntake();
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
@@ -368,8 +370,8 @@ public class FiveSpecIntake extends OpMode {
                     }
 
                     if(timer.seconds() > .6 || colorSubsystem.stupidstpid != -1) {
-                    //    intakeSubsystem.autoDropdownEject();
-                     //   pitchSubsystem.autoPitchEject();
+                        intakeSubsystem.autoDropdownEject();
+                        pitchSubsystem.autoPitchEject();
                     }
                     if(timer.seconds() > .9|| colorSubsystem.stupidstpid != -1) {
 
@@ -408,6 +410,7 @@ public class FiveSpecIntake extends OpMode {
                 break;
 
             case 6:
+                intakeSubsystem.autoIntake();
                 intakeSubsystem.autoDropdownIntake();
                 pitchSubsystem.autoPitchIntake();
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
@@ -425,9 +428,9 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
 
-                    if(timer.seconds() > .6 || colorSubsystem.stupidstpid != -1) {
-                    //    intakeSubsystem.autoDropdownEject();
-                     //   pitchSubsystem.autoPitchEject();
+                    if(timer.seconds() > .8 || colorSubsystem.stupidstpid != -1) {
+                        intakeSubsystem.autoDropdownEject();
+                        pitchSubsystem.autoPitchEject();
                     }
                     if(timer.seconds() > .9|| colorSubsystem.stupidstpid != -1) {
 
@@ -493,8 +496,8 @@ public class FiveSpecIntake extends OpMode {
                 break;
             case 9:
 
-                armSubsystem.autoArmSpec();
-                wristSubsystem.autoWristSpec();
+                armSubsystem.autoArmStraight();
+                wristSubsystem.autoWristScoreSpecPosAuto();
                 if(!follower.isBusy() || follower.isRobotStuck()) {
                     /* Grab Sample */
                     liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight);
@@ -502,7 +505,7 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(liftSubsystem.getLeftEncoderVal() > 400) {
+                    if(liftSubsystem.getLeftEncoderVal() > 750) {
                         clawSubsystem.autoClawOpen();
                     }
 
@@ -548,8 +551,8 @@ public class FiveSpecIntake extends OpMode {
                 }
                 break;
             case 11:
-                armSubsystem.autoArmSpec();
-                wristSubsystem.autoWristSpec();
+                armSubsystem.autoArmStraight();
+                wristSubsystem.autoWristScoreSpecPosAuto();
 
                 if(!follower.isBusy() || follower.isRobotStuck() || timer.seconds() > 5) {
                     /* Grab Sample */
@@ -559,7 +562,7 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(liftSubsystem.getLeftEncoderVal() > 400) {
+                    if(liftSubsystem.getLeftEncoderVal() > 750) {
                         clawSubsystem.autoClawOpen();
                     }
                     if(timer.seconds() > 0.7) {
@@ -604,8 +607,8 @@ public class FiveSpecIntake extends OpMode {
                 break;
 
             case 13:
-                armSubsystem.autoArmSpec();
-                wristSubsystem.autoWristSpec();
+                armSubsystem.autoArmStraight();
+                wristSubsystem.autoWristScoreSpecPosAuto();
 
                 if(!follower.isBusy() || follower.isRobotStuck() || timer.seconds() > 5) {
                     /* Grab Sample */
@@ -615,7 +618,7 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(liftSubsystem.getLeftEncoderVal() > 400) {
+                    if(liftSubsystem.getLeftEncoderVal() > 750) {
                         clawSubsystem.autoClawOpen();
                     }
                     if(timer.seconds() > 0.7) {
@@ -660,8 +663,8 @@ public class FiveSpecIntake extends OpMode {
                 break;
             case 15:
 
-                armSubsystem.autoArmSpec();
-                wristSubsystem.autoWristSpec();
+                armSubsystem.autoArmStraight();
+                wristSubsystem.autoWristScoreSpecPosAuto();
                 if(!follower.isBusy() || follower.isRobotStuck() || timer.seconds() > 5) {
                     /* Grab Sample */
 
@@ -670,7 +673,7 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(liftSubsystem.getLeftEncoderVal() > 400) {
+                    if(liftSubsystem.getLeftEncoderVal() > 750) {
                         clawSubsystem.autoClawOpen();
                     }
 
