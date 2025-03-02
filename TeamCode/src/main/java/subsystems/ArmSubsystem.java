@@ -32,10 +32,10 @@ public class ArmSubsystem extends SubsystemBase {
     //if Mid_POS doesn't go to a high enough value change to .3
     public static double SPEC_POS_INTAKE = 0.42; //tele = 0 auto =  //THIS ONEEEEEEEEE!!!!!!!!!!!!!!!
     public static double SAMP_POS = .7;
-    public static double IN_POS = 0.05;
+    public static double IN_POS = 0.03;
     public static double WALL_POS = 1;
     //new ositon
-    public static double SAMP_STRAIHGTPOS = .5;
+    public static double SAMP_STRAIHGTPOS = .2;
     public ArmSubsystem(Servo leftArm, Servo rightArm ) {
         this.leftArm = leftArm;
         this.rightArm = rightArm;
@@ -67,7 +67,7 @@ public class ArmSubsystem extends SubsystemBase {
             rightArm.setPosition(WALL_POS);
         }, this);
     }
-    public Command SAMP_STRAIGHTPOS() {
+    public Command samp_straightPos() {
         return new InstantCommand(() -> {
             leftArm.setPosition(SAMP_STRAIHGTPOS);
             rightArm.setPosition(SAMP_STRAIHGTPOS);
