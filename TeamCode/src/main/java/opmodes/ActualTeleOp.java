@@ -83,15 +83,13 @@ public class ActualTeleOp extends BaseOpMode {
           colorSubsystem.poopingOff()
         );
          */
-        /*gb1(LEFT_BUMPER).whenActive(
+        gb2(RIGHT_BUMPER).whenActive(
                 new SequentialCommandGroup(
-                        armSubsystem.samp_straightPos(),
+                        armSubsystem.sampStraight(),
                         new WaitCommand(250),
                         wristSubsystem.wristWorkNowPease()
                 )
         );
-
-         */
 
         gb1(LEFT_BUMPER).whenActive(
             new SequentialCommandGroup(
