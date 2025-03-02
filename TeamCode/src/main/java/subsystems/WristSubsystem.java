@@ -29,7 +29,7 @@ public class WristSubsystem extends SubsystemBase {
 
     public static double WRIST_WALL_POS = .4;
 
-    public static double WRIST_SCORE_SPEC_POS_AUTO = .5;
+    public static double WRIST_SCORE_SPEC_POS_AUTO = .6;
 
 
     public WristSubsystem( Servo flipServo) {
