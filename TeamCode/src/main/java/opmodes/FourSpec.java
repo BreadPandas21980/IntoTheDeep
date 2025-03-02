@@ -213,14 +213,14 @@ public class FourSpec extends OpMode {
                 clawSubsystem.autoClawClosed();
                 armSubsystem.autoArmSpec();
                 wristSubsystem.autoWristSpec();
-                liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
+                //liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
                     follower.followPath(scorePreload, false);
                     setPathState(1);
                 timer.reset();
                 break;
             case 1:
 
-                liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
+                //liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
 
 
                 /* You could check for
@@ -285,7 +285,7 @@ public class FourSpec extends OpMode {
                     }
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     if(timer.seconds() > 0.2) {
-                        liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
+                      //  liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
                         follower.followPath(score2,false);
                         timer.reset();
                         first = true;
@@ -349,7 +349,7 @@ public class FourSpec extends OpMode {
                     }
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     if(timer.seconds() > 0.2) {
-                        liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
+                        //liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
                         follower.followPath(score3,false);
                         timer.reset();
                         first = true;
@@ -411,7 +411,7 @@ public class FourSpec extends OpMode {
                     }
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     if(timer.seconds() > 0.2) {
-                        liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
+                       // liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeight);
                         follower.followPath(score4, false);
                         first = true;
                         timer.reset();
