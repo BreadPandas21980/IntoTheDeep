@@ -105,10 +105,10 @@ public class FiveSpecIntake extends OpMode {
     private final Pose controlIntakePose1 = new Pose(50, 135, Math.toRadians(90));
     private final Pose intakePose1 = new Pose(41, 118, Math.toRadians(50));
     private final Pose intakePose1b = new Pose(37, 120, Math.toRadians(0));
-    private final Pose intakePose2 = new Pose(32, 115, Math.toRadians(50));
+    private final Pose intakePose2 = new Pose(32, 113.5, Math.toRadians(50));
     private final Pose intakePose2b = new Pose(33, 120, Math.toRadians(-20));
-    private final Pose intakePose3 = new Pose(26, 115.5, Math.toRadians(45));
-    private final Pose intakePose3b = new Pose(28, 115, Math.toRadians(-17));
+    private final Pose intakePose3 = new Pose(26, 115, Math.toRadians(46));
+    private final Pose intakePose3b = new Pose(28, 115, Math.toRadians(-25));
     private final Pose grabPrepPose2 = new Pose(27, 115, Math.toRadians(90));
     private final Pose grabPose2 = new Pose(27, 128, Math.toRadians(90));
     private final Pose scorePose2 = new Pose(65, 106.5, Math.toRadians(90));
@@ -119,7 +119,7 @@ public class FiveSpecIntake extends OpMode {
     private final Pose grabPose4 = new Pose(36, 131, Math.toRadians(90));
     private final Pose scorePose4 = new Pose(65, 106.5, Math.toRadians(90));
     private final Pose grabPrepPose5 = new Pose(36, 115, Math.toRadians(90));
-    private final Pose grabPose5 = new Pose(36, 130, Math.toRadians(90));
+    private final Pose grabPose5 = new Pose(36, 131, Math.toRadians(90));
     private final Pose scorePose5 = new Pose(65, 107, Math.toRadians(90));
 
     /** Park Pose for our robot, after we do all of the scoring. */
@@ -271,7 +271,7 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
                     
-                    if(liftSubsystem.getLeftEncoderVal() > 750) {
+                    if(liftSubsystem.getLeftEncoderVal() > 760) {
                         clawSubsystem.autoClawOpen();
                     }
                     /* Score Preload */
@@ -338,7 +338,7 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
 
-                    if(timer.seconds() > .2 ) {
+                    if(timer.seconds() > .3 ) {
                         extendoSubsystem.setTargetPos(0);
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                         follower.followPath(intake2,false);
@@ -369,7 +369,7 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
 
-                    if(timer.seconds() > .6 || colorSubsystem.stupidstpid != -1) {
+                    if(timer.seconds() > .8 || colorSubsystem.stupidstpid != -1) {
                         intakeSubsystem.autoDropdownEject();
                         pitchSubsystem.autoPitchEject();
                     }
@@ -397,7 +397,7 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
 
-                    if(timer.seconds() > .2 ) {
+                    if(timer.seconds() > .3 ) {
                         extendoSubsystem.setTargetPos(0);
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                         follower.followPath(intake3,false);
@@ -428,11 +428,11 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
 
-                    if(timer.seconds() > .8 || colorSubsystem.stupidstpid != -1) {
+                    if(timer.seconds() > 1 || colorSubsystem.stupidstpid != -1) {
                         intakeSubsystem.autoDropdownEject();
                         pitchSubsystem.autoPitchEject();
                     }
-                    if(timer.seconds() > .9|| colorSubsystem.stupidstpid != -1) {
+                    if(timer.seconds() > 1.1|| colorSubsystem.stupidstpid != -1) {
 
                         extendoSubsystem.setTargetPos(-30000);
                         intakeSubsystem.autoIdle();
