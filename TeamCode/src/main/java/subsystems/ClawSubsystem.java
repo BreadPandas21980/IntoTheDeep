@@ -20,11 +20,11 @@ public class ClawSubsystem extends SubsystemBase {
 
     public static boolean autoDisabled = false;
     private final Servo clawServo;
-    public static  double FULLY_OPEN = 0.23;
+    public static  double FULLY_OPEN = 0.1;
 
     public static double NOT_OPENX2 = 0.6;
     boolean clawOpen;
-    public static  double NOT_OPEN = 0.5;
+    public static  double NOT_OPEN = 0.4;
 
     public ClawSubsystem(Servo clawServo) {
         this.clawServo = clawServo;
