@@ -90,7 +90,7 @@ public class ActualTeleOp extends BaseOpMode {
                         wristSubsystem.wristWorkNowPease()
                 )
         );
-        */-0
+        */
 
         gb1(LEFT_BUMPER).whenActive(
             new SequentialCommandGroup(
