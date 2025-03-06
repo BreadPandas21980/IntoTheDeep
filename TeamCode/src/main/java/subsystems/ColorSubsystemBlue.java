@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import opmodes.FourSamp;
+
 /**
  * A gripper mechanism that grabs a stone from the quarry.
  * Centered around the Skystone game for FTC that was done in the 2019
@@ -143,6 +145,12 @@ public class ColorSubsystemBlue extends SubsystemBase {
             } else {
                 stupidstpid = redVal;
                 timer.reset();
+            }
+
+            if(stupidstpid == nothingVal) {
+                FourSamp.isSampleIn = false;
+            } else {
+                FourSamp.isSampleIn = true;
             }
     }
     public Command senseColor() {
