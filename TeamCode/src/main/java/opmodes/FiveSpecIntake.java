@@ -247,7 +247,7 @@ public class FiveSpecIntake extends OpMode {
                     follower.followPath(scorePreload);
                     setPathState(1);
                 pathTimer.resetTimer();
-                clawSubsystem.autoClawClosed();
+                clawSubsystem.autoClawSpecClosed();
                 armSubsystem.autoArmStraight();
                 wristSubsystem.autoWristScoreSpecPosAuto();
                 break;
@@ -478,7 +478,7 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
                     if(timer.seconds() > 0.3) {
-                        clawSubsystem.autoClawClosed();
+                        clawSubsystem.autoClawSpecClosed();
                     }
                     if(timer.seconds() > 0.75) {
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele);
@@ -535,7 +535,7 @@ public class FiveSpecIntake extends OpMode {
                     }
 
                     if(timer.seconds() > 0.3) {
-                        clawSubsystem.autoClawClosed();
+                        clawSubsystem.autoClawSpecClosed();
                     }
                     if(timer.seconds() > 0.75) {
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele);
@@ -590,7 +590,7 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
                     if(timer.seconds() > 0.3) {
-                        clawSubsystem.autoClawClosed();
+                        clawSubsystem.autoClawSpecClosed();
                     }
                     if(timer.seconds() > 0.75) {
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele);
@@ -646,7 +646,7 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
                     if(timer.seconds() > 0.3) {
-                        clawSubsystem.autoClawClosed();
+                        clawSubsystem.autoClawSpecClosed();
                     }
                     if(timer.seconds() > 0.75) {
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele);
@@ -817,7 +817,7 @@ public class FiveSpecIntake extends OpMode {
         imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
                 RevHubOrientationOnRobot.UsbFacingDirection.RIGHT)));
         imu.resetYaw();
-        clawSubsystem.autoClawClosed();
+        clawSubsystem.autoClawSpecClosed();
 
        // colorSensor.enableLed(true);
 
