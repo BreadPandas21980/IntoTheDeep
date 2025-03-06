@@ -23,7 +23,7 @@ public class DriveSubsystem extends SubsystemBase {
     public MotorEx fL, fR, bL, bR;
     public static double slowFactor = 2;
     public static double strafeFactor = 1;
-    public static double strafeFactorB = .85;
+    public static double strafeFactorB = .95;
     public static double strafeFactorS = 1;
     public static double strafeFactorBS = 1;
 
@@ -218,7 +218,7 @@ public class DriveSubsystem extends SubsystemBase {
         if(LiftSubsystem.ptoClimb) {
 
 
-            bL.set(1);
+            bL.set(-1);
             bR.set(1);
             fL.set(1);
             fR.set(1);

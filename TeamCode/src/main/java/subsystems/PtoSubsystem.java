@@ -2,6 +2,7 @@ package subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -31,13 +32,13 @@ public class PtoSubsystem extends SubsystemBase {
     }
 
     public Command ptoEngage() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             leftPTO.setPosition(PTO_DOWN_LEFT);
             rightPTO.setPosition(PTO_DOWN_RIGHT);
         }, this);
     }
     public Command ptoDisengage() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             leftPTO.setPosition(PTO_HALF_LEFT);
             rightPTO.setPosition(PTO_HALF_RIGHT);
         }, this);
