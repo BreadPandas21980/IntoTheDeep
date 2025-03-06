@@ -88,7 +88,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 IN_POWER = 1;
             }
             */
-            if(ColorSubsystemBlue.pooping == true && ColorSubsystemBlue.grrr == true) {
+            if(ColorSubsystem.pooping == true && ColorSubsystem.grrr == true) {
                 IN_POWER = 0;
             }
             intakeServo.setPower(IN_POWER);

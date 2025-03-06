@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -26,7 +25,7 @@ import opmodes.FourSamp;
  * to 2020 season.
  */
 @Config
-public class ColorSubsystemBlue extends SubsystemBase {
+public class ColorSubsystem extends SubsystemBase {
     public static boolean autoDisabled = false;
 
     private final ColorSensor colorSensor;
@@ -51,7 +50,7 @@ public class ColorSubsystemBlue extends SubsystemBase {
     public static boolean grrrBox = false;
     public static ArrayList<Integer> data = new ArrayList<Integer>(); //1 is red, 2 is yellow, 3 is blue, -1 is nothing
 
-    public ColorSubsystemBlue(ColorSensor colorSensor ) {
+    public ColorSubsystem(ColorSensor colorSensor ) {
         this.colorSensor = colorSensor;
         data.add(-1);
         timer.reset();

@@ -60,7 +60,7 @@ import java.util.List;
 
 import subsystems.ArmSubsystem;
 import subsystems.ClawSubsystem;
-import subsystems.ColorSubsystemBlue;
+import subsystems.ColorSubsystem;
 import subsystems.ExtendoSubsystem;
 import subsystems.IntakeSubsystem;
 import subsystems.LiftSubsystem;
@@ -102,7 +102,7 @@ public class LimelightTestAdam extends LinearOpMode {
     public static boolean firstimu = true;
     public static boolean firstcool = true;
     protected IntakeSubsystem intakeSubsystem;
-    protected ColorSubsystemBlue colorSubsystem;
+    protected ColorSubsystem colorSubsystem;
     protected ColorSensor colorSensor;
     protected MotorEx leftSlide, rightSlide, extendoMotor, intakeMotor;
     protected DcMotor leftSlideDC;

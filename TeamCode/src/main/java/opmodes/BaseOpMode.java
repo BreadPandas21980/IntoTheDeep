@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import subsystems.ArmSubsystem;
 import subsystems.ClawSubsystem;
-import subsystems.ColorSubsystemBlue;
+import subsystems.ColorSubsystem;
 import subsystems.DriveSubsystem;
 import subsystems.ExtendoSubsystem;
 import subsystems.IntakeSubsystem;
@@ -73,7 +73,7 @@ public class BaseOpMode extends CommandOpMode {
     protected ClawSubsystem clawSubsystem;
 
     protected SweeperSubsystem sweeperSubsystem;
-    protected ColorSubsystemBlue colorSubsystem;
+    protected ColorSubsystem colorSubsystem;
     protected PitchSubsystem pitchSubsystem;
 
     protected GamepadEx driverGamepad;
@@ -114,7 +114,7 @@ public class BaseOpMode extends CommandOpMode {
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);
         clawSubsystem = new ClawSubsystem(clawServo);
         sweeperSubsystem = new SweeperSubsystem(sweeperServo);
-        colorSubsystem = new ColorSubsystemBlue(colorSensor);
+        colorSubsystem = new ColorSubsystem(colorSensor);
 
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());

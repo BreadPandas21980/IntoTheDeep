@@ -34,7 +34,7 @@ import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 import subsystems.ArmSubsystem;
 import subsystems.ClawSubsystem;
-import subsystems.ColorSubsystemBlue;
+import subsystems.ColorSubsystem;
 import subsystems.ExtendoSubsystem;
 import subsystems.IntakeSubsystem;
 import subsystems.LiftSubsystem;
@@ -71,7 +71,7 @@ public class LimelightTest extends OpMode {
     public static boolean firstimu = true;
     public static boolean firstcool = true;
     protected IntakeSubsystem intakeSubsystem;
-    protected ColorSubsystemBlue colorSubsystem;
+    protected ColorSubsystem colorSubsystem;
     protected ColorSensor colorSensor;
     protected MotorEx leftSlide, rightSlide, extendoMotor, intakeMotor;
     protected DcMotor leftSlideDC;
@@ -382,7 +382,7 @@ public class LimelightTest extends OpMode {
         telemetry.addData("getStarginPose, ", follower.getPose());
 
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
-        colorSubsystem = new ColorSubsystemBlue(colorSensor);
+        colorSubsystem = new ColorSubsystem(colorSensor);
         imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
                 RevHubOrientationOnRobot.UsbFacingDirection.RIGHT)));
