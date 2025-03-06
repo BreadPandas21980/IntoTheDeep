@@ -22,7 +22,8 @@ public class ClawSubsystem extends SubsystemBase {
     private final Servo clawServo;
     public static  double FULLY_OPEN = 0.1;
 
-    public static double NOT_OPENX2 = 0.6;
+    public static double AUTO_CLOSED = 0.07;
+    public static double AUTO_OPEN = 0.3;
     boolean clawOpen;
     public static  double NOT_OPEN = 0.4;
 
@@ -51,13 +52,19 @@ public class ClawSubsystem extends SubsystemBase {
     public void autoClawOpen() {
         if(!autoDisabled) {
 
-            clawServo.setPosition(FULLY_OPEN);
+            clawServo.setPosition(AUTO_OPEN);
         }
     }
     public void autoClawClosed() {
         if(!autoDisabled) {
 
-            clawServo.setPosition(NOT_OPEN);
+            clawServo.setPosition(AUTO_CLOSED);
+        }
+    }
+    public void autoClawSpecClosed() {
+        if(!autoDisabled) {
+
+            clawServo.setPosition(AUTO_CLOSED);
         }
     }
     public Command clawSwitch() {
