@@ -36,8 +36,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+import subsystems.PtoSubsystem;
 
 
 /*
@@ -58,9 +61,11 @@ import com.qualcomm.robotcore.util.Range;
 public class MeasuredFFGraph extends LinearOpMode {
 
     // Declare OpMode members.
+    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo, pitchServo, leftStilt, rightStilt, leftPTO, rightPTO;
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftSlide = null;
     private DcMotor rightSlide = null;
+    protected PtoSubsystem ptoSubsystem;
     public static double testPower = 0;
 
     @Override
@@ -74,6 +79,10 @@ public class MeasuredFFGraph extends LinearOpMode {
         leftSlide  = hardwareMap.get(DcMotor.class, "leftSlide");
         rightSlide = hardwareMap.get(DcMotor.class, "rightSlide");
 
+        leftPTO = hardwareMap.get(Servo.class, "leftPTO");
+        rightPTO = hardwareMap.get(Servo.class, "rightPTO");
+        leftPTO.setPosition(PtoSubsystem.PTO_HALF_LEFT);
+        rightPTO.setPosition(PtoSubsystem.PTO_HALF_RIGHT);
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
