@@ -142,10 +142,10 @@ public class SixSampBeyond extends OpMode {
     public static double pickup3x = 126;
     public static double pickup3y = 122;
     public static double pickup3heading = 105;
-    public static double viewSubx = 90;
-    public static double viewSuby = 77.5;
     public static double viewControlx = 110;
     public static double viewControly = 77.5;
+    public static double viewSubx = 90;
+    public static double viewSuby = 77.5;
     public static double viewSubheading = 0;
     public static double scoreSubx = 126;
     public static double scoreSuby = 127;
