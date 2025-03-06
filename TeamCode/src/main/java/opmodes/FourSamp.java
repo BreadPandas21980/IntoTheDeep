@@ -57,6 +57,7 @@ public class FourSamp extends OpMode {
     public boolean iansigma = false;
     public boolean iansdecisiveness = true;
     public static boolean isSampleIn = false;
+    public static double voltageReg = 12.5;
     public boolean firstSampleDetection = true;
     public boolean sampleOneWasStuck = false;
     public boolean sampleTwoWasStuck = false;
@@ -98,6 +99,16 @@ public class FourSamp extends OpMode {
      * This visualizer is very easy to use to find and create paths/pathchains/poses: <https://pedro-path-generator.vercel.app/>
      * Lets assume our robot is 18 by 18 inches
      * Lets assume the Robot is facing the human player and we want to score in the bucket */
+    public static double pause1y = 125;
+    public static double pickup1x = 119;
+
+    public static double pickup1heading = 85;
+    public static double pause2y = 125;
+    public static double pickup2x = 128;
+    public static double pickup2heading = 85;
+    public static double pickup3x = 127;
+    public static double pickup3y = 122;
+    public static double pickup3heading = 106;
 
     /** Start Pose of our robot */
     private final Pose startPose = new Pose(108, 137, Math.toRadians(0));
@@ -105,18 +116,20 @@ public class FourSamp extends OpMode {
 
     /** Scoring Pose of our robot. It is facing the submersible at a -45 degree (315 degree) angle. */
     private final Pose scorePose = new Pose(122.5, 137.5, Math.toRadians(0));
-    private final Pose pickup1ControlPose = new Pose(120, 125, Math.toRadians(115));
+    private final Pose pickup1ControlPose = new Pose(118.5, 125, Math.toRadians(115));
 
     /** Lowest (First) Sample from the Spike Mark */
-    private final Pose pickup1Pose = new Pose(113, 120, Math.toRadians(96));
+    private final Pose pickup1PausePose = new Pose(pickup1x, pause1y, Math.toRadians(pickup1heading));
+    private final Pose pickup1Pose = new Pose(pickup1x, 120, Math.toRadians(pickup1heading));
     private final Pose scorePose2 = new Pose(126, 127, Math.toRadians(45));
 
     /** Middle (Second) Sample from the Spike Mark */
-    private Pose pickup2Pose = new Pose(126, 124, Math.toRadians(85));
+    private Pose pickup2PausePose = new Pose(pickup2x, pause2y, Math.toRadians(pickup2heading));
+    private Pose pickup2Pose = new Pose(pickup2x, 124, Math.toRadians(pickup2heading));
     private final Pose scorePose3 = new Pose(127, 129, Math.toRadians(45));
 
     /** Highest (Third) Sample from the Spike Mark */
-    private Pose pickup3Pose = new Pose(127, 120, Math.toRadians(105));
+    private Pose pickup3Pose = new Pose(pickup3x, pickup3y, Math.toRadians(pickup3heading));
     private final Pose scorePose4 = new Pose(125, 129, Math.toRadians(45));
     /** Park Pose for our robot, after we do all of the scoring. */
     private final Pose parkPose = new Pose(80, 86, Math.toRadians(180));
@@ -159,8 +172,10 @@ public class FourSamp extends OpMode {
 
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         grabPickup1 = follower.pathBuilder()
-                .addPath(new BezierCurve(new Point(scorePose), new Point(pickup1ControlPose), new Point(pickup1Pose)))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
+                .addPath(new BezierCurve(new Point(scorePose), new Point(pickup1ControlPose), new Point(pickup1PausePose)))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1PausePose.getHeading())
+                .addPath(new BezierLine(new Point(pickup1PausePose), new Point(pickup1Pose)))
+                .setLinearHeadingInterpolation(pickup1PausePose.getHeading(), pickup1Pose.getHeading())
                 .build();
 
         /* This is our scorePickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
@@ -171,8 +186,10 @@ public class FourSamp extends OpMode {
 
         /* This is our grabPickup2 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         grabPickup2 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(scorePose2), new Point(pickup2Pose)))
-                .setLinearHeadingInterpolation(scorePose2.getHeading(), pickup2Pose.getHeading())
+                .addPath(new BezierLine(new Point(scorePose2), new Point(pickup2PausePose)))
+                .setLinearHeadingInterpolation(scorePose2.getHeading(), pickup2PausePose.getHeading())
+                .addPath(new BezierLine(new Point(pickup2PausePose), new Point(pickup2Pose)))
+                .setLinearHeadingInterpolation(pickup2PausePose.getHeading(), pickup2Pose.getHeading())
                 .build();
 
         /* This is our scorePickup2 PathChain. We are using a single path with a BezierLine, which is a straight line. */
@@ -383,15 +400,15 @@ public class FourSamp extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(timer.seconds() > 0.25) {
+                    if(timer.seconds() > .3) {
                         extendoSubsystem.setTargetPos(-38000);
                     }
-                    if(timer.seconds() > .3) {
+                    if(timer.seconds() > .1) {
 
                         intakeSubsystem.autoDropdownIntake();
                         pitchSubsystem.autoPitchIntake();
                     }
-                    if(timer.seconds() > .8 || colorSubsystem.stupidstpid != -1) {
+                    if(timer.seconds() > 1.2 || colorSubsystem.stupidstpid != -1) {
                         intakeSubsystem.autoDropdownStow();
                         pitchSubsystem.autoPitchStow();
                         extendoSubsystem.setTargetPos(0);
@@ -400,9 +417,9 @@ public class FourSamp extends OpMode {
                             firstSampleDetection = false;
                         }
                     }
-                    if(timer.seconds() > 1 || (isSampleIn && !firstSampleDetection && sampleTimer.seconds() > 0.1)) {
+                    if(timer.seconds() > 1.4 || (isSampleIn && !firstSampleDetection && sampleTimer.seconds() > 0.1)) {
 
-                        intakeSubsystem.autoIdle();
+                        intakeSubsystem.autoIntake();
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                         follower.followPath(scorePickup2,true);
                         setPathState(5);
@@ -416,25 +433,25 @@ public class FourSamp extends OpMode {
             case 5:
                 if(!sampleTwoWasStuck) {
 
-                    if(timer2.seconds() > 0.2) {
+                    if(timer2.seconds() > 0.5) {
                         liftSubsystem.setTargetPos(0);
                     }
-                    if(timer2.seconds() > 0.5 && liftSubsystem.atTarget()) {
+                    if(timer2.seconds() > 0.8 && liftSubsystem.atTarget()) {
                         clawSubsystem.autoClawClosed();
                     }
-                    if(timer2.seconds() > .6) {
+                    if(timer2.seconds() > .9) {
                         liftSubsystem.setTargetPos(LiftSubsystem.sampPrepHeight);
                     }
-                    if(timer2.seconds() > .8) {
+                    if(timer2.seconds() > 1.1) {
                         armSubsystem.autoArmSamp();
                         wristSubsystem.autoWristSamp();
                     }
                 } else {
 
-                    if(timer2.seconds() > 3) {
+                    if(timer2.seconds() > 0) {
                         liftSubsystem.setTargetPos(0);
                     }
-                    if(timer2.seconds() > 3.1 && liftSubsystem.atTarget()) {
+                    if(timer2.seconds() > 0.5 && liftSubsystem.atTarget()) {
                         clawSubsystem.autoClawClosed();
                     }
                     if(timer2.seconds() > 3.2) {
@@ -445,7 +462,7 @@ public class FourSamp extends OpMode {
                         wristSubsystem.autoWristSamp();
                     }
                 }
-                if((!follower.isBusy() || follower.isRobotStuck() )&& ((sampleTwoWasStuck && timer2.seconds() > 3.4 )|| (!sampleTwoWasStuck && timer2.seconds() > .8))) {
+                if((!follower.isBusy() || follower.isRobotStuck() )&& ((sampleTwoWasStuck && timer2.seconds() > 3.4 )|| (!sampleTwoWasStuck && timer2.seconds() > 1.1))) {
 
 
                     if(first) {
@@ -453,10 +470,10 @@ public class FourSamp extends OpMode {
                         first = false;
                     }
                     /* Score Preload */
-                    if(timer.seconds() > 0.5) {
+                    if(timer.seconds() > 0.7) {
                         clawSubsystem.autoClawOpen();
                     }
-                    if(timer.seconds() > 0.6) {
+                    if(timer.seconds() > 0.8) {
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
 
                         intakeSubsystem.autoIntake();
@@ -478,6 +495,14 @@ public class FourSamp extends OpMode {
                     armSubsystem.autoArmIn();
                     intakeSubsystem.autoDropdownStow();
                     pitchSubsystem.autoPitchStow();
+                    wristSubsystem.autoWristIn();
+                    armSubsystem.autoArmIn();
+                    intakeSubsystem.autoDropdownStow();
+                    pitchSubsystem.autoPitchStow();
+                    wristSubsystem.autoWristIn();
+                    armSubsystem.autoArmIn();
+                    intakeSubsystem.autoDropdownStow();
+                    pitchSubsystem.autoPitchStow();
                     extendoSubsystem.setTargetPos(0);
                     pickup2Pose = new Pose(follower.getPose().getX(), follower.getPose().getY(), follower.getPose().getHeading());
                     sampleTwoWasStuck = true;
@@ -492,6 +517,8 @@ public class FourSamp extends OpMode {
                     iansigma = false;
                     travis = false;
                     timer2.reset();
+                } else {
+                    sampleTwoWasStuck = false;
                 }
                 travis = false;
                 iansdecisiveness = true;
@@ -521,6 +548,24 @@ public class FourSamp extends OpMode {
                     if(timer.seconds() > 1 || colorSubsystem.stupidstpid != -1) {
                         intakeSubsystem.autoDropdownStow();
                         pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
                         extendoSubsystem.setTargetPos(0);
                         if(isSampleIn && firstSampleDetection) {
                             sampleTimer.reset();
@@ -529,6 +574,22 @@ public class FourSamp extends OpMode {
                     }
                     if(timer.seconds() > 1.2 || (isSampleIn && !firstSampleDetection && sampleTimer.seconds() > 0.1)) {
 
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        armSubsystem.autoArmIn();
+                        wristSubsystem.autoWristIn();
+                        armSubsystem.autoArmIn();
+                        wristSubsystem.autoWristIn();
+                        armSubsystem.autoArmIn();
+                        wristSubsystem.autoWristIn();
+                        armSubsystem.autoArmIn();
+                        wristSubsystem.autoWristIn();
                         intakeSubsystem.autoIdle();
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                         follower.followPath(scorePickup3, true);
@@ -543,57 +604,70 @@ public class FourSamp extends OpMode {
                 }
                 break;
             case 7:
+                intakeSubsystem.autoDropdownStow();
+                pitchSubsystem.autoPitchStow();
                 if(!sampleTwoWasStuck) {
 
-                    if(timer2.seconds() > 0.2) {
+                    if(timer2.seconds() > 3) {
+                        liftSubsystem.setTargetPos(0);
+                        liftSubsystem.setTargetPos(0);
+                        liftSubsystem.setTargetPos(0);
+                        liftSubsystem.setTargetPos(0);
+                        liftSubsystem.setTargetPos(0);
                         liftSubsystem.setTargetPos(0);
                     }
-                    if(timer2.seconds() > .5 && liftSubsystem.atTarget()) {
+                    if(timer2.seconds() > 3.2 && liftSubsystem.atTarget()) {
                         clawSubsystem.autoClawClosed();
                     }
-                    if(timer2.seconds() > .6) {
+                    if(timer2.seconds() > 3.4) {
                         liftSubsystem.setTargetPos(LiftSubsystem.sampPrepHeight);
                     }
-                    if(timer2.seconds() > .8) {
+                    if(timer2.seconds() > 4) {
                         armSubsystem.autoArmSamp();
                         wristSubsystem.autoWristSamp();
                     }
                 } else {
 
-                    if(timer2.seconds() > 3) {
+                    if(timer2.seconds() > 1) {
+                        liftSubsystem.setTargetPos(0);
+                        liftSubsystem.setTargetPos(0);
+                        liftSubsystem.setTargetPos(0);
+                        liftSubsystem.setTargetPos(0);
+                        liftSubsystem.setTargetPos(0);
+                        liftSubsystem.setTargetPos(0);
                         liftSubsystem.setTargetPos(0);
                     }
-                    if(timer2.seconds() > 3.1 && liftSubsystem.atTarget()) {
+                    if(timer2.seconds() > 1.1 && liftSubsystem.atTarget()) {
                         clawSubsystem.autoClawClosed();
                     }
-                    if(timer2.seconds() > 3.2) {
+                    if(timer2.seconds() > 1.2) {
                         liftSubsystem.setTargetPos(LiftSubsystem.sampPrepHeight);
                     }
-                    if(timer2.seconds() > 3.4) {
+                    if(timer2.seconds() > 1.4) {
                         armSubsystem.autoArmSamp();
                         wristSubsystem.autoWristSamp();
                     }
                 }
-                if((!follower.isBusy() || follower.isRobotStuck() )&& ((sampleTwoWasStuck && timer2.seconds() > 3.4 )|| (!sampleTwoWasStuck && timer2.seconds() > .8))) {
+                if((!follower.isBusy() || follower.isRobotStuck() )&& ((sampleTwoWasStuck && timer2.seconds() > 1.4 )|| (!sampleTwoWasStuck && timer2.seconds() > 4))) {
 
                     if(first) {
                         timer.reset();
                         first = false;
                     }
-                    if(timer.seconds() > .5) {
+                    if(timer.seconds() > 1.2) {
                         armSubsystem.autoArmSamp();
                         wristSubsystem.autoWristSamp();
                     }
 
-                    if(timer.seconds() > 0.7) {
+                    if(timer.seconds() > 1.5) {
                         clawSubsystem.autoClawOpen();
                     }
-                    if(timer.seconds() > 0.9) {
+                    if(timer.seconds() > 1.7) {
                         wristSubsystem.autoWristIn();
                         armSubsystem.autoArmIn();
                     }
                     /* Score Preload */
-                    if(timer.seconds() > 1.1) {
+                    if(timer.seconds() > 1.8) {
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
 
                         follower.followPath(park,true);
@@ -671,7 +745,7 @@ public class FourSamp extends OpMode {
         telemetry.addData("xset: ", follower.getXOffset());
 
         if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 12.5);
+            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / voltageReg);
         }
 
 
@@ -759,6 +833,14 @@ public class FourSamp extends OpMode {
         leftStilt.setPosition(StiltSubsystem.STILTS_UP);
         rightStilt.setPosition(StiltSubsystem.STILTS_UP);
         ptoSubsystem.ptoDisengage();
+        leftPTO.setPosition(PtoSubsystem.PTO_HALF_LEFT);
+        rightPTO.setPosition(PtoSubsystem.PTO_HALF_RIGHT);
+        leftPTO.setPosition(PtoSubsystem.PTO_HALF_LEFT);
+        rightPTO.setPosition(PtoSubsystem.PTO_HALF_RIGHT);
+        leftPTO.setPosition(PtoSubsystem.PTO_HALF_LEFT);
+        rightPTO.setPosition(PtoSubsystem.PTO_HALF_RIGHT);
+        leftPTO.setPosition(PtoSubsystem.PTO_HALF_LEFT);
+        rightPTO.setPosition(PtoSubsystem.PTO_HALF_RIGHT);
         leftPTO.setPosition(PtoSubsystem.PTO_HALF_LEFT);
         rightPTO.setPosition(PtoSubsystem.PTO_HALF_RIGHT);
 
