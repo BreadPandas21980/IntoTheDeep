@@ -153,14 +153,10 @@ public class ActualTeleOp extends BaseOpMode {
                 )
         );
 
-        gb2(B).whenPressed(
-                /*
+        gb2(B).toggleWhenActive(
                 clawSubsystem.fullyOpen(),
                 clawSubsystem.notOpen()
 
-                 */
-
-                clawSubsystem.clawSwitch()
         );
 
 
@@ -176,19 +172,22 @@ public class ActualTeleOp extends BaseOpMode {
                         liftSubsystem.climbHeightOne(),
                         new WaitUntilCommand(() -> liftSubsystem.atTarget()),
                         ptoSubsystem.ptoEngage(),
-                        liftSubsystem.unheighting(),
+                   //     liftSubsystem.unheighting(),
                         liftSubsystem.ptoClimbing(),
                         liftSubsystem.climbHeightTwo(),
                         new WaitUntilCommand(() -> liftSubsystem.atTarget()),
                         ptoSubsystem.ptoDisengage(),
-                        liftSubsystem.ptoUnclimbing()
+                        liftSubsystem.ptoUnclimbing(),
+                        liftSubsystem.unheighting()
                 )
         );
-        gb1(DPAD_LEFT).whenActive(
-                stiltSubsystem.stiltsDown()
+        gb1(DPAD_LEFT).toggleWhenActive(
+                stiltSubsystem.stiltsDown(),
+                stiltSubsystem.stiltsUp()
         );
-        gb1(DPAD_RIGHT).whenActive(
-                ptoSubsystem.ptoEngage()
+        gb1(DPAD_RIGHT).toggleWhenActive(
+                ptoSubsystem.ptoEngage(),
+                ptoSubsystem.ptoDisengage()
         );
         gb1(DPAD_DOWN).whenActive(
                 new SequentialCommandGroup(
