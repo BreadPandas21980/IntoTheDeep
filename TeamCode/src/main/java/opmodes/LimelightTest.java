@@ -8,6 +8,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
+import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.BezierLine;
 import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
@@ -22,6 +23,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -36,6 +38,10 @@ import subsystems.ColorSubsystemBlue;
 import subsystems.ExtendoSubsystem;
 import subsystems.IntakeSubsystem;
 import subsystems.LiftSubsystem;
+import subsystems.PitchSubsystem;
+import subsystems.PtoSubsystem;
+import subsystems.StiltSubsystem;
+import subsystems.SweeperSubsystem;
 import subsystems.WristSubsystem;
 
 /**
@@ -53,6 +59,8 @@ import subsystems.WristSubsystem;
 public class LimelightTest extends OpMode {
 
     private Limelight3A limelight;
+    LLResult result;
+    double stupidtravis2andadam = 0;
 
     ElapsedTime timerImu = new ElapsedTime();
     public static boolean offsettest = true;
@@ -67,10 +75,14 @@ public class LimelightTest extends OpMode {
     protected ColorSensor colorSensor;
     protected MotorEx leftSlide, rightSlide, extendoMotor, intakeMotor;
     protected DcMotor leftSlideDC;
-    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo, intakeArmServo;
+    protected Servo clawServo, flipServo, leftArm, rightArm, dropdownServo, sweeperServo, pitchServo, leftStilt, rightStilt, leftPTO, rightPTO;
     protected CRServo intakeServo;
     protected LiftSubsystem liftSubsystem;
+    protected PitchSubsystem pitchSubsystem;
+    protected PtoSubsystem ptoSubsystem;
+    protected StiltSubsystem stiltSubsystem;
     protected ArmSubsystem armSubsystem;
+    protected SweeperSubsystem sweeperSubsystem;
     protected WristSubsystem wristSubsystem;
     protected ClawSubsystem clawSubsystem;
     protected ExtendoSubsystem extendoSubsystem;
@@ -93,10 +105,11 @@ public class LimelightTest extends OpMode {
 
     /** Start Pose of our robot */
     private final Pose startPose = new Pose(108, 135, Math.toRadians(0));
-    private final Pose viewPose = new Pose(85, 100, Math.toRadians(0));
-    private Pose pickupPose = new Pose(85, 100, Math.toRadians(0));
+    private final Pose sweepControlPose = new Pose(130, 100, Math.toRadians(0));
+    private final Pose sweepPose = new Pose(90, 77.5, Math.toRadians(0));
+    private Pose pickupPose = new Pose(80, 100, Math.toRadians(0));
 
-    private PathChain moveView, movePickup;
+    private PathChain moveSweep, moveView, movePickup;
 
     /** Build the paths for the auto (adds, for example, constant/linear headings while doing paths)
      * It is necessary to do this so that all the paths are built before the auto starts. **/
@@ -120,9 +133,13 @@ public class LimelightTest extends OpMode {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
      //   //scorePreload = new Path(new BezierLine(new Point(startPose), new Point(scorePose)));
         //        park =
-        moveView = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPose), new Point(viewPose)))
-                .setLinearHeadingInterpolation(startPose.getHeading(), viewPose.getHeading())
+        moveSweep = follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(startPose), new Point(sweepControlPose), new Point(sweepPose)))
+                .setLinearHeadingInterpolation(startPose.getHeading(), sweepPose.getHeading())
+                .build();
+        movePickup = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(sweepPose), new Point(pickupPose)))
+                .setLinearHeadingInterpolation(sweepPose.getHeading(), pickupPose.getHeading())
                 .build();
 
 
@@ -135,59 +152,114 @@ public class LimelightTest extends OpMode {
         switch (pathState) {
             case 0:
                 timer.reset();
-                    follower.followPath(moveView);
-                    setPathState(1);
+                follower.followPath(moveSweep);
+                setPathState(1);
                 pathTimer.resetTimer();
                 break;
+
             case 1:
-                LLResult result = limelight.getLatestResult();
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+                if (!follower.isBusy() || follower.isRobotStuck()) {// || pathTimer.getElapsedTimeSeconds() > 2){// && timer2.seconds() > 2.5) {
+                    if (first) {
+                        timer.reset();
+                        first = false;
+                    }
+
+                    if (timer.seconds() > 0.01) {
+                        sweeperSubsystem.autoSweeperOpen();
+                    }
+                    if (timer.seconds() > 0.2) {
+                        sweeperSubsystem.autoSweeperHalf_Closed();
+                    }
+                    if (timer.seconds() > 0.4) {
+                        sweeperSubsystem.autoSweeperOpen();
+                    }
+                    if (timer.seconds() > 0.6) {
+                        sweeperSubsystem.autoSweeperHalf_Closed();
+                    }
+                    if (timer.seconds() > .7) {
+                        sweeperSubsystem.autoSweeperClosed();
+                        //
+                    }
+
+                    if(timer.seconds() > 1) {
+
+                        if (result != null) {
+
+                            if (result.isValid()) {
+                                telemetry.addData("tx", result.getTx());
+                                telemetry.addData("txnc", result.getTxNC());
+                                telemetry.addData("ty", result.getTy());
+                                telemetry.addData("tync", result.getTyNC());
+
+                                // Access color results
+                                List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
+                                for (LLResultTypes.ColorResult cr : colorResults) {
+                                    telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
+                                }
+                                pickupPose = new Pose(sweepPose.getX(), sweepPose.getY() - getLeftInches(result.getTx()), Math.toRadians(0));
+
+                                extendoSubsystem.setTargetPos((int)( Math.abs((getDistanceFromBar(result.getTy()))) * -14767/9.5 ) + 2500);
+                                intakeSubsystem.autoDropdownIntake();
+                                pitchSubsystem.autoPitchIntake();
+                            }
+                        } else {
+                            telemetry.addData("Limelight", "No data available");
+                        }
+                        if (timer.seconds() > 2) {
+                            telemetry.addData("crapcrapcrap, ", 1);
+                            movePickup = follower.pathBuilder()
+                                    .addPath(new BezierLine(new Point(sweepPose), new Point(pickupPose)))
+                                    .setLinearHeadingInterpolation(sweepPose.getHeading(), pickupPose.getHeading())
+                                    .build();
+                            /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
+
+                            clawSubsystem.autoClawOpen();
+                            //
+                            follower.followPath(movePickup, true);
+                            intakeSubsystem.autoIntake();
+                            setPathState(2);
+                            first = true;
+                        }
+
+                    }
+                    }
+                break;
+
+            case 2:
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+                if (timer.seconds() > 2 || colorSubsystem.stupidstpid != -1) {// || pathTimer.getElapsedTimeSeconds() > 2){// && timer2.seconds() > 2.5) {
+
+                    extendoSubsystem.setTargetPos(extendoSubsystem.getTargetPos() - 2500);
+                    if (first) {
+                        timer.reset();
+                        first = false;
+                    }
+                    if(timer.seconds() > 2) {
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                    }
+                    setPathState(3);
+                    first = true;
+                }
+
+
+                break;
+            case 3:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()){// || pathTimer.getElapsedTimeSeconds() > 2){// && timer2.seconds() > 2.5) {
 
-                    if (result != null) {
-
-                        if (result.isValid()) {
-                            telemetry.addData("tx", result.getTx());
-                            telemetry.addData("txnc", result.getTxNC());
-                            telemetry.addData("ty", result.getTy());
-                            telemetry.addData("tync", result.getTyNC());
-
-                            // Access color results
-                            List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
-                            for (LLResultTypes.ColorResult cr : colorResults) {
-                                telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
-                            }
-                            pickupPose = new Pose(viewPose.getX(), viewPose.getY() - result.getTx(), Math.toRadians(0));
-
-                            extendoSubsystem.setTargetPos((int)(-10000 * result.getTy()));
-                        }
-                    } else {
-                        telemetry.addData("Limelight", "No data available");
-                    }
-                    if(timer.seconds() > .6) {
-                        movePickup= follower.pathBuilder()
-                                .addPath(new BezierLine(new Point(viewPose), new Point(pickupPose)))
-                                .setLinearHeadingInterpolation(viewPose.getHeading(), pickupPose.getHeading())
-                                .build();
-                        /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-
-                        clawSubsystem.autoClawOpen();
-                        //
-                        follower.followPath(movePickup,true);
-                        setPathState(2);
-                        first = true;
-                    }
-
-                }
-                break;
-            case 2:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
-                if(!follower.isBusy() || follower.isRobotStuck()) {
+                    extendoSubsystem.setTargetPos(0);
                         setPathState(-1);
+                        first = true;
+
+
                 }
                 break;
+
         }
     }
+
 
     /** These change the states of the paths and actions
      * It will also reset the timers of the individual switches **/
@@ -214,62 +286,85 @@ public class LimelightTest extends OpMode {
         }
 
 
-        telemetry.addData("pffset: ", follower.getHeadingOffset() * 180 / Math.PI);
-        telemetry.addData("xset: ", follower.getXOffset());
+        telemetry.addData("extenso pos: ", extendoSubsystem.getEncoderVal());
+        telemetry.addData("target: ", extendoSubsystem.getTargetPos());
 
         if(opmodeTimer.getElapsedTimeSeconds() % 0.5 == 0) {
-            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 11);
+            follower.setMaxPower( hardwareMap.voltageSensor.iterator().next().getVoltage() / 12.5);
         }
 
 
         // These loop the movements of the robot
         follower.update();
         autonomousPathUpdate();
+        result = limelight.getLatestResult();
 
         liftSubsystem.update();
         extendoSubsystem.update();
         colorSubsystem.update();
+        telemetry.addData("tx", result.getTx());
+        telemetry.addData("txnc", result.getTxNC());
+        telemetry.addData("ty", result.getTy());
+        telemetry.addData("tync", result.getTyNC());
         // Feedback to Driver Hub
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading() * 180 / Math.PI);
         telemetry.addData("whatthe: ", whatthesigma);
+
         telemetry.update();
     }
+
+    public double getLeftInches(double degrees) {
+        return (-0.431*degrees + 4.66);
+    }
+
+    public double getDistanceFromBar(double degrees) {
+        return (0.746*degrees + 16.8);
+    }
+
 
     /** This method is called once at the init of the OpMode. **/
     @Override
     public void init() {
+
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+
+        telemetry.setMsTransmissionInterval(11);
+
+        limelight.pipelineSwitch(7);
+        limelight.start();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
 
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-
-        telemetry.setMsTransmissionInterval(11);
-
-        limelight.pipelineSwitch(1);
-        limelight.start();
         leftSlide = new MotorEx(hardwareMap, "leftSlide");
         rightSlide = new MotorEx(hardwareMap, "rightSlide");
-        rightSlide.setInverted(true);
+        leftSlide.setInverted(true);
+        intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
         dropdownServo = hardwareMap.get(Servo.class, "dropdownServo");
         leftArm = hardwareMap.get(Servo.class, "leftArm");
         rightArm = hardwareMap.get(Servo.class, "rightArm");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         flipServo = hardwareMap.get(Servo.class, "flipServo");
         leftSlideDC = hardwareMap.get(DcMotor.class, "leftSlide");
+        leftStilt = hardwareMap.get(Servo.class, "leftStilt");
+        rightStilt = hardwareMap.get(Servo.class, "rightStilt");
         flipServo.setDirection(Servo.Direction.REVERSE);
         liftSubsystem = new LiftSubsystem(leftSlide, rightSlide);
         armSubsystem = new ArmSubsystem(leftArm, rightArm);
         wristSubsystem = new WristSubsystem(flipServo);
         clawSubsystem = new ClawSubsystem(clawServo);
         firstimu = true;
+        leftPTO = hardwareMap.get(Servo.class, "leftPTO");
+        rightPTO = hardwareMap.get(Servo.class, "rightPTO");
         rightArm.setDirection(Servo.Direction.REVERSE);
+        pitchServo = hardwareMap.get(Servo.class, "pitchServo");
         intakeSubsystem = new IntakeSubsystem(intakeServo, dropdownServo);
+        pitchSubsystem = new PitchSubsystem(pitchServo);
         leftSlide.resetEncoder();
         extendoMotor =new MotorEx(hardwareMap, "extendoMotor");
         extendoSubsystem = new ExtendoSubsystem(extendoMotor);
@@ -281,6 +376,7 @@ public class LimelightTest extends OpMode {
         follower.setStartingPose(startPose);
         follower.setStartingPose(startPose);
         follower.setStartingPose(startPose);
+        ptoSubsystem = new PtoSubsystem(leftPTO, rightPTO);
         follower.setMaxPower(1);
         buildPaths();
         telemetry.addData("getStarginPose, ", follower.getPose());
@@ -293,6 +389,30 @@ public class LimelightTest extends OpMode {
         imu.resetYaw();
         clawSubsystem.autoClawClosed();
 
+        // colorSensor.enableLed(true);
+
+        leftStilt.setDirection(Servo.Direction.REVERSE);
+        rightArm.setDirection(Servo.Direction.REVERSE);
+        intakeServo.setDirection(DcMotorSimple.Direction.FORWARD);
+        flipServo.setDirection(Servo.Direction.REVERSE);
+        intakeSubsystem.autoDropdownStow();
+        pitchSubsystem.autoPitchStow();
+        leftStilt.setPosition(StiltSubsystem.STILTS_UP);
+        rightStilt.setPosition(StiltSubsystem.STILTS_UP);
+        ptoSubsystem.ptoDisengage();
+        leftPTO.setPosition(PtoSubsystem.PTO_HALF_LEFT);
+        rightPTO.setPosition(PtoSubsystem.PTO_HALF_RIGHT);
+        extendoSubsystem.resetEnc();
+        extendoSubsystem.resetEnc();
+        extendoSubsystem.resetEnc();
+        extendoSubsystem.resetEnc();
+        extendoSubsystem.resetEnc();
+        extendoSubsystem.resetEnc();
+        extendoSubsystem.resetEnc();
+
+        sweeperServo = hardwareMap.get(Servo.class, "sweeperServo");
+        sweeperSubsystem = new SweeperSubsystem(sweeperServo);
+        sweeperSubsystem.autoSweeperClosed();
 
 
     }
