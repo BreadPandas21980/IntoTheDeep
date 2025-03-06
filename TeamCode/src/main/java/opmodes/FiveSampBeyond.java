@@ -346,16 +346,16 @@ public class FiveSampBeyond extends OpMode {
                 break;
             case 3:
 
-                if (timer2.seconds() > zeroLiftDelay1) {
+                if (timer2.seconds() > zeroLiftDelayB) {
                     liftSubsystem.setTargetPos(0);
                 }
-                if (timer2.seconds() > clawDelay1) {
+                if (timer2.seconds() > clawDelayB) {
                     clawSubsystem.autoClawClosed();
                 }
-                if (timer2.seconds() > sampLiftDelay1) {
+                if (timer2.seconds() > sampLiftDelayB) {
                     liftSubsystem.setTargetPos(LiftSubsystem.sampPrepHeight);
                 }
-                if (timer2.seconds() > armDelay1) {
+                if (timer2.seconds() > armDelayB) {
                     armSubsystem.autoArmSamp();
                     wristSubsystem.autoWristSamp();
                 }
