@@ -21,13 +21,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     public static boolean sampSame = false;
     public static boolean sampIntake = false;
-    public static double PARK_POS = .6;
+    public static double PARK_POS = .75;
     public static double SPEC_POS_SAME = 0.6; //ignore
     public static double MID_POS = 0.1;
     public static double FIRST_POS = 0.06;
     //if Mid_POS doesn't go to a high enough value change to .3
     public static double SPEC_POS_INTAKE = 0.42; //tele = 0 auto =  //THIS ONEEEEEEEEE!!!!!!!!!!!!!!!
     public static double SAMP_POS = .7;
+    public static double SAMP_POS_AUTO = .6;
     public static double IN_POS = 0.03;
     public static double WALL_POS = 1;
     //new ositon

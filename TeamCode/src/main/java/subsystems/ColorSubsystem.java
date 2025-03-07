@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import opmodes.FourSamp;
+import opmodes.SixSampBeyond;
 
 /**
  * A gripper mechanism that grabs a stone from the quarry.
@@ -147,9 +147,9 @@ public class ColorSubsystem extends SubsystemBase {
             }
 
             if(stupidstpid == nothingVal) {
-                FourSamp.isSampleIn = false;
+                SixSampBeyond.isSampleIn = false;
             } else {
-                FourSamp.isSampleIn = true;
+                SixSampBeyond.isSampleIn = true;
             }
     }
     public Command senseColor() {

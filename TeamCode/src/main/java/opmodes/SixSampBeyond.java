@@ -67,30 +67,32 @@ public class SixSampBeyond extends OpMode {
     public static boolean isSampleIn = false;
     public static double voltageReg = 12.5;
     public boolean firstSampleDetection = true;
-    public static double zeroLiftDelaySub = 1;
-    public static double clawDelaySub = 1.1;
-    public static double sampLiftDelaySub = 1.2;
-    public static double armDelaySub = 1.4;
-    public static double zeroLiftDelay3 = 1.5;
-    public static double clawDelay3 = 1.7;
-    public static double sampLiftDelay3 = 1.9;
-    public static double armDelay3 = 2.1;
-    public static double zeroLiftDelay2 = 0.5;
-    public static double clawDelay2 = 0.7;
-    public static double sampLiftDelay2 = 0.9;
-    public static double armDelay2 = 1.1;
-    public static double zeroLiftDelay1 = 1;
-    public static double clawDelay1 = 1.1;
-    public static double sampLiftDelay1 = 1.2;
-    public static double armDelay1 = 1.4;
-    public static double zeroLiftDelayB = 1;
-    public static double clawDelayB = 1.1;
-    public static double sampLiftDelayB = 1.2;
-    public static double armDelayB = 1.4;
+    public static double zeroLiftDelaySub = 1.75;
+    public static double clawDelaySub = 2.2;
+    public static double sampLiftDelaySub = 2.3;
+    public static double armDelaySub = 2.7;
+    public static double zeroLiftDelay3 = 0.8;
+    public static double clawDelay3 = 1.05;
+    public static double sampLiftDelay3 = 1.25;
+    public static int adamissocoolandveryveryamazingandsoniceanduhuhveryverywhatsanadjectivehandsomebuffmasculinesevenfootlebronjames = 0;
+    public static double armDelay3 = 1.8;
+    public static double zeroLiftDelay2 = 0.35;
+    public static double clawDelay2 = .8;
+    public static double sampLiftDelay2 = .9;
+    public static double armDelay2 = 1.7;
+    public static double zeroLiftDelay1 = 0.35;
+    public static double clawDelay1 = .8;
+    public static double sampLiftDelay1 = .9;
+    public static double armDelay1 = 1.7;
+    public static double zeroLiftDelayB = 0.35;
+    public static double clawDelayB = .8;
+    public static double sampLiftDelayB = 1;
+    public static double armDelayB = 1.7;
 
     ElapsedTime timer = new ElapsedTime();
     public static boolean first = true;
     ElapsedTime timer2 = new ElapsedTime();
+    ElapsedTime timer3 = new ElapsedTime();
     ElapsedTime sampleTimer = new ElapsedTime();
     public static boolean whatthesigma = false;
     public static boolean firstimu = true;
@@ -128,53 +130,53 @@ public class SixSampBeyond extends OpMode {
      * This visualizer is very easy to use to find and create paths/pathchains/poses: <https://pedro-path-generator.vercel.app/>
      * Lets assume our robot is 18 by 18 inches
      * Lets assume the Robot is facing the human player and we want to score in the bucket */
-    public static double pause1y = 125;
+    public static double pause1y = 128;
     public static double pickup1x = 119;
 
     public static double pickup1heading = 85;
     public static double pickupBeyondx = 100;
-    public static double pickupBeyondy = 132;
+    public static double pickupBeyondy = 131.5;
 
     public static double pickupBeyondheading = 0;
     public static double pause2y = 125;
-    public static double pickup2x = 128;
+    public static double pickup2x = 129.8;
     public static double pickup2heading = 85;
-    public static double pickup3x = 126;
-    public static double pickup3y = 122;
-    public static double pickup3heading = 105;
+    public static double pickup3x = 128.5;
+    public static double pickup3y = 121.5;
+    public static double pickup3heading = 106.5;
     public static double viewControlx = 110;
     public static double viewControly = 77.5;
-    public static double viewSubx = 90;
+    public static double viewSubx = 90.5;
     public static double viewSuby = 77.5;
     public static double viewSubheading = 0;
-    public static double scoreSubx = 126;
-    public static double scoreSuby = 127;
+    public static double scoreSubx = 124.5;
+    public static double scoreSuby = 129;
     public static double scoreSubheading = 45;
 
     /** Start Pose of our robot */
     private final Pose startPose = new Pose(108, 137, Math.toRadians(0));
-    private final Pose scoreControlPose = new Pose(108, 135, Math.toRadians(0));
+    private final Pose scoreControlPose = new Pose(108, 137, Math.toRadians(0));
 
     /** Scoring Pose of our robot. It is facing the submersible at a -45 degree (315 degree) angle. */
-    private final Pose scorePose = new Pose(122.5, 137.5, Math.toRadians(0));
+    private final Pose scorePose = new Pose(124, 137.5, Math.toRadians(0));
     private final Pose pickupBeyondPose = new Pose(pickupBeyondx, pickupBeyondy, Math.toRadians(pickupBeyondheading));
-    private final Pose scoreBeyondPose = new Pose(122.5, 134, Math.toRadians(0));
+    private final Pose scoreBeyondPose = new Pose(122.5, 130, Math.toRadians(30));
 
     private final Pose pickup1ControlPose = new Pose(118.5, 125, Math.toRadians(115));
 
     /** Lowest (First) Sample from the Spike Mark */
     private final Pose pickup1PausePose = new Pose(pickup1x, pause1y, Math.toRadians(pickup1heading));
     private final Pose pickup1Pose = new Pose(pickup1x, 120, Math.toRadians(pickup1heading));
-    private final Pose scorePose2 = new Pose(126, 127, Math.toRadians(45));
+    private final Pose scorePose2 = new Pose(135, 114, Math.toRadians(45));
 
     /** Middle (Second) Sample from the Spike Mark */
     private Pose pickup2PausePose = new Pose(pickup2x, pause2y, Math.toRadians(pickup2heading));
     private Pose pickup2Pose = new Pose(pickup2x, 124, Math.toRadians(pickup2heading));
-    private final Pose scorePose3 = new Pose(127, 129, Math.toRadians(45));
+    private final Pose scorePose3 = new Pose(129, 126, Math.toRadians(45));
 
     /** Highest (Third) Sample from the Spike Mark */
     private Pose pickup3Pose = new Pose(pickup3x, pickup3y, Math.toRadians(pickup3heading));
-    private final Pose scorePose4 = new Pose(125, 129, Math.toRadians(45));
+    private final Pose scorePose4 = new Pose(123, 130, Math.toRadians(45));
 
     /** Highest (Third) Sample from the Spike Mark */
     private Pose viewControlPose = new Pose(viewControlx, viewControly, Math.toRadians(viewSubheading));
@@ -295,18 +297,18 @@ public class SixSampBeyond extends OpMode {
             case 0:
                 timer.reset();
                 clawSubsystem.autoClawClosed();
-                armSubsystem.autoArmMid();
                 follower.followPath(scorePreload);
                 setPathState(1);
-                wristSubsystem.autoWristSamp();
                 //   follower.followPath(scorePreload);
                 liftSubsystem.setTargetPos(LiftSubsystem.sampPrepHeight);
                 pathTimer.resetTimer();
                 break;
             case 1:
+                if(pathTimer.getElapsedTimeSeconds() > 0) {
+                    clawSubsystem.autoClawClosed();
+                    armSubsystem.autoArmSamp();
+                }
                 timerImu.reset();
-                clawSubsystem.autoClawClosed();
-                armSubsystem.autoArmSamp();
                 wristSubsystem.autoWristSamp();
                 liftSubsystem.setTargetPos(LiftSubsystem.sampPrepHeight);
 
@@ -341,14 +343,18 @@ public class SixSampBeyond extends OpMode {
                         intakeSubsystem.autoDropdownIntake();
                         pitchSubsystem.autoPitchIntake();
                         setPathState(2);
+                        intakeSubsystem.autoIntake();
+                        intakeSubsystem.autoIntake();
                         first = true;
                     }
 
                 }
                 break;
             case 2:
+                intakeSubsystem.autoIntake();
                 wristSubsystem.autoWristIn();
                 armSubsystem.autoArmIn();
+                extendoSubsystem.setTargetPos(-38000);
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if (!follower.isBusy()) {
 
@@ -358,26 +364,38 @@ public class SixSampBeyond extends OpMode {
                     }
                     liftSubsystem.setTargetPos(LiftSubsystem.autoStowHeight);
                     wristSubsystem.autoWristIn();
-                    extendoSubsystem.setTargetPos(-38000);
                     /* Grab Sample */
                     if (first) {
                         timer.reset();
                         first = false;
                     }
 
-                    if (timer.seconds() > .6 || colorSubsystem.stupidstpid != -1) {
+                    if (timer.seconds() > 1 || colorSubsystem.stupidstpid != -1) {
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
                         intakeSubsystem.autoDropdownStow();
                         pitchSubsystem.autoPitchStow();
                         extendoSubsystem.setTargetPos(0);
                         isSampleIn = true;
                     }
-                    if (timer.seconds() > .7 || (isSampleIn && sampleTimer.seconds() > 0.2)) {
+                    if (timer.seconds() > 1.1 || (isSampleIn && sampleTimer.seconds() > 0.2)) {
 
                         extendoSubsystem.setTargetPos(0);
                         extendoSubsystem.setTargetPos(0);
                         extendoSubsystem.setTargetPos(0);
                         extendoSubsystem.setTargetPos(0);
                         extendoSubsystem.setTargetPos(0);
+
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
+                        intakeSubsystem.autoDropdownStow();
+                        pitchSubsystem.autoPitchStow();
                         intakeSubsystem.autoIdle();
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                         follower.followPath(scoreBeyond, false);
@@ -392,7 +410,7 @@ public class SixSampBeyond extends OpMode {
                 if (timer2.seconds() > zeroLiftDelayB) {
                     liftSubsystem.setTargetPos(0);
                 }
-                if (timer2.seconds() > clawDelayB) {
+                if (timer2.seconds() > clawDelayB && liftSubsystem.atTarget()) {
                     clawSubsystem.autoClawClosed();
                 }
                 if (timer2.seconds() > sampLiftDelayB) {
@@ -431,44 +449,55 @@ public class SixSampBeyond extends OpMode {
 
                 break;
             case 4:
+
                 wristSubsystem.autoWristIn();
                 armSubsystem.autoArmIn();
-                if(timer.seconds() > 3) {
-                    extendoSubsystem.setTargetPos(-38000);
-                }
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
-                if (!follower.isBusy() && timer.seconds() > 3) {
+                travis = false;
+                iansdecisiveness = true;
+                iansigma = false;
+                if (timer.seconds() > 1.7) {
 
-                    if (isSampleIn && firstSampleDetection) {
-                        sampleTimer.reset();
-                        firstSampleDetection = false;
-                    }
-                    liftSubsystem.setTargetPos(LiftSubsystem.autoStowHeight);
+                    intakeSubsystem.autoIntake();
+                    intakeSubsystem.autoDropdownIntake();
+                    pitchSubsystem.autoPitchIntake();
                     wristSubsystem.autoWristIn();
+                    armSubsystem.autoArmIn();
+                }
+
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
+                if ((!follower.isBusy() || follower.isRobotStuck())) {
+                    liftSubsystem.setTargetPos(LiftSubsystem.autoStowHeight);
                     /* Grab Sample */
                     if (first) {
                         timer.reset();
                         first = false;
                     }
+                    if (timer.seconds() > .3) {
+                        extendoSubsystem.setTargetPos(-38000);
+                    }
+                    if (timer.seconds() > .1) {
 
-                    if (timer.seconds() > .6 || colorSubsystem.stupidstpid != -1) {
+                        intakeSubsystem.autoDropdownIntake();
+                        pitchSubsystem.autoPitchIntake();
+                    }
+                    if (timer.seconds() > 1.2 || colorSubsystem.stupidstpid != -1) {
                         intakeSubsystem.autoDropdownStow();
                         pitchSubsystem.autoPitchStow();
                         extendoSubsystem.setTargetPos(0);
-                        isSampleIn = true;
+                        if (isSampleIn && firstSampleDetection) {
+                            sampleTimer.reset();
+                            firstSampleDetection = false;
+                        }
                     }
-                    if (timer.seconds() > .7 || (isSampleIn && sampleTimer.seconds() > 0.2)) {
+                    if (timer.seconds() > 1.4 || (isSampleIn && !firstSampleDetection && sampleTimer.seconds() > 0.1)) {
 
-                        extendoSubsystem.setTargetPos(0);
-                        extendoSubsystem.setTargetPos(0);
-                        extendoSubsystem.setTargetPos(0);
-                        extendoSubsystem.setTargetPos(0);
-                        extendoSubsystem.setTargetPos(0);
-                        intakeSubsystem.autoIdle();
+                        intakeSubsystem.autoIntake();
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                        follower.followPath(scorePickup1, false);
+                        follower.followPath(scorePickup2, true);
                         setPathState(5);
                         first = true;
+                        iansigma = false;
+                        travis = false;
                         timer2.reset();
                     }
                 }
@@ -478,10 +507,10 @@ public class SixSampBeyond extends OpMode {
                 if (timer2.seconds() > zeroLiftDelay1) {
                     liftSubsystem.setTargetPos(0);
                 }
-                if (timer2.seconds() > clawDelay1) {
+                if (timer2.seconds() > clawDelay1 && liftSubsystem.atTarget()) {
                     clawSubsystem.autoClawClosed();
                 }
-                if (timer2.seconds() > sampLiftDelay1) {
+                if (timer2.seconds() > sampLiftDelay1 ) {
                     liftSubsystem.setTargetPos(LiftSubsystem.sampPrepHeight);
                 }
                 if (timer2.seconds() > armDelay1) {
@@ -641,16 +670,18 @@ public class SixSampBeyond extends OpMode {
                     wristSubsystem.autoWristIn();
                     armSubsystem.autoArmIn();
                     iansigma = false;
-                    extendoSubsystem.setTargetPos(-35000);
                 }
 
                 if ((!follower.isBusy() || follower.isRobotStuck() || timer.seconds() > 3)) {
-                    extendoSubsystem.setTargetPos(-35000);
                     liftSubsystem.setTargetPos(LiftSubsystem.autoStowHeight);
                     /* Grab Sample */
                     if (first) {
                         timer.reset();
                         first = false;
+                    }
+                    if(timer.seconds() > 0.7) {
+
+                        extendoSubsystem.setTargetPos(-35000);
                     }
                     if(timer.seconds() < 2.5) {
 
@@ -772,24 +803,23 @@ public class SixSampBeyond extends OpMode {
                     liftSubsystem.setTargetPos(LiftSubsystem.autoStowHeight);
                 }
                 if((!follower.isBusy() || follower.isRobotStuck())) {
+                    if(first) {
+                        timer.reset();
+                        first = false;
+                    }
                     if (timer.seconds() > 0.01) {
                         sweeperSubsystem.autoSweeperOpen();
                     }
-                    if (timer.seconds() > 0.1) {
-                        sweeperSubsystem.autoSweeperHalf_Closed();
+                    if (timer.seconds() > 0.251) {
+                        sweeperSubsystem.autoSweeperClosed();
                     }
-                    if (timer.seconds() > 0.2) {
+                    if (timer.seconds() > 0.501) {
                         sweeperSubsystem.autoSweeperOpen();
                     }
-                    if (timer.seconds() > 0.3) {
-                        sweeperSubsystem.autoSweeperHalf_Closed();
-                    }
-                    if (timer.seconds() > .4) {
+                    if (timer.seconds() > 0.751) {
                         sweeperSubsystem.autoSweeperClosed();
-                        //
                     }
-
-                    if(timer.seconds() > 1) {
+                    if(timer.seconds() > .8) {
 
                         if (result != null) {
 
@@ -804,18 +834,15 @@ public class SixSampBeyond extends OpMode {
                                 for (LLResultTypes.ColorResult cr : colorResults) {
                                     telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
                                 }
-                                pickupSubPose = new Pose(viewSubPose.getX(), viewSubPose.getY() - getLeftInches(result.getTx()), Math.toRadians(0));
-
-                                extendoSubsystem.setTargetPos((int)( Math.abs((getDistanceFromBar(result.getTy()))) * -14767/9.5 ) + 1000);
+                                pickupSubPose = new Pose(viewSubPose.getX(), viewSubPose.getY() - getLeftInches(result.getTx()) -1, Math.toRadians(0));
+                                adamissocoolandveryveryamazingandsoniceanduhuhveryverywhatsanadjectivehandsomebuffmasculinesevenfootlebronjames =(int)( Math.abs((getDistanceFromBar(result.getTy()))) * -14767/9.5 );
+                                extendoSubsystem.setTargetPos(adamissocoolandveryveryamazingandsoniceanduhuhveryverywhatsanadjectivehandsomebuffmasculinesevenfootlebronjames + 500);
                                 intakeSubsystem.autoIntake();
-                                intakeSubsystem.autoDropdownIntake();
-
-                                pitchSubsystem.autoPitchIntake();
                             }
                         } else {
                             telemetry.addData("Limelight", "No data available");
                         }
-                        if (timer.seconds() > 2) {
+                        if (timer.seconds() > 1) {
                             telemetry.addData("crapcrapcrap, ", 1);
                             grabSub = follower.pathBuilder()
                                     .addPath(new BezierLine(new Point(viewSubPose), new Point(pickupSubPose)))
@@ -836,22 +863,35 @@ public class SixSampBeyond extends OpMode {
                 }
                 break;
             case 11:
+
+                intakeSubsystem.autoDropdownIntake();
+
+                pitchSubsystem.autoPitchIntake();
+                if(colorSubsystem.stupidstpid == 1) {
+                    intakeSubsystem.autoDropdownEject();
+                    pitchSubsystem.autoPitchEject();
+                    intakeSubsystem.autoOuttake();
+                }
+                if (colorSubsystem.stupidstpid != -1 && colorSubsystem.stupidstpid != 1 || timer2.seconds() > 3.5) {
+                    intakeSubsystem.autoDropdownStow();
+                    pitchSubsystem.autoPitchStow();
+                    scoreSub = follower.pathBuilder()
+                            .addPath(new BezierLine(new Point(follower.getPose()), new Point(scoreSubPose)))
+                            .setLinearHeadingInterpolation(follower.getPose().getHeading(), scoreSubPose.getHeading())
+                            .build();
+                    follower.followPath(scoreSub, true);
+                    setPathState(12);
+                    first = true;
+
+                }
                 if(follower.isRobotStuck() || !follower.isBusy()) {
                     /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                     if (timer2.seconds() > 0.5) {// || pathTimer.getElapsedTimeSeconds() > 2){// && timer2.seconds() > 2.5) {
 
-                        extendoSubsystem.setTargetPos(extendoSubsystem.getTargetPos() - 2500);
+                        extendoSubsystem.setTargetPos(adamissocoolandveryveryamazingandsoniceanduhuhveryverywhatsanadjectivehandsomebuffmasculinesevenfootlebronjames - 1000);
                         if (first) {
                             timer.reset();
                             first = false;
-                        }
-                        if (timer.seconds() > 2 || colorSubsystem.stupidstpid != -1) {
-                            intakeSubsystem.autoDropdownStow();
-                            pitchSubsystem.autoPitchStow();
-                            follower.followPath(scoreSub, true);
-                            setPathState(12);
-                            first = true;
-
                         }
                     }
                 }
@@ -956,6 +996,11 @@ public class SixSampBeyond extends OpMode {
         // These loop the movements of the robot
         follower.update();
         autonomousPathUpdate();
+        if(colorSubsystem.stupidstpid == 1) {
+            intakeSubsystem.autoDropdownEject();
+            pitchSubsystem.autoPitchEject();
+            intakeSubsystem.autoOuttake();
+        }
 
         liftSubsystem.update();
         extendoSubsystem.update();

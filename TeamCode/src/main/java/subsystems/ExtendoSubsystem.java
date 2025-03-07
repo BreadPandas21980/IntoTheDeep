@@ -38,7 +38,7 @@ public class ExtendoSubsystem extends SubsystemBase {
     public static double tolerance = 300;
     public static int targetPos = 0;
 
-    public static int SOFTWARE_LIMIT = 22000;
+    public static int SOFTWARE_LIMIT = -23500;
     public static int SUB_PICKUP = -8500;
     public static int limitTolerance = 20;
 
@@ -60,7 +60,7 @@ public class ExtendoSubsystem extends SubsystemBase {
             double encVal = getEncoderVal();
             if(power.getAsDouble() > 0.2) {// && (getEncoderVal() >= SOFTWARE_LIMIT - tolerance)) {
                 outPower = 1;
-            } else if(encVal > SOFTWARE_LIMIT) {
+            } else if(encVal < SOFTWARE_LIMIT) {
                 outPower = 0;
             } else if (power.getAsDouble() < -0.2) {
                 outPower = -1;

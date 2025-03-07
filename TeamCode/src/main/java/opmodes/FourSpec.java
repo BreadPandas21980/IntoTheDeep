@@ -14,6 +14,7 @@ import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -46,6 +47,7 @@ import subsystems.WristSubsystem;
  * @version 2.0, 11/28/2024
  */
 
+@Disabled
 @Autonomous(name = "FOURSpec", group = "!!!!yay")
 public class FourSpec extends OpMode {
 
