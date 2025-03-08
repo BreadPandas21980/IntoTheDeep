@@ -21,7 +21,8 @@ public class WristSubsystem extends SubsystemBase {
 
     private final Servo  flipServo;
 
-    public static double WRIST_INTAKE_POS = .31;
+    public static double WRIST_INTAKE_POS_AUTO = .34;
+    public static double WRIST_INTAKE_POS = .3;
     public static double WRIST_OUT_SPEC_POS = .4;
     //tele = .25
     // auto =
@@ -77,7 +78,7 @@ public class WristSubsystem extends SubsystemBase {
     public void autoWristIn() {
         if(!autoDisabled) {
 
-            flipServo.setPosition(WRIST_INTAKE_POS);
+            flipServo.setPosition(WRIST_INTAKE_POS_AUTO);
         }
     }
 

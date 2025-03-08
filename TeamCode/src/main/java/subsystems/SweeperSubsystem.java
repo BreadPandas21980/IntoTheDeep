@@ -16,10 +16,10 @@ public class SweeperSubsystem extends SubsystemBase {
 
     public static boolean autoDisabled = false;
     private final Servo sweeperServo;
-    public static double FULLY_OPEN = 1;
+    public static double NOT_OPEN = 1;
     //change when find actual positions
     boolean sweeperOpen;
-    public static double NOT_OPEN = 0.24; //adam's val: 0.2
+    public static double FULLY_OPEN = 0.24; //adam's val: 0.2
 
     public static double HALF_CLOSED = 0.5;
     //change when find actual positions
