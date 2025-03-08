@@ -1,8 +1,6 @@
 package opmodes;
 
 
-import static opmodes.FourSpec.first;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -57,8 +55,8 @@ import subsystems.WristSubsystem;
  */
 
 @Config
-@Autonomous(name = "SixSampIanForPreload", group = "!!!!yay")
-public class SixSampBeyond extends OpMode {
+@Autonomous(name = "SixSampHumanRed", group = "!!!!yay")
+public class SixSampHumanRed extends OpMode {
 
     ElapsedTime timerImu = new ElapsedTime();
     public boolean travis = false;
@@ -134,7 +132,7 @@ public class SixSampBeyond extends OpMode {
     public static double pickup1x = 120.25;
 
     public static double pickup1heading = 83;
-    public static double pickupBeyondx = 100;
+    public static double pickupBeyondx = 52;
     public static double pickupBeyondy = 131.25;
 
     public static double pickupBeyondheading = 0;
@@ -880,12 +878,12 @@ public class SixSampBeyond extends OpMode {
                 break;
             case 11:
 
-                if(colorSubsystem.stupidstpid == 1) {
+                if(colorSubsystem.stupidstpid == 3) {
                     intakeSubsystem.autoDropdownEject();
                     pitchSubsystem.autoPitchEject();
                     intakeSubsystem.autoOuttake();
                 }
-                if (colorSubsystem.stupidstpid == 3 || colorSubsystem.stupidstpid == 2 || timer2.seconds() > 3.5) {
+                if (colorSubsystem.stupidstpid == 1 || colorSubsystem.stupidstpid == 2 || timer2.seconds() > 3.5) {
                     intakeSubsystem.autoDropdownStow();
                     pitchSubsystem.autoPitchStow();
                     intakeSubsystem.autoDropdownStow();
@@ -939,7 +937,7 @@ public class SixSampBeyond extends OpMode {
                 pitchSubsystem.autoPitchStow();
                 intakeSubsystem.autoDropdownStow();
                 pitchSubsystem.autoPitchStow();
-                if(colorSubsystem.stupidstpid != 1) {
+                if(colorSubsystem.stupidstpid != 3) {
                     extendoSubsystem.setTargetPos(0);
                 }
                 extendoSubsystem.setTargetPos(0);
@@ -1073,7 +1071,7 @@ public class SixSampBeyond extends OpMode {
 
         telemetry.setMsTransmissionInterval(11);
 
-        limelight.pipelineSwitch(7);
+        limelight.pipelineSwitch(6);
         limelight.start();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         pathTimer = new Timer();
