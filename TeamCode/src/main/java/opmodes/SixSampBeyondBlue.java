@@ -55,7 +55,7 @@ import subsystems.WristSubsystem;
  */
 
 @Config
-@Autonomous(name = "SixSampBlueIanForPreload", group = "!!!!yay")
+@Autonomous(name = "SixSampBeyondBlue", group = "!!!!yay")
 public class SixSampBeyondBlue extends OpMode {
 
     ElapsedTime timerImu = new ElapsedTime();
@@ -82,7 +82,7 @@ public class SixSampBeyondBlue extends OpMode {
     public static double clawDelay1 = .9;
     public static double sampLiftDelay1 = 1.1;
     public static double armDelay1 = 1.7;
-    public static double zeroLiftDelayB = 0.35;
+    public static double zeroLiftDelayB = 0.5;
     public static double clawDelayB = .8;
     public static double sampLiftDelayB = 1;
     public static double armDelayB = 1.45;
