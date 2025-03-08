@@ -50,7 +50,7 @@ import subsystems.WristSubsystem;
  */
 
 @Config
-@Autonomous(name = "FiveSpecIntake", group = "!!!!yay")
+@Autonomous(name = "HELLO THIS IS THE SPECIMEN INTAKE or something like that", group = "!!!!yay")
 public class FiveSpecIntake extends OpMode {
     ElapsedTime timerImu = new ElapsedTime();
     public boolean travis = false;
@@ -101,20 +101,20 @@ public class FiveSpecIntake extends OpMode {
 
     /** Start Pose of our robot */
     private final Pose startPose = new Pose(56, 134, Math.toRadians(90)); //56
-    private final Pose scorePose1 = new Pose(68, 106.5, Math.toRadians(90));
+    private final Pose scorePose1 = new Pose(68, 106, Math.toRadians(90));
     private final Pose controlIntakePose1 = new Pose(50, 135, Math.toRadians(90));
     private final Pose intakePose1 = new Pose(41, 118, Math.toRadians(50));
     private final Pose intakePose1b = new Pose(37, 120, Math.toRadians(0));
     private final Pose intakePose2 = new Pose(32, 113.5, Math.toRadians(50));
     private final Pose intakePose2b = new Pose(33, 120, Math.toRadians(-20));
-    private final Pose intakePose3 = new Pose(26, 115, Math.toRadians(46));
+    private final Pose intakePose3 = new Pose(26, 114, Math.toRadians(46));
     private final Pose intakePose3b = new Pose(28, 115, Math.toRadians(-25));
     private final Pose grabPrepPose2 = new Pose(27, 115, Math.toRadians(90));
-    private final Pose grabPose2 = new Pose(27, 128, Math.toRadians(90));
+    private final Pose grabPose2 = new Pose(27, 127.5, Math.toRadians(90));
     private final Pose scorePose2 = new Pose(65, 106.5, Math.toRadians(90));
     private final Pose grabPrepPose3 = new Pose(36, 115, Math.toRadians(90));
     private final Pose grabPose3 = new Pose(36, 130, Math.toRadians(90));
-    private final Pose scorePose3 = new Pose(65, 106.5, Math.toRadians(90));
+    private final Pose scorePose3 = new Pose(65, 106, Math.toRadians(90));
     private final Pose grabPrepPose4 = new Pose(36, 115, Math.toRadians(90));
     private final Pose grabPose4 = new Pose(36, 131, Math.toRadians(90));
     private final Pose scorePose4 = new Pose(65, 106.5, Math.toRadians(90));
@@ -123,7 +123,7 @@ public class FiveSpecIntake extends OpMode {
     private final Pose scorePose5 = new Pose(65, 107, Math.toRadians(90));
 
     /** Park Pose for our robot, after we do all of the scoring. */
-    private final Pose parkPose = new Pose(36, 130, Math.toRadians(90));
+    private final Pose parkPose = new Pose(36, 130, Math.toRadians(315));
     /* These are our Paths and PathChains that we will define in buildPaths() */
     private Path scorePreload, park;
     private PathChain intake1, intake2, intake3, grabPickup2, grabPickup3, grabPickup4, grabPickup5, score2, score3, score4, score5;
@@ -265,13 +265,13 @@ public class FiveSpecIntake extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()){// || pathTimer.getElapsedTimeSeconds() > 2){// && timer2.seconds() > 2.5) {
 
-                    liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight);
+                    liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight + 100);
                     if(first) {
                         timer.reset();
                         first = false;
                     }
                     
-                    if(liftSubsystem.getLeftEncoderVal() > 760) {
+                    if(liftSubsystem.getLeftEncoderVal() > 770) {
                         clawSubsystem.autoClawOpen();
                     }
                     /* Score Preload */
@@ -397,7 +397,7 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
 
-                    if(timer.seconds() > .3 ) {
+                    if(timer.seconds() > .45 ) {
                         extendoSubsystem.setTargetPos(0);
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                         follower.followPath(intake3,false);
@@ -505,7 +505,7 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(liftSubsystem.getLeftEncoderVal() > 750) {
+                    if(liftSubsystem.getLeftEncoderVal() > 765) {
                         clawSubsystem.autoClawOpen();
                     }
 
@@ -562,7 +562,7 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(liftSubsystem.getLeftEncoderVal() > 750) {
+                    if(liftSubsystem.getLeftEncoderVal() > 765) {
                         clawSubsystem.autoClawOpen();
                     }
                     if(timer.seconds() > 0.7) {
@@ -618,7 +618,7 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(liftSubsystem.getLeftEncoderVal() > 750) {
+                    if(liftSubsystem.getLeftEncoderVal() > 765) {
                         clawSubsystem.autoClawOpen();
                     }
                     if(timer.seconds() > 0.7) {
@@ -691,6 +691,9 @@ public class FiveSpecIntake extends OpMode {
             case 16:
 
 
+                if(timer2.seconds() > 1) {
+                    extendoSubsystem.setTargetPos(-25000);
+                }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()) {
                     /* Grab Sample */
