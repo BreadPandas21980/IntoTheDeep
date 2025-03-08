@@ -173,11 +173,11 @@ public class ActualTeleOp extends BaseOpMode {
                         new WaitUntilCommand(() -> liftSubsystem.atTarget()),
                         ptoSubsystem.ptoEngage(),
                    //     liftSubsystem.unheighting(),
-                        liftSubsystem.ptoClimbing(),
-                        liftSubsystem.climbHeightTwo(),
-                        new WaitUntilCommand(() -> liftSubsystem.atTarget()),
-                        ptoSubsystem.ptoDisengage(),
-                        liftSubsystem.ptoUnclimbing(),
+                      //  liftSubsystem.ptoClimbing(),
+                   //     liftSubsystem.climbHeightTwo(),
+                   //     new WaitUntilCommand(() -> liftSubsystem.atTarget()),
+                   //     ptoSubsystem.ptoDisengage(),
+                      //  liftSubsystem.ptoUnclimbing(),
                         liftSubsystem.unheighting()
                 )
         );
