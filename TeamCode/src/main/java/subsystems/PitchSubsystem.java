@@ -55,6 +55,12 @@ public class PitchSubsystem extends SubsystemBase {
             pitchServo.setPosition(PITCH_STOW + 0.015);
         }
     }
+    public void autoPitchStow2() {
+        if(!autoDisabled) {
+
+            pitchServo.setPosition(PITCH_STOW + 0.04);
+        }
+    }
     public Command pitchIntake() {
         return new InstantCommand(() -> {
             pitchServo.setPosition(PITCH_INTAKE);

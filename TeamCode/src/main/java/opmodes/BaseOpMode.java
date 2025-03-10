@@ -177,12 +177,10 @@ public class BaseOpMode extends CommandOpMode {
         leftSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        leftSlide.resetEncoder();
-        leftSlide.resetEncoder();
-        leftSlide.resetEncoder();
+
+
         leftSlideDC.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftSlideDC.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftSlide.resetEncoder();
         extendoMotor.resetEncoder();
         extendoMotor.setInverted(true);
         extendoMotor.setRunMode(Motor.RunMode.RawPower);

@@ -38,7 +38,7 @@ public class ExtendoSubsystem extends SubsystemBase {
     public static double tolerance = 300;
     public static int targetPos = 0;
 
-    public static int SOFTWARE_LIMIT = -23500;
+    public static int SOFTWARE_LIMIT = -25000;
     public static int SUB_PICKUP = -8500;
     public static int limitTolerance = 20;
 

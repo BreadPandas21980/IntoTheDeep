@@ -81,7 +81,7 @@ public class SixSampBeyondBlue extends OpMode {
     public static double zeroLiftDelay1 = 0.3;
     public static double clawDelay1 = .9;
     public static double sampLiftDelay1 = 1.1;
-    public static double armDelay1 = 1.7;
+    public static double armDelay1 = 1.5;
     public static double zeroLiftDelayB = 0.5;
     public static double clawDelayB = .8;
     public static double sampLiftDelayB = 1;
@@ -133,7 +133,7 @@ public class SixSampBeyondBlue extends OpMode {
 
     public static double pickup1heading = 83;
     public static double pickupBeyondx = 100;
-    public static double pickupBeyondy = 131.25;
+    public static double pickupBeyondy = 130.5;
 
     public static double pickupBeyondheading = 0;
     public static double pause2y = 125;
@@ -147,8 +147,8 @@ public class SixSampBeyondBlue extends OpMode {
     public static double viewSubx = 89;
     public static double viewSuby = 80;
     public static double viewSubheading = 0;
-    public static double scoreSubx = 124.5;
-    public static double scoreSuby = 129;
+    public static double scoreSubx = 122.5;
+    public static double scoreSuby = 127.5;
     public static double scoreSubheading = 45;
 
     /** Start Pose of our robot */
@@ -158,7 +158,7 @@ public class SixSampBeyondBlue extends OpMode {
     /** Scoring Pose of our robot. It is facing the submersible at a -45 degree (315 degree) angle. */
     private final Pose scorePose = new Pose(124, 137.5, Math.toRadians(0));
     private final Pose pickupBeyondPose = new Pose(pickupBeyondx, pickupBeyondy, Math.toRadians(pickupBeyondheading));
-    private final Pose scoreBeyondPose = new Pose(122.5, 130, Math.toRadians(30));
+    private final Pose scoreBeyondPose = new Pose(121, 128.5, Math.toRadians(30));
 
     private final Pose pickup1ControlPose = new Pose(118.5, 125, Math.toRadians(115));
 
@@ -170,7 +170,7 @@ public class SixSampBeyondBlue extends OpMode {
     /** Middle (Second) Sample from the Spike Mark */
     private Pose pickup2PausePose = new Pose(pickup2x, pause2y, Math.toRadians(pickup2heading));
     private Pose pickup2Pose = new Pose(pickup2x, 124, Math.toRadians(pickup2heading));
-    private final Pose scorePose3 = new Pose(127, 128.5, Math.toRadians(45));
+    private final Pose scorePose3 = new Pose(126.5, 127.5, Math.toRadians(45));
 
     /** Highest (Third) Sample from the Spike Mark */
     private Pose pickup3Pose = new Pose(pickup3x, pickup3y, Math.toRadians(pickup3heading));
@@ -421,7 +421,7 @@ public class SixSampBeyondBlue extends OpMode {
                 }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
 
-                if ((!follower.isBusy() || follower.isRobotStuck()) && timer2.seconds() > armDelay1) {
+                if ((!follower.isBusy() || follower.isRobotStuck()) && timer2.seconds() > armDelayB + 0.45) {
                     armSubsystem.autoArmSamp();
                     wristSubsystem.autoWristSamp();
                     if (first) {
@@ -518,7 +518,7 @@ public class SixSampBeyondBlue extends OpMode {
                 }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
 
-                if ((!follower.isBusy() || follower.isRobotStuck()) && timer2.seconds() > armDelay1) {
+                if ((!follower.isBusy() || follower.isRobotStuck()) && timer2.seconds() > armDelay1 + 0.2) {
                     armSubsystem.autoArmSamp();
                     wristSubsystem.autoWristSamp();
                     if (first) {
@@ -883,7 +883,7 @@ public class SixSampBeyondBlue extends OpMode {
                     pitchSubsystem.autoPitchEject();
                     intakeSubsystem.autoOuttake();
                 }
-                if (colorSubsystem.stupidstpid == 3 || colorSubsystem.stupidstpid == 2 || timer2.seconds() > 3.5) {
+                if (colorSubsystem.stupidstpid == 3 || colorSubsystem.stupidstpid == 2 || timer2.seconds() > 4) {
                     intakeSubsystem.autoDropdownStow();
                     pitchSubsystem.autoPitchStow();
                     intakeSubsystem.autoDropdownStow();

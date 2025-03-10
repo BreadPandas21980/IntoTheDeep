@@ -164,7 +164,7 @@ public class ActualTeleOp extends BaseOpMode {
 
         //climb automation
         //uh oh
-        gb1(DPAD_UP).whenActive(
+        gb1(Y).whenActive(
                 new SequentialCommandGroup(
                         stiltSubsystem.stiltsDown(),
                         new WaitCommand(200),
@@ -181,15 +181,15 @@ public class ActualTeleOp extends BaseOpMode {
                         liftSubsystem.unheighting()
                 )
         );
-        gb1(DPAD_LEFT).toggleWhenActive(
+        gb1(X).toggleWhenActive(
                 stiltSubsystem.stiltsDown(),
                 stiltSubsystem.stiltsUp()
         );
-        gb1(DPAD_RIGHT).toggleWhenActive(
+        gb1(B).toggleWhenActive(
                 ptoSubsystem.ptoEngage(),
                 ptoSubsystem.ptoDisengage()
         );
-        gb1(DPAD_DOWN).whenActive(
+        gb1(A).whenActive(
                 new SequentialCommandGroup(
                         ptoSubsystem.ptoDisengage(),
                         stiltSubsystem.stiltsUp(),
@@ -224,19 +224,19 @@ public class ActualTeleOp extends BaseOpMode {
                 )
         );
 
-        gb1(X).whenActive(
+        gb1(DPAD_LEFT).whenActive(
                 new SequentialCommandGroup(
                         pitchSubsystem.pitchIntake(),
                         intakeSubsystemBlue.dropdownIntake()
                 )
         );
-        gb1(B).whenActive(
+        gb1(DPAD_RIGHT).whenActive(
                 new SequentialCommandGroup(
                         intakeSubsystemBlue.dropdownStow(),
                         pitchSubsystem.pitchStow()
                 )
         );
-        gb1(Y).whenActive(
+        gb1(DPAD_UP).whenActive(
                 new SequentialCommandGroup(
                         intakeSubsystemBlue.dropdownEject(),
                         pitchSubsystem.pitchEject()

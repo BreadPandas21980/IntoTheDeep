@@ -50,7 +50,7 @@ public class LiftSubsystem extends SubsystemBase {
 
     public static int GROUND_HEIGHT = 0;
     //hit first rung and get on 1st set
-    public static int CLIMB_HEIGHT_ONE_UP = 880;
+    public static int CLIMB_HEIGHT_ONE_UP = 650;
     //lock on to first rung with first set of hooks
     public static int CLIMB_HEIGHT_TWO_DOWN = 150;
     public LiftSubsystem(MotorEx leftSlide, MotorEx rightSlide) {

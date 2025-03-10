@@ -81,7 +81,7 @@ public class SixSampHumanRed extends OpMode {
     public static double zeroLiftDelay1 = 0.3;
     public static double clawDelay1 = .9;
     public static double sampLiftDelay1 = 1.1;
-    public static double armDelay1 = 1.7;
+    public static double armDelay1 = 1.5;
     public static double zeroLiftDelayB = 0.5;
     public static double clawDelayB = .8;
     public static double sampLiftDelayB = 1;
@@ -133,7 +133,7 @@ public class SixSampHumanRed extends OpMode {
 
     public static double pickup1heading = 83;
     public static double pickupBeyondx = 52;
-    public static double pickupBeyondy = 131.25;
+    public static double pickupBeyondy = 130.75;
 
     public static double pickupBeyondheading = 0;
     public static double pause2y = 125;
@@ -421,7 +421,7 @@ public class SixSampHumanRed extends OpMode {
                 }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
 
-                if ((!follower.isBusy() || follower.isRobotStuck()) && timer2.seconds() > armDelay1) {
+                if ((!follower.isBusy() || follower.isRobotStuck()) && timer2.seconds() > armDelayB + 0.2) {
                     armSubsystem.autoArmSamp();
                     wristSubsystem.autoWristSamp();
                     if (first) {
@@ -518,7 +518,7 @@ public class SixSampHumanRed extends OpMode {
                 }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
 
-                if ((!follower.isBusy() || follower.isRobotStuck()) && timer2.seconds() > armDelay1) {
+                if ((!follower.isBusy() || follower.isRobotStuck()) && timer2.seconds() > armDelay1 + 0.2) {
                     armSubsystem.autoArmSamp();
                     wristSubsystem.autoWristSamp();
                     if (first) {
@@ -883,7 +883,7 @@ public class SixSampHumanRed extends OpMode {
                     pitchSubsystem.autoPitchEject();
                     intakeSubsystem.autoOuttake();
                 }
-                if (colorSubsystem.stupidstpid == 1 || colorSubsystem.stupidstpid == 2 || timer2.seconds() > 3.5) {
+                if (colorSubsystem.stupidstpid == 1 || colorSubsystem.stupidstpid == 2 || timer2.seconds() > 4) {
                     intakeSubsystem.autoDropdownStow();
                     pitchSubsystem.autoPitchStow();
                     intakeSubsystem.autoDropdownStow();
