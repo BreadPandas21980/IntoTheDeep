@@ -109,16 +109,16 @@ public class FiveSpecIntake extends OpMode {
     private final Pose intakePose2b = new Pose(33, 120, Math.toRadians(-20));
     private final Pose intakePose3 = new Pose(26, 114, Math.toRadians(46));
     private final Pose intakePose3b = new Pose(28, 115, Math.toRadians(-25));
-    private final Pose grabPrepPose2 = new Pose(27, 115, Math.toRadians(90));
+    private final Pose grabPrepPose2 = new Pose(27, 127., Math.toRadians(90));
     private final Pose grabPose2 = new Pose(27, 127.5, Math.toRadians(90));
     private final Pose scorePose2 = new Pose(65, 106.5, Math.toRadians(90));
-    private final Pose grabPrepPose3 = new Pose(36, 115, Math.toRadians(90));
+    private final Pose grabPrepPose3 = new Pose(36, 129, Math.toRadians(90));
     private final Pose grabPose3 = new Pose(36, 130, Math.toRadians(90));
     private final Pose scorePose3 = new Pose(65, 106, Math.toRadians(90));
-    private final Pose grabPrepPose4 = new Pose(36, 115, Math.toRadians(90));
+    private final Pose grabPrepPose4 = new Pose(36, 130, Math.toRadians(90));
     private final Pose grabPose4 = new Pose(36, 131, Math.toRadians(90));
     private final Pose scorePose4 = new Pose(65, 106.5, Math.toRadians(90));
-    private final Pose grabPrepPose5 = new Pose(36, 115, Math.toRadians(90));
+    private final Pose grabPrepPose5 = new Pose(36, 130, Math.toRadians(90));
     private final Pose grabPose5 = new Pose(36, 131, Math.toRadians(90));
     private final Pose scorePose5 = new Pose(65, 107, Math.toRadians(90));
 
@@ -293,6 +293,10 @@ public class FiveSpecIntake extends OpMode {
             case 2:
                 wristSubsystem.autoWristWall();
                 armSubsystem.autoArmWall();
+                if(iansigma && follower.getPose().getY() > 118) {
+                    extendoSubsystem.setTargetPos(-30000);
+                    iansigma = false;
+                }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy()) {
 
@@ -307,12 +311,15 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-
+/*
                     if(timer.seconds() > .9 || colorSubsystem.stupidstpid != -1) {
                         //why was this commented out. Lowkey scared that it won't work
+                        //why would i need to eject during specimen auto?
                      intakeSubsystem.autoDropdownEject();
                      pitchSubsystem.autoPitchEject();
                     }
+
+ */
                     if(timer.seconds() > 1|| colorSubsystem.stupidstpid != -1) {
 
                         intakeSubsystem.autoIdle();
@@ -322,6 +329,7 @@ public class FiveSpecIntake extends OpMode {
                         setPathState(3);
                         first = true;
                         timer2.reset();
+                        iansigma = true;
                     }
                 }
                 break;
@@ -471,20 +479,20 @@ public class FiveSpecIntake extends OpMode {
                 intakeSubsystem.autoIdleReal();
                 intakeSubsystem.autoDropdownStow();
                 pitchSubsystem.autoPitchStow();
-                if((!follower.isBusy() || follower.isRobotStuck()) && timer2.seconds() > 0.5) {
+                if((!follower.isBusy() || follower.isRobotStuck())) {
 
                     if(first) {
                         timer.reset();
                         first = false;
                     }
-                    if(timer.seconds() > 0.3) {
+                    if(timer.seconds() > 0.1) {
                         clawSubsystem.autoClawSpecClosed();
                     }
-                    if(timer.seconds() > 0.75) {
+                    if(timer.seconds() > 0.3) {
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele);
                     }
                     /* Score Preload */
-                    if(timer.seconds() > 1) {
+                    if(timer.seconds() > 0.5) {
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
 
                         follower.followPath(score2,true);
@@ -509,7 +517,7 @@ public class FiveSpecIntake extends OpMode {
                         clawSubsystem.autoClawOpen();
                     }
 
-                    if(timer.seconds() > 0.7) {
+                    if(timer.seconds() > 0.5) {
 
                         intakeSubsystem.autoIdle();
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
@@ -534,14 +542,14 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
 
-                    if(timer.seconds() > 0.3) {
+                    if(timer.seconds() > 0.1) {
                         clawSubsystem.autoClawSpecClosed();
                     }
-                    if(timer.seconds() > 0.75) {
+                    if(timer.seconds() > 0.3) {
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele);
                     }
                     /* Score Preload */
-                    if(timer.seconds() > 1) {
+                    if(timer.seconds() > 0.5) {
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
 
                         follower.followPath(score3,true);
@@ -565,7 +573,7 @@ public class FiveSpecIntake extends OpMode {
                     if(liftSubsystem.getLeftEncoderVal() > 765) {
                         clawSubsystem.autoClawOpen();
                     }
-                    if(timer.seconds() > 0.7) {
+                    if(timer.seconds() > 0.5) {
 
                         intakeSubsystem.autoIdle();
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
@@ -583,20 +591,20 @@ public class FiveSpecIntake extends OpMode {
                 if(timer2.seconds() > 1) {
                     liftSubsystem.setTargetPos(0);
                 }
-                if((!follower.isBusy() || follower.isRobotStuck()) && timer2.seconds() > 2.5) {
+                if((!follower.isBusy() || follower.isRobotStuck())) {
 
                     if(first) {
                         timer.reset();
                         first = false;
                     }
-                    if(timer.seconds() > 0.3) {
+                    if(timer.seconds() > 0.1) {
                         clawSubsystem.autoClawSpecClosed();
                     }
-                    if(timer.seconds() > 0.75) {
+                    if(timer.seconds() > 0.3) {
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele);
                     }
                     /* Score Preload */
-                    if(timer.seconds() > 1.3) {
+                    if(timer.seconds() > 0.5) {
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
 
                         follower.followPath(score4,true);
@@ -621,7 +629,7 @@ public class FiveSpecIntake extends OpMode {
                     if(liftSubsystem.getLeftEncoderVal() > 765) {
                         clawSubsystem.autoClawOpen();
                     }
-                    if(timer.seconds() > 0.7) {
+                    if(timer.seconds() > 0.5) {
 
                         intakeSubsystem.autoIdle();
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
@@ -639,20 +647,20 @@ public class FiveSpecIntake extends OpMode {
                 if(timer2.seconds() > 1) {
                     liftSubsystem.setTargetPos(0);
                 }
-                if((!follower.isBusy() || follower.isRobotStuck()) && timer2.seconds() > 2.5) {
+                if((!follower.isBusy() || follower.isRobotStuck())) {
 
                     if(first) {
                         timer.reset();
                         first = false;
                     }
-                    if(timer.seconds() > 0.3) {
+                    if(timer.seconds() > 0.1) {
                         clawSubsystem.autoClawSpecClosed();
                     }
-                    if(timer.seconds() > 0.75) {
+                    if(timer.seconds() > 0.3) {
                         liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele);
                     }
                     /* Score Preload */
-                    if(timer.seconds() > 1.3) {
+                    if(timer.seconds() > 0.5) {
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
 
                         follower.followPath(score5,true);
@@ -677,7 +685,7 @@ public class FiveSpecIntake extends OpMode {
                         clawSubsystem.autoClawOpen();
                     }
 
-                    if(timer.seconds() > 0.7) {
+                    if(timer.seconds() > 0.5) {
 
                         intakeSubsystem.autoIdle();
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
