@@ -171,13 +171,13 @@ public class LimelightTest extends OpMode {
                         sweeperSubsystem.autoSweeperOpen();
                     }
                     if (timer.seconds() > 0.2) {
-                        sweeperSubsystem.autoSweeperHalf_Closed();
+                        sweeperSubsystem.autoSweeperClosed();
                     }
                     if (timer.seconds() > 0.4) {
                         sweeperSubsystem.autoSweeperOpen();
                     }
                     if (timer.seconds() > 0.6) {
-                        sweeperSubsystem.autoSweeperHalf_Closed();
+                        sweeperSubsystem.autoSweeperClosed();
                     }
                     if (timer.seconds() > .7) {
                         sweeperSubsystem.autoSweeperClosed();

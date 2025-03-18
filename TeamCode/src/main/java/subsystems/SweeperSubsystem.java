@@ -16,12 +16,10 @@ public class SweeperSubsystem extends SubsystemBase {
 
     public static boolean autoDisabled = false;
     private final Servo sweeperServo;
-    public static double NOT_OPEN = 1;
+    public static double NOT_OPEN = 0;
     //change when find actual positions
     boolean sweeperOpen;
-    public static double FULLY_OPEN = 0.24; //adam's val: 0.2
-
-    public static double HALF_CLOSED = 0.5;
+    public static double FULLY_OPEN = 1; //adam's val: 0.2
     //change when find actual positions
 
 
@@ -36,13 +34,6 @@ public class SweeperSubsystem extends SubsystemBase {
     public Command fullyOpen() {
         return new InstantCommand(() -> {
             sweeperServo.setPosition(FULLY_OPEN);
-            sweeperOpen = true;
-        }, this);
-    }
-
-    public Command halfClosed() {
-        return new InstantCommand(() -> {
-            sweeperServo.setPosition(HALF_CLOSED);
             sweeperOpen = true;
         }, this);
     }
@@ -69,14 +60,4 @@ public class SweeperSubsystem extends SubsystemBase {
         }
 
     }
-
-    public void autoSweeperHalf_Closed() {
-        if (!autoDisabled) {
-
-            sweeperServo.setPosition(HALF_CLOSED);
-        }
-
-
-    }
-
 }
