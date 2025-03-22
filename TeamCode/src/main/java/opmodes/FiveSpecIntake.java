@@ -101,26 +101,30 @@ public class FiveSpecIntake extends OpMode {
 
     /** Start Pose of our robot */
     private final Pose startPose = new Pose(56, 134, Math.toRadians(90)); //56
-    private final Pose scorePose1 = new Pose(68, 106, Math.toRadians(90));
+    private final Pose scorePose1 = new Pose(68, 105, Math.toRadians(90));
     private final Pose controlIntakePose1 = new Pose(50, 135, Math.toRadians(90));
-    private final Pose intakePose1 = new Pose(41, 117, Math.toRadians(50));
-    private final Pose intakePose1b = new Pose(37, 120, Math.toRadians(0));
-    private final Pose intakePose2 = new Pose(32, 114.5, Math.toRadians(51));
-    private final Pose intakePose2b = new Pose(33, 120, Math.toRadians(0));
-    private final Pose intakePose3 = new Pose(24., 117.15, Math.toRadians(50));
-    private final Pose intakePose3b = new Pose(33, 117.5, Math.toRadians(-22));
-    private final Pose grabPrepPose2 = new Pose(33, 127., Math.toRadians(90));
-    private final Pose grabPose2 = new Pose(33, 127.5, Math.toRadians(90));
-    private final Pose scorePose2 = new Pose(63, 107, Math.toRadians(90));
-    private final Pose grabPrepPose3 = new Pose(36, 129, Math.toRadians(90));
-    private final Pose grabPose3 = new Pose(36, 130, Math.toRadians(90));
-    private final Pose scorePose3 = new Pose(64, 108, Math.toRadians(90));
-    private final Pose grabPrepPose4 = new Pose(36, 130, Math.toRadians(90));
-    private final Pose grabPose4 = new Pose(36, 131, Math.toRadians(90));
-    private final Pose scorePose4 = new Pose(65, 107.9, Math.toRadians(90));
-    private final Pose grabPrepPose5 = new Pose(36, 130, Math.toRadians(90));
+    private final Pose intakePose1 = new Pose(29, 124, Math.toRadians(87));
+    private final Pose intakePose1b = new Pose(30, 124, Math.toRadians(0));
+    private final Pose intakePose2 = new Pose(17, 119, Math.toRadians(87));
+    private final Pose intakePose2b = new Pose(25, 124, Math.toRadians(0));
+    private final Pose intakePose3 = new Pose(30, 119.5, Math.toRadians(30));
+    private final Pose intakePose3b = new Pose(36, 121, Math.toRadians(-22));
+    private final Pose grabPrepPose2 = new Pose(33, 126.5, Math.toRadians(90));
+    private final Pose grabPose2 = new Pose(33, 128.25, Math.toRadians(90));
+    private final Pose scorePose2a = new Pose(60, 127, Math.toRadians(90));
+    private final Pose scorePose2 = new Pose(63, 110, Math.toRadians(90));
+    private final Pose grabPrepPose3 = new Pose(36, 115, Math.toRadians(90));
+    private final Pose grabPose3 = new Pose(36, 130.5, Math.toRadians(90));
+    private final Pose scorePose3a = new Pose(61, 129.5, Math.toRadians(90));
+    private final Pose scorePose3 = new Pose(64, 110, Math.toRadians(90));
+    private final Pose grabPrepPose4 = new Pose(36, 115, Math.toRadians(90));
+    private final Pose grabPose4 = new Pose(36, 131.5, Math.toRadians(90));
+    private final Pose scorePose4a = new Pose(62, 130.5, Math.toRadians(90));
+    private final Pose scorePose4 = new Pose(65, 110, Math.toRadians(90));
+    private final Pose grabPrepPose5 = new Pose(36, 115, Math.toRadians(90));
     private final Pose grabPose5 = new Pose(36, 131, Math.toRadians(90));
-    private final Pose scorePose5 = new Pose(62, 108., Math.toRadians(90));
+    private final Pose scorePose5a = new Pose(58, 130.5, Math.toRadians(90));
+    private final Pose scorePose5 = new Pose(61, 110, Math.toRadians(90));
 
     /** Park Pose for our robot, after we do all of the scoring. */
     private final Pose parkPose = new Pose(36, 130, Math.toRadians(90));
@@ -194,8 +198,10 @@ public class FiveSpecIntake extends OpMode {
 
         /* This is our scorePickup2 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         score2 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(grabPose2), new Point(scorePose2)))
-                .setLinearHeadingInterpolation(grabPose2.getHeading(), scorePose2.getHeading())
+                .addPath(new BezierLine(new Point(grabPose2), new Point(scorePose2a)))
+                .setLinearHeadingInterpolation(grabPose2.getHeading(), scorePose2a.getHeading())
+                .addPath(new BezierLine(new Point(scorePose2a), new Point(scorePose2)))
+                .setLinearHeadingInterpolation(scorePose2a.getHeading(), scorePose2.getHeading())
                 .build();
 
         /* This is our grabPickup3 PathChain. We are using a single path with a BezierLine, which is a straight line. */
@@ -208,8 +214,10 @@ public class FiveSpecIntake extends OpMode {
 
         /* This is our scorePickup3 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         score3 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(grabPose3), new Point(scorePose3)))
-                .setLinearHeadingInterpolation(grabPose3.getHeading(), scorePose3.getHeading())
+                .addPath(new BezierLine(new Point(grabPose3), new Point(scorePose3a)))
+                .setLinearHeadingInterpolation(grabPose3.getHeading(), scorePose3a.getHeading())
+                .addPath(new BezierLine(new Point(scorePose3a), new Point(scorePose3)))
+                .setLinearHeadingInterpolation(scorePose3a.getHeading(), scorePose3.getHeading())
                 .build();
 
         grabPickup4 = follower.pathBuilder()
@@ -219,8 +227,10 @@ public class FiveSpecIntake extends OpMode {
                 .setLinearHeadingInterpolation(grabPrepPose4.getHeading(), grabPose4.getHeading())
                 .build();
         score4 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(grabPose4), new Point(scorePose4)))
-                .setLinearHeadingInterpolation(grabPose4.getHeading(), scorePose4.getHeading())
+                .addPath(new BezierLine(new Point(grabPose4), new Point(scorePose4a)))
+                .setLinearHeadingInterpolation(grabPose4.getHeading(), scorePose4a.getHeading())
+                .addPath(new BezierLine(new Point(scorePose4a), new Point(scorePose4)))
+                .setLinearHeadingInterpolation(scorePose4a.getHeading(), scorePose4.getHeading())
                 .build();
         grabPickup5 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(scorePose4), new Point(grabPrepPose4)))
@@ -229,8 +239,10 @@ public class FiveSpecIntake extends OpMode {
                 .setLinearHeadingInterpolation(grabPrepPose5.getHeading(), grabPose5.getHeading())
                 .build();
         score5 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(grabPose5), new Point(scorePose5)))
-                .setLinearHeadingInterpolation(grabPose5.getHeading(), scorePose5.getHeading())
+                .addPath(new BezierLine(new Point(grabPose5), new Point(scorePose5a)))
+                .setLinearHeadingInterpolation(grabPose5.getHeading(), scorePose5a.getHeading())
+                .addPath(new BezierLine(new Point(scorePose5a), new Point(scorePose5)))
+                .setLinearHeadingInterpolation(scorePose5a.getHeading(), scorePose5.getHeading())
                 .build();
         /* This is our park path. We are using a BezierCurve with 3 points, which is a curved line that is curved based off of the control point */
         park = new Path(new BezierLine(new Point(scorePose5), new Point(parkPose)));
@@ -253,7 +265,7 @@ public class FiveSpecIntake extends OpMode {
                 break;
             case 1:
                 timerImu.reset();
-                liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele + 010);
+                liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele+010);
                 armSubsystem.autoArmStraight();
                 wristSubsystem.autoWristScoreSpecPosAuto();
                 /* You could check for
@@ -265,15 +277,12 @@ public class FiveSpecIntake extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()){// || pathTimer.getElapsedTimeSeconds() > 2){// && timer2.seconds() > 2.5) {
 
-                    liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight + 100);
+                    liftSubsystem.setTargetPos(LiftSubsystem.specimenScoreHeight + 500);
                     if(first) {
                         timer.reset();
                         first = false;
                     }
-                    
-                    if(liftSubsystem.getLeftEncoderVal() > 830) {
-                        clawSubsystem.autoClawOpen();
-                    }
+
                     /* Score Preload */
                     if(timer.seconds() > .5) {
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
@@ -327,7 +336,7 @@ public class FiveSpecIntake extends OpMode {
                         intakeSubsystem.autoIdle();
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                         follower.followPath(intake1b,false);
-                        extendoSubsystem.setTargetPos(-37000);
+                        extendoSubsystem.setTargetPos(0);
                         setPathState(3);
                         first = true;
                         timer2.reset();
@@ -337,6 +346,10 @@ public class FiveSpecIntake extends OpMode {
                 break;
 
             case 3:
+                if(timer2.seconds() > 0.5 && iansigma) {
+                    extendoSubsystem.setTargetPos(-30000);
+                    iansigma = false;
+                }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy() || follower.isRobotStuck()) {
 
@@ -348,7 +361,7 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
 
-                    if(timer.seconds() > .3 ) {
+                    if(timer.seconds() > .4 ) {
                         extendoSubsystem.setTargetPos(0);
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                         follower.followPath(intake2,false);
@@ -356,6 +369,7 @@ public class FiveSpecIntake extends OpMode {
                         first = true;
                         timer2.reset();
                         travis = true;
+                        iansigma = true;
                     }
                 }
                 break;
@@ -370,7 +384,7 @@ public class FiveSpecIntake extends OpMode {
                     if(travis) {
 
                         liftSubsystem.setTargetPos(0);
-                        extendoSubsystem.setTargetPos(-38000);
+                        extendoSubsystem.setTargetPos(-32000);
                         travis = false;
                     }
                     /* Grab Sample */
@@ -385,7 +399,7 @@ public class FiveSpecIntake extends OpMode {
                     }
                     if(timer.seconds() > .9|| colorSubsystem.stupidstpid != -1) {
 
-                        extendoSubsystem.setTargetPos(-30000);
+                        extendoSubsystem.setTargetPos(-25200);
                         intakeSubsystem.autoIdle();
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                         follower.followPath(intake2b,false);
@@ -407,7 +421,7 @@ public class FiveSpecIntake extends OpMode {
                         first = false;
                     }
 
-                    if(timer.seconds() > .4 ) {
+                    if(timer.seconds() > .45 ) {
                         extendoSubsystem.setTargetPos(0);
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                         follower.followPath(intake3,false);
@@ -415,21 +429,24 @@ public class FiveSpecIntake extends OpMode {
                         first = true;
                         timer2.reset();
                         travis = true;
+                        iansaidtonameitthissoiamnamingitthis=true;
                     }
                 }
                 break;
 
             case 6:
-                intakeSubsystem.autoIntake();
-                intakeSubsystem.autoDropdownIntake();
-                pitchSubsystem.autoPitchIntake();
+                if (iansaidtonameitthissoiamnamingitthis && timer2.seconds() > 0.5) {
+                    intakeSubsystem.autoIntake();
+                    intakeSubsystem.autoDropdownIntake();
+                    pitchSubsystem.autoPitchIntake();
+                }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy()) {
 
                     if(travis) {
 
                         liftSubsystem.setTargetPos(0);
-                        extendoSubsystem.setTargetPos(-41000);
+                        extendoSubsystem.setTargetPos(-46000);
                         travis = false;
                     }
                     /* Grab Sample */
@@ -516,11 +533,11 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(liftSubsystem.getLeftEncoderVal() > 850) {
+                    if(liftSubsystem.getLeftEncoderVal() > 910) {
                         clawSubsystem.autoClawOpen();
                     }
 
-                    if(timer.seconds() > 0.5) {
+                    if(timer.seconds() > 0.55) {
 
                         clawSubsystem.autoClawOpen();
                         intakeSubsystem.autoIdleReal();
@@ -574,7 +591,7 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(liftSubsystem.getLeftEncoderVal() > 900) {
+                    if(liftSubsystem.getLeftEncoderVal() > 910) {
                         clawSubsystem.autoClawOpen();
                     }
                     if(timer.seconds() > 0.5) {
@@ -631,7 +648,7 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(liftSubsystem.getLeftEncoderVal() > 900) {
+                    if(liftSubsystem.getLeftEncoderVal() > 910) {
                         clawSubsystem.autoClawOpen();
                     }
                     if(timer.seconds() > 0.58) {
@@ -686,11 +703,11 @@ public class FiveSpecIntake extends OpMode {
                         timer.reset();
                         first = false;
                     }
-                    if(liftSubsystem.getLeftEncoderVal() > 900) {
+                    if(liftSubsystem.getLeftEncoderVal() > 940) {
                         clawSubsystem.autoClawOpen();
                     }
 
-                    if(timer.seconds() > 0.7) {
+                    if(timer.seconds() > 0.6) {
 
                         clawSubsystem.autoClawOpen();
                         intakeSubsystem.autoIdleReal();
