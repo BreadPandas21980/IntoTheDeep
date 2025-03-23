@@ -16,6 +16,7 @@ import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -50,6 +51,7 @@ import subsystems.WristSubsystem;
  */
 
 @Config
+@Disabled
 @Autonomous(name = "HELLO THIS IS THE SPECIMEN INTAKE or something like that", group = "!!!!yay")
 public class FiveSpecIntake extends OpMode {
     ElapsedTime timerImu = new ElapsedTime();
