@@ -101,7 +101,7 @@ public class FiveSpecReal extends OpMode {
 
     /** Start Pose of our robot */
     private final Pose startPose = new Pose(56, 134, Math.toRadians(90)); //56
-    private final Pose scorePose1 = new Pose(68, 106, Math.toRadians(90));
+    private final Pose scorePose1 = new Pose(68, 108.5, Math.toRadians(90));
     private final Pose controlIntakePose1 = new Pose(50, 135, Math.toRadians(90));
     /*
     private final Pose intakePose1 = new Pose(41, 117, Math.toRadians(50));
@@ -115,9 +115,9 @@ public class FiveSpecReal extends OpMode {
 
     private final Pose intakePose1 = new Pose(41, 117.25, Math.toRadians(50));
     private final Pose intakePose1b = new Pose(37, 120, Math.toRadians(0));
-    private final Pose intakePose2 = new Pose(32, 114.75, Math.toRadians(51));
+    private final Pose intakePose2 = new Pose(32, 114., Math.toRadians(51));
     private final Pose intakePose2b = new Pose(33, 120, Math.toRadians(0));
-    private final Pose intakePose3 = new Pose(26.1, 116.55, Math.toRadians(50));
+    private final Pose intakePose3 = new Pose(25, 116.55, Math.toRadians(50));
     private final Pose intakePose3b = new Pose(33, 116.5, Math.toRadians(-22));
     private final Pose grabPrepPose2 = new Pose(33, 127., Math.toRadians(90));
     private final Pose grabPose2 = new Pose(32.75, 129.5, Math.toRadians(90));
@@ -127,10 +127,10 @@ public class FiveSpecReal extends OpMode {
     private final Pose scorePose3 = new Pose(62, 108, Math.toRadians(90));
     private final Pose grabPrepPose4 = new Pose(36, 120, Math.toRadians(90));
     private final Pose grabPose4 = new Pose(36, 131, Math.toRadians(90));
-    private final Pose scorePose4 = new Pose(65.75, 107, Math.toRadians(90));
+    private final Pose scorePose4 = new Pose(65, 107, Math.toRadians(90));
     private final Pose grabPrepPose5 = new Pose(36, 125, Math.toRadians(90));
     private final Pose grabPose5 = new Pose(36, 131, Math.toRadians(90));
-    private final Pose scorePose5 = new Pose(62, 108., Math.toRadians(90));
+    private final Pose scorePose5 = new Pose(62, 108, Math.toRadians(90));
 
     /** Park Pose for our robot, after we do all of the scoring. */
     private final Pose parkPose = new Pose(36, 130, Math.toRadians(90));
@@ -263,7 +263,7 @@ public class FiveSpecReal extends OpMode {
                 break;
             case 1:
                 timerImu.reset();
-                liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele + 010);
+                liftSubsystem.setTargetPos(LiftSubsystem.specimenPrepareHeightTele - 50);
                 armSubsystem.autoArmStraight();
                 wristSubsystem.autoWristScoreSpecPosAuto();
                 /* You could check for
@@ -379,9 +379,12 @@ public class FiveSpecReal extends OpMode {
                 break;
 
             case 4:
-                intakeSubsystem.autoIntake();
-                intakeSubsystem.autoDropdownIntake();
-                pitchSubsystem.autoPitchIntake();
+                if(timer2.seconds() > 0.2) {
+
+                    intakeSubsystem.autoIntake();
+                    intakeSubsystem.autoDropdownIntake();
+                    pitchSubsystem.autoPitchIntake();
+                }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy()) {
 
@@ -438,9 +441,12 @@ public class FiveSpecReal extends OpMode {
                 break;
 
             case 6:
-                intakeSubsystem.autoIntake();
-                intakeSubsystem.autoDropdownIntake();
-                pitchSubsystem.autoPitchIntake();
+                if(timer2.seconds() > 0.2) {
+
+                    intakeSubsystem.autoIntake();
+                    intakeSubsystem.autoDropdownIntake();
+                    pitchSubsystem.autoPitchIntake();
+                }
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy()) {
 
@@ -491,14 +497,18 @@ public class FiveSpecReal extends OpMode {
                         extendoSubsystem.setTargetPos(0);
                         first = true;
                         timer2.reset();
+                        wristSubsystem.autoWristWall();
                     }
                 }
                 break;
             case 8:
 
-                intakeSubsystem.autoIdleReal();
-                intakeSubsystem.autoDropdownStow();
-                pitchSubsystem.autoPitchStow();
+                if(timer2.seconds() > 0.2) {
+
+                    intakeSubsystem.autoIdleReal();
+                    intakeSubsystem.autoDropdownStow();
+                    pitchSubsystem.autoPitchStow();
+                }
                 if((!follower.isBusy() || follower.isRobotStuck())) {
 
                     if(first) {
@@ -557,7 +567,7 @@ public class FiveSpecReal extends OpMode {
             case 10:
 
                 armSubsystem.autoArmWall();
-                wristSubsystem.autoWristSpec();
+                wristSubsystem.autoWristWall();
                 if(timer2.seconds() > 1) {
                     liftSubsystem.setTargetPos(0);
                 }
@@ -619,7 +629,7 @@ public class FiveSpecReal extends OpMode {
             case 12:
 
                 armSubsystem.autoArmWall();
-                wristSubsystem.autoWristSpec();
+                wristSubsystem.autoWristWall();
                 if(timer2.seconds() > 1) {
                     liftSubsystem.setTargetPos(0);
                 }
@@ -680,7 +690,7 @@ public class FiveSpecReal extends OpMode {
             case 14:
 
                 armSubsystem.autoArmWall();
-                wristSubsystem.autoWristSpec();
+                wristSubsystem.autoWristWall();
                 if(timer2.seconds() > 1) {
                     liftSubsystem.setTargetPos(0);
                 }

@@ -25,7 +25,7 @@ public class ClawSubsystem extends SubsystemBase {
     public static double AUTO_CLOSED = 0.33;
     public static double AUTO_OPEN = 0.07;
     boolean clawOpen;
-    public static  double NOT_OPEN = .31;
+    public static  double NOT_OPEN = .29;
 
     public ClawSubsystem(Servo clawServo) {
         this.clawServo = clawServo;
