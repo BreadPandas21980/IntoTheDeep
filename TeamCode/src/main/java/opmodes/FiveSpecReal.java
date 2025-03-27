@@ -117,8 +117,8 @@ public class FiveSpecReal extends OpMode {
     private final Pose intakePose1b = new Pose(37, 120, Math.toRadians(0));
     private final Pose intakePose2 = new Pose(32, 114.75, Math.toRadians(51));
     private final Pose intakePose2b = new Pose(33, 120, Math.toRadians(0));
-    private final Pose intakePose3 = new Pose(26, 116.75, Math.toRadians(50));
-    private final Pose intakePose3b = new Pose(33, 117.5, Math.toRadians(-22));
+    private final Pose intakePose3 = new Pose(26.1, 116.55, Math.toRadians(50));
+    private final Pose intakePose3b = new Pose(33, 116.5, Math.toRadians(-22));
     private final Pose grabPrepPose2 = new Pose(33, 127., Math.toRadians(90));
     private final Pose grabPose2 = new Pose(32.75, 129.5, Math.toRadians(90));
     private final Pose scorePose2 = new Pose(63, 107, Math.toRadians(90));
@@ -281,7 +281,7 @@ public class FiveSpecReal extends OpMode {
                         first = false;
                     }
 
-                    if(liftSubsystem.getLeftEncoderVal() > 830) {
+                    if(liftSubsystem.getLeftEncoderVal() > 740) {
                         clawSubsystem.autoClawOpen();
                         travis = true;
                         follower.followPath(intake1,true);
